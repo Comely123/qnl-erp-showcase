@@ -1,0 +1,27 @@
+# 启能力 ERP · 数据对齐网关
+# 部署到 erp.nexduo.xyz 后，前端「数据对齐与自动化流」页切到「实时」即可走真实请求。
+name = "qnl-erp-sync-gateway"
+main = "sync-gateway.js"
+compatibility_date = "2026-11-14"
+
+# 把 table-map.json 作为文本导入（Worker 内 JSON.parse）
+[[rules]]
+type = "Text"
+globs = ["**/*.json"]
+fallthrough = false
+
+# wrangler kv:namespace create SYNC_KV 后把返回的 id 填到这里
+[[kv_namespaces]]
+binding = "SYNC_KV"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+
+# 用 wrangler secret put 设置，不要写进文件：
+#   DINGTALK_APP_KEY      钉钉应用 AppKey
+#   DINGTALK_APP_SECRET   钉钉应用 AppSecret
+#   SYNC_SECRET           前端请求头 X-Sync-Token 的共享令牌
+[vars]
+BASE_ID = "0eMKjyp81YYeX2ZAsZE9YXLg8xAZB1Gv"
+
+# Cloudflare Pages 绑定自定义域后，把 /api/sync/* 路由到本 Worker：
+#   Pages 项目 → 设置 → 函数/Workers 路由，或直接在 DNS 所在 zone 添加
+#   route = "erp.nexduo.xyz/api/sync/*"

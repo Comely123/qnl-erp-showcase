@@ -56,6 +56,14 @@
     };
   }
 
+  // 数据对齐钩子：本地写操作成功后通知同步层入队（同步层未加载时静默跳过）
+  function emitSync(moduleKey, rec, action) {
+    try {
+      var s = global.ERP_SYNC;
+      if (s && s.onRecordSaved) s.onRecordSaved(moduleKey, rec, action);
+    } catch (e) { /* 同步失败不得影响本地业务操作 */ }
+  }
+
   function makeRecord(mod, data, opts) {
     opts = opts || {};
     var st = blankRecordStatus(mod, data);
@@ -397,7 +405,54 @@
       this.notify(mod.approvers.concat([role.id]), '流转', '新建单据 · ' + mod.name,
         rec.no + ' 已创建，等待提交审批。', moduleKey, rec.id);
       this.save();
+      emitSync(moduleKey, rec, 'create');
       return rec;
+    },
+
+    // 同步网关专用：把钉钉表单/表格的数据落地到本地库。
+    // 这是系统行为，不受当前登录角色的写权限约束；不触发回推送，避免同步回环。
+    systemUpsert: function (moduleKey, data, meta) {
+      var mod = MOD[moduleKey];
+      if (!mod) throw new Error('未知模块');
+      meta = meta || {};
+      var remoteId = text(meta.remoteId);
+      var list = this.state.records[moduleKey] || (this.state.records[moduleKey] = []);
+      var hit = null;
+      if (remoteId) {
+        hit = list.filter(function (r) { return r.remoteId === remoteId; })[0];
+      }
+      if (!hit && mod.noField && text(data[mod.noField])) {
+        var no = text(data[mod.noField]);
+        hit = list.filter(function (r) { return r.no === no; })[0];
+      }
+      if (hit) {
+        // 本地有人工修改且晚于上次同步 -> 不静默覆盖，交由冲突裁决
+        if (hit.updatedAt && hit.lastSyncAt && hit.updatedAt > hit.lastSyncAt &&
+            !meta.force) return { rec: hit, action: 'conflict' };
+        var d = clone(data);
+        if (mod.noField) d[mod.noField] = hit.no;
+        hit.data = d;
+        hit.updatedAt = now(); hit.lastSyncAt = now();
+        hit.remoteId = remoteId || hit.remoteId;
+        hit.origin = meta.origin || hit.origin || 'dingtalk-form';
+        hit.timeline.push({ ts: now(), action: '同步更新', person: '同步网关', role: 'system',
+          from: hit.status, to: hit.status, note: meta.note || '' });
+        this.save();
+        return { rec: hit, action: 'updated' };
+      }
+      var rec = makeRecord(mod, data, {
+        createdBy: 'system', createdRole: '', person: meta.person || '钉钉表单',
+        note: meta.note || '来源：钉钉表单提交'
+      });
+      rec.origin = meta.origin || 'dingtalk-form';
+      rec.remoteId = remoteId || uid('remote');
+      rec.lastSyncAt = now();
+      rec.syncState = 'pulled';
+      list.unshift(rec);
+      this.log('同步拉取', rec.no + ' · ' + mod.name, moduleKey, rec.id,
+        { detail: meta.note || '钉钉表单 → 前端单据', person: '同步网关', role: 'system' });
+      this.save();
+      return { rec: rec, action: 'created' };
     },
 
     update: function (moduleKey, id, data) {
@@ -414,6 +469,7 @@
         from: rec.status, to: rec.status, note: '' });
       this.log('编辑单据', rec.no + ' · ' + text(rec.data[mod.titleField]), moduleKey, id);
       this.save();
+      emitSync(moduleKey, rec, 'update');
       return rec;
     },
 
@@ -475,6 +531,7 @@
         (created.length ? '；已自动派生 ' + created.length + ' 张下游单据' : ''),
         moduleKey, id);
       this.save();
+      emitSync(moduleKey, rec, action);
       return { rec: rec, created: created };
     },
 

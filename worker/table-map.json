@@ -1,0 +1,3422 @@
+{
+  "baseId": "0eMKjyp81YYeX2ZAsZE9YXLg8xAZB1Gv",
+  "host": "erp.nexduo.xyz",
+  "tables": {
+    "system-navigation": {
+      "moduleKey": "t00",
+      "tableId": "ZSEwBEp",
+      "tableName": "00 系统导航与流程说明",
+      "fields": [
+        {
+          "label": "模块名称",
+          "key": "name",
+          "fieldId": "kTWKMUu",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "业务域",
+          "key": "field",
+          "fieldId": "IjkcO7o",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "对应数据表",
+          "key": "field_2",
+          "fieldId": "9Gxbj1a",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "流程说明",
+          "key": "description",
+          "fieldId": "u7irypG",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "负责人",
+          "key": "owner",
+          "fieldId": "bTJNZv8",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "上线状态",
+          "key": "status",
+          "fieldId": "tR2Ykf5",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "入口链接",
+          "key": "url",
+          "fieldId": "Q0gv8k4",
+          "apiType": "string(url)",
+          "required": false
+        },
+        {
+          "label": "更新日期",
+          "key": "date",
+          "fieldId": "mJchCOM",
+          "apiType": "string(date)",
+          "required": false
+        }
+      ]
+    },
+    "organizations": {
+      "moduleKey": "t01",
+      "tableId": "dcpxx54",
+      "tableName": "01 组织与部门",
+      "fields": [
+        {
+          "label": "组织/部门名称",
+          "key": "name",
+          "fieldId": "DpgSMiw",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "编码",
+          "key": "code",
+          "fieldId": "knlFUU3",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "NkOfZ4g",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "上级部门",
+          "key": "department",
+          "fieldId": "wn0LUKr",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "负责人",
+          "key": "owner",
+          "fieldId": "Kffnz1D",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "排序",
+          "key": "sort_order",
+          "fieldId": "bni10A3",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "uD1jsgt",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "备注",
+          "key": "remark",
+          "fieldId": "DsT7voQ",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "users-roles": {
+      "moduleKey": "t02",
+      "tableId": "ATdXujG",
+      "tableName": "02 用户与角色",
+      "fields": [
+        {
+          "label": "姓名",
+          "key": "field",
+          "fieldId": "WLR3gje",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "登录账号",
+          "key": "field_2",
+          "fieldId": "4KORHk8",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "所属部门",
+          "key": "department",
+          "fieldId": "Ga0E1Ac",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "角色",
+          "key": "field_3",
+          "fieldId": "5Y2qRRk",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "手机",
+          "key": "mobile",
+          "fieldId": "ryAxFia",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "邮箱",
+          "key": "email",
+          "fieldId": "27vPJe8",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "用户类型",
+          "key": "type",
+          "fieldId": "IuaHEt4",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "vhPBuyb",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "最后登录",
+          "key": "field_4",
+          "fieldId": "VvFgsDa",
+          "apiType": "string(date)",
+          "required": false
+        }
+      ]
+    },
+    "dict-approval": {
+      "moduleKey": "t03",
+      "tableId": "KyHkYcX",
+      "tableName": "03 数据字典与审批流",
+      "fields": [
+        {
+          "label": "配置名称",
+          "key": "name",
+          "fieldId": "SKbZnDH",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "bsuvAfN",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "编码",
+          "key": "code",
+          "fieldId": "tIggtJT",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "值或标签",
+          "key": "field",
+          "fieldId": "4mgKS9b",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "排序",
+          "key": "sort_order",
+          "fieldId": "zCeDstL",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "适用业务",
+          "key": "field_2",
+          "fieldId": "FFzwBLt",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "是否启用",
+          "key": "is_",
+          "fieldId": "WxSHnFW",
+          "apiType": "boolean",
+          "required": false
+        },
+        {
+          "label": "说明",
+          "key": "description",
+          "fieldId": "yqyqZTJ",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "notifications": {
+      "moduleKey": "t04",
+      "tableId": "Rw74UI3",
+      "tableName": "04 通知与操作日志",
+      "fields": [
+        {
+          "label": "事件标题",
+          "key": "title",
+          "fieldId": "kT5xz8R",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "事件类型",
+          "key": "type",
+          "fieldId": "UHjVWro",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "业务对象",
+          "key": "field",
+          "fieldId": "3cbW7eh",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "操作人",
+          "key": "operator",
+          "fieldId": "YwMhhDm",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "发生时间",
+          "key": "time",
+          "fieldId": "VPX9O70",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "内容",
+          "key": "content",
+          "fieldId": "fGRE4TQ",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "处理状态",
+          "key": "status",
+          "fieldId": "67Li9zG",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "关联链接",
+          "key": "url",
+          "fieldId": "ABnkH74",
+          "apiType": "string(url)",
+          "required": false
+        }
+      ]
+    },
+    "attachments": {
+      "moduleKey": "t05",
+      "tableId": "G3D2ADa",
+      "tableName": "05 附件中心",
+      "fields": [
+        {
+          "label": "附件名称",
+          "key": "name",
+          "fieldId": "QZjU6cE",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "业务类型",
+          "key": "type",
+          "fieldId": "BRFbIna",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "关联单号",
+          "key": "doc_no",
+          "fieldId": "ehwlWb9",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "附件文件",
+          "key": "attachment",
+          "fieldId": "J7And3V",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "上传人",
+          "key": "field",
+          "fieldId": "A4SL0LQ",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "上传日期",
+          "key": "date",
+          "fieldId": "QXeuvhL",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "版本",
+          "key": "version",
+          "fieldId": "1Ag4VcY",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "备注",
+          "key": "remark",
+          "fieldId": "WT2dE3l",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "materials": {
+      "moduleKey": "t06",
+      "tableId": "qOtTPnx",
+      "tableName": "06 物料主数据",
+      "fields": [
+        {
+          "label": "物料名称",
+          "key": "name",
+          "fieldId": "86o7r7t",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "物料编码",
+          "key": "code",
+          "fieldId": "WvNowwE",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "品类",
+          "key": "category",
+          "fieldId": "I2X6Onp",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "规格型号",
+          "key": "field",
+          "fieldId": "bHNBX12",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "计量单位",
+          "key": "uom",
+          "fieldId": "68lhmYT",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "参考单价",
+          "key": "unit_price",
+          "fieldId": "5RYAsvR",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "0KhVJoq",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "图片",
+          "key": "image",
+          "fieldId": "GRLcnpn",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "创建日期",
+          "key": "date",
+          "fieldId": "veI93pn",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "备注",
+          "key": "remark",
+          "fieldId": "yhrQIqS",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "warehouses": {
+      "moduleKey": "t07",
+      "tableId": "kNFiTLN",
+      "tableName": "07 仓库与库位",
+      "fields": [
+        {
+          "label": "仓库名称",
+          "key": "name",
+          "fieldId": "HoJP0KY",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "仓库编码",
+          "key": "code",
+          "fieldId": "KipVLop",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "仓库类型",
+          "key": "type",
+          "fieldId": "ODh8ZyA",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "库位",
+          "key": "location",
+          "fieldId": "GWmOlIN",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "负责人",
+          "key": "owner",
+          "fieldId": "BmSbFWO",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "地址",
+          "key": "address",
+          "fieldId": "ZTSQaAr",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "容量",
+          "key": "field",
+          "fieldId": "lCPovvT",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "msEUcbF",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "平面示意图",
+          "key": "field_2",
+          "fieldId": "o6Q369l",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "uom-currency": {
+      "moduleKey": "t08",
+      "tableId": "oQt1YOR",
+      "tableName": "08 单位币种与汇率",
+      "fields": [
+        {
+          "label": "名称",
+          "key": "name",
+          "fieldId": "qUwd0Cc",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "I0abbh8",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "编码",
+          "key": "code",
+          "fieldId": "X9lp4my",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "符号",
+          "key": "field",
+          "fieldId": "KLJc8Ga",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "汇率",
+          "key": "exchange_rate",
+          "fieldId": "ZXvLcwb",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "生效日期",
+          "key": "date",
+          "fieldId": "XIf22FE",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "cAQYlmj",
+          "apiType": "string(enum)",
+          "required": false
+        }
+      ]
+    },
+    "suppliers": {
+      "moduleKey": "t09",
+      "tableId": "UbiNWwS",
+      "tableName": "09 供应商档案",
+      "fields": [
+        {
+          "label": "供应商名称",
+          "key": "name",
+          "fieldId": "VOFjyqh",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "供应商编码",
+          "key": "code",
+          "fieldId": "TJcMuL1",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "统一社会信用代码",
+          "key": "field",
+          "fieldId": "8NxG9H9",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "供应商状态",
+          "key": "status",
+          "fieldId": "407hvtn",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "供货品类",
+          "key": "category",
+          "fieldId": "mOGI42o",
+          "apiType": "string[]",
+          "required": false
+        },
+        {
+          "label": "联系人",
+          "key": "field_2",
+          "fieldId": "PXerQ24",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "联系电话",
+          "key": "phone",
+          "fieldId": "rRS6lhy",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "邮箱",
+          "key": "email",
+          "fieldId": "HrqX9nR",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "合作起始日",
+          "key": "field_3",
+          "fieldId": "g8eZeWB",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "评级",
+          "key": "field_4",
+          "fieldId": "ONK9RMM",
+          "apiType": "number(1-5)",
+          "required": false
+        },
+        {
+          "label": "收款账户",
+          "key": "field_5",
+          "fieldId": "YAat3CF",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "资质附件",
+          "key": "attachment",
+          "fieldId": "3t1t4Ek",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "supplier-admission": {
+      "moduleKey": "t10",
+      "tableId": "csKJkCD",
+      "tableName": "10 供应商准入申请",
+      "fields": [
+        {
+          "label": "申请单号",
+          "key": "doc_no",
+          "fieldId": "7rVRipZ",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "供应商名称",
+          "key": "name",
+          "fieldId": "DQeh4dx",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "邀请方式",
+          "key": "field",
+          "fieldId": "xkhRDua",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "申请状态",
+          "key": "status",
+          "fieldId": "zS0gROH",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "提交日期",
+          "key": "date",
+          "fieldId": "2bnHCZo",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "审核人",
+          "key": "reviewer",
+          "fieldId": "wY4rTwM",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "审核意见",
+          "key": "comment",
+          "fieldId": "iZaRS4A",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "营业执照",
+          "key": "field_2",
+          "fieldId": "6H7Rt49",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "补充材料",
+          "key": "field_3",
+          "fieldId": "QU6P5U4",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "supplier-licenses": {
+      "moduleKey": "t11",
+      "tableId": "plfIV4J",
+      "tableName": "11 供应商资质证照",
+      "fields": [
+        {
+          "label": "证照名称",
+          "key": "name",
+          "fieldId": "aRXWMKF",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "HjkKwRb",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "证照类型",
+          "key": "type",
+          "fieldId": "ZWb2GFQ",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "证照编号",
+          "key": "code",
+          "fieldId": "pgNmHtR",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "有效期至",
+          "key": "field",
+          "fieldId": "QeaHulf",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "证照文件",
+          "key": "file",
+          "fieldId": "AHmjAE5",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "核验状态",
+          "key": "status",
+          "fieldId": "txc7dsP",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "核验人",
+          "key": "field_2",
+          "fieldId": "XBdq4yP",
+          "apiType": "string(userId)",
+          "required": false
+        }
+      ]
+    },
+    "supplier-changes": {
+      "moduleKey": "t12",
+      "tableId": "VYhQsFS",
+      "tableName": "12 供应商变更与品类",
+      "fields": [
+        {
+          "label": "变更单号",
+          "key": "doc_no",
+          "fieldId": "ArF6KhR",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "Y3mtiyQ",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "变更类型",
+          "key": "type",
+          "fieldId": "TthtdMt",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "变更内容",
+          "key": "content",
+          "fieldId": "UZcUzMQ",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "提交日期",
+          "key": "date",
+          "fieldId": "YV3lexP",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "审批状态",
+          "key": "status",
+          "fieldId": "p21amhk",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "生效日期",
+          "key": "date_2",
+          "fieldId": "TQ91eGJ",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "附件",
+          "key": "attachment",
+          "fieldId": "LxJHak9",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "supplier-reviews": {
+      "moduleKey": "t13",
+      "tableId": "DwoBXv3",
+      "tableName": "13 供应商评审",
+      "fields": [
+        {
+          "label": "评审单号",
+          "key": "doc_no",
+          "fieldId": "fv1RMti",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "I99SNWF",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "评审模板",
+          "key": "field",
+          "fieldId": "PG8VVVO",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "评审日期",
+          "key": "date",
+          "fieldId": "4HC7eyl",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "评审人",
+          "key": "field_2",
+          "fieldId": "Jg6bNPj",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "综合得分",
+          "key": "field_3",
+          "fieldId": "vkIfRLB",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "评审等级",
+          "key": "level",
+          "fieldId": "4nVepEQ",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "评审结论",
+          "key": "conclusion",
+          "fieldId": "xpqzizz",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "评审报告",
+          "key": "field_4",
+          "fieldId": "ghZuPfv",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "incoming-inspection": {
+      "moduleKey": "t14",
+      "tableId": "Q7qB42B",
+      "tableName": "14 来料检验",
+      "fields": [
+        {
+          "label": "检验单号",
+          "key": "doc_no",
+          "fieldId": "xltMulV",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "关联订单",
+          "key": "order",
+          "fieldId": "a7wba2K",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "q8ygyuu",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "物料",
+          "key": "material",
+          "fieldId": "6LB6o49",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "送检数量",
+          "key": "qty",
+          "fieldId": "7e6MZyr",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "抽检数量",
+          "key": "qty_2",
+          "fieldId": "Pu2vGqL",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "合格数量",
+          "key": "qty_3",
+          "fieldId": "SEhK2ML",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "检验结果",
+          "key": "result",
+          "fieldId": "dMxQ3Vu",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "检验日期",
+          "key": "date",
+          "fieldId": "out7Vb6",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "检验员",
+          "key": "field",
+          "fieldId": "khfLPXv",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "检验报告",
+          "key": "field_2",
+          "fieldId": "e3C7g55",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "ncr-corrective": {
+      "moduleKey": "t15",
+      "tableId": "0o0vhnv",
+      "tableName": "15 不合格与整改",
+      "fields": [
+        {
+          "label": "单号",
+          "key": "doc_no",
+          "fieldId": "KrZuDvc",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "LPMeVJQ",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "关联检验单",
+          "key": "related",
+          "fieldId": "8acYbtW",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "RLrJafD",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "问题描述",
+          "key": "field",
+          "fieldId": "5vhHu8C",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "处置方式",
+          "key": "field_2",
+          "fieldId": "ptoReQ4",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "AGT5cgX",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "责任方",
+          "key": "field_3",
+          "fieldId": "qqnDdGk",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "截止日期",
+          "key": "date",
+          "fieldId": "nxlEK6m",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "整改附件",
+          "key": "attachment",
+          "fieldId": "4tehF3E",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "quality-scorecard": {
+      "moduleKey": "t16",
+      "tableId": "WtlZedO",
+      "tableName": "16 质量记分卡与考察",
+      "fields": [
+        {
+          "label": "名称",
+          "key": "name",
+          "fieldId": "mKapaH5",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "9TdMjeM",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "周期",
+          "key": "field",
+          "fieldId": "qWjYXhi",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "交付得分",
+          "key": "field_2",
+          "fieldId": "IfW0JGt",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "质量得分",
+          "key": "field_3",
+          "fieldId": "nJyfMsx",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "响应得分",
+          "key": "field_4",
+          "fieldId": "p2kVwVr",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "综合得分",
+          "key": "field_5",
+          "fieldId": "laoWkQa",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "等级",
+          "key": "level",
+          "fieldId": "CJkTcsX",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "考察计划",
+          "key": "plan",
+          "fieldId": "GNw7LuS",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "考察日期",
+          "key": "date",
+          "fieldId": "Gox1mIQ",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "考察报告",
+          "key": "field_6",
+          "fieldId": "Z2aFq2h",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "purchase-projects": {
+      "moduleKey": "t17",
+      "tableId": "fXZnQ5D",
+      "tableName": "17 采购项目",
+      "fields": [
+        {
+          "label": "项目名称",
+          "key": "name",
+          "fieldId": "FhZlwUJ",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "项目编号",
+          "key": "code",
+          "fieldId": "otfSao0",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "项目类型",
+          "key": "type",
+          "fieldId": "80dKzBZ",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "预算金额",
+          "key": "amount",
+          "fieldId": "dYVWgqI",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "负责人",
+          "key": "owner",
+          "fieldId": "7DaAcOM",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "开始日期",
+          "key": "date",
+          "fieldId": "Pc6abs5",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "结束日期",
+          "key": "date_2",
+          "fieldId": "8iWC64l",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "2yiwek8",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "目标说明",
+          "key": "description",
+          "fieldId": "zu5wW8t",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "立项附件",
+          "key": "attachment",
+          "fieldId": "B6WNRJq",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "purchase-requisitions": {
+      "moduleKey": "t18",
+      "tableId": "s1IYdZt",
+      "tableName": "18 采购申请 PR",
+      "fields": [
+        {
+          "label": "申请单号",
+          "key": "doc_no",
+          "fieldId": "tAHGkqv",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "申请标题",
+          "key": "title",
+          "fieldId": "rqsJ16c",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "申请部门",
+          "key": "department",
+          "fieldId": "uuz4UKN",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "申请人",
+          "key": "applicant",
+          "fieldId": "ZZCqbiq",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "物料或服务",
+          "key": "material",
+          "fieldId": "r2NnPbF",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "数量",
+          "key": "qty",
+          "fieldId": "0bix1hv",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "预算金额",
+          "key": "amount",
+          "fieldId": "UAFFcz8",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "期望到货日",
+          "key": "field",
+          "fieldId": "YmGRkQp",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "紧急程度",
+          "key": "urgency",
+          "fieldId": "DENDHCT",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "审批状态",
+          "key": "status",
+          "fieldId": "hO5McsF",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "关联项目",
+          "key": "related",
+          "fieldId": "fLc8rlY",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "附件",
+          "key": "attachment",
+          "fieldId": "0SgqFYT",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "demand-pool": {
+      "moduleKey": "t19",
+      "tableId": "W6yVUlI",
+      "tableName": "19 需求池与寻源派发",
+      "fields": [
+        {
+          "label": "需求编号",
+          "key": "code",
+          "fieldId": "9tZ5w7P",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "需求内容",
+          "key": "content",
+          "fieldId": "0qUTJFb",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "来源",
+          "key": "source",
+          "fieldId": "Z7et1i1",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "数量",
+          "key": "qty",
+          "fieldId": "00kU6Gr",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "需求状态",
+          "key": "status",
+          "fieldId": "WM4vIy9",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "寻源方式",
+          "key": "field",
+          "fieldId": "p92DKE1",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "派发人",
+          "key": "field_2",
+          "fieldId": "RH8N4sn",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "派发日期",
+          "key": "date",
+          "fieldId": "u6vtBNX",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "期望完成日",
+          "key": "field_3",
+          "fieldId": "UnjRfPa",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "备注",
+          "key": "remark",
+          "fieldId": "NLcmebq",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "opinion-award": {
+      "moduleKey": "t20",
+      "tableId": "2x6nX0F",
+      "tableName": "20 意见征集与定标",
+      "fields": [
+        {
+          "label": "单号",
+          "key": "doc_no",
+          "fieldId": "RMk1tj5",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "主题",
+          "key": "field",
+          "fieldId": "LRRZWas",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "征集状态",
+          "key": "status",
+          "fieldId": "cKNnD8F",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "参与供应商数",
+          "key": "supplier",
+          "fieldId": "pZJg0bd",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "收到方案数",
+          "key": "field_2",
+          "fieldId": "VQ0V8TB",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "定标结果",
+          "key": "result",
+          "fieldId": "fCNtZU3",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "转出对象",
+          "key": "field_3",
+          "fieldId": "GNhMooK",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "定标日期",
+          "key": "date",
+          "fieldId": "42qvi6g",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "负责人",
+          "key": "owner",
+          "fieldId": "BwGrDht",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "方案附件",
+          "key": "attachment",
+          "fieldId": "Owgx3ZR",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "rfq-requests": {
+      "moduleKey": "t21",
+      "tableId": "H0KLtgg",
+      "tableName": "21 询价单 RFQ",
+      "fields": [
+        {
+          "label": "询价单号",
+          "key": "doc_no",
+          "fieldId": "Pni5Eks",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "询价标题",
+          "key": "title",
+          "fieldId": "JWEErhN",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "寻源方式",
+          "key": "field",
+          "fieldId": "NYSwfuN",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "采购员",
+          "key": "field_2",
+          "fieldId": "Wa8YM1c",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "发布日期",
+          "key": "date",
+          "fieldId": "sg6GH4M",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "报价截止",
+          "key": "field_3",
+          "fieldId": "RDq4LlK",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "开标日期",
+          "key": "date_2",
+          "fieldId": "1e6N45o",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "zt8YtGG",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "预算金额",
+          "key": "amount",
+          "fieldId": "cdrIDry",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "邀请供应商数",
+          "key": "supplier",
+          "fieldId": "gm7tqCZ",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "询价文件",
+          "key": "file",
+          "fieldId": "nUQfVhd",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "备注",
+          "key": "remark",
+          "fieldId": "AB3RIsY",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "rfq-quotes": {
+      "moduleKey": "t22",
+      "tableId": "SeRdd62",
+      "tableName": "22 供应商报价",
+      "fields": [
+        {
+          "label": "报价单号",
+          "key": "doc_no",
+          "fieldId": "n8zP6yC",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "关联询价单",
+          "key": "related",
+          "fieldId": "XbzxKpQ",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "P5qxGdJ",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "报价总额",
+          "key": "field",
+          "fieldId": "dgxdZTi",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "币种",
+          "key": "currency",
+          "fieldId": "YnTl3Sp",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "报价日期",
+          "key": "date",
+          "fieldId": "rRq3szK",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "有效期至",
+          "key": "field_2",
+          "fieldId": "HxjQlR5",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "rUXVTPt",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "报价附件",
+          "key": "attachment",
+          "fieldId": "fsYldL3",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "auctions": {
+      "moduleKey": "t23",
+      "tableId": "aLJOrPv",
+      "tableName": "23 竞价场次与出价",
+      "fields": [
+        {
+          "label": "场次或出价编号",
+          "key": "code",
+          "fieldId": "uCyPUOw",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "竞价场次",
+          "key": "field",
+          "fieldId": "K3UCgtO",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "RyBjxKp",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "轮次",
+          "key": "field_2",
+          "fieldId": "l47Phki",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "出价金额",
+          "key": "amount",
+          "fieldId": "6Iy0YGp",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "出价时间",
+          "key": "time",
+          "fieldId": "QH8c5si",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "是否领先",
+          "key": "is_",
+          "fieldId": "nUngJfx",
+          "apiType": "boolean",
+          "required": false
+        },
+        {
+          "label": "场次状态",
+          "key": "status",
+          "fieldId": "e3cbuPh",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "规则说明",
+          "key": "description",
+          "fieldId": "AZUV91T",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "结果",
+          "key": "result",
+          "fieldId": "b7urn45",
+          "apiType": "string(enum)",
+          "required": false
+        }
+      ]
+    },
+    "tenders": {
+      "moduleKey": "t24",
+      "tableId": "KUISvXt",
+      "tableName": "24 招标计划与投标评标",
+      "fields": [
+        {
+          "label": "招标编号",
+          "key": "code",
+          "fieldId": "XWDPsji",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "项目名称",
+          "key": "name",
+          "fieldId": "TBO8iQJ",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "招标方式",
+          "key": "field",
+          "fieldId": "LrF8jGL",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "发布日期",
+          "key": "date",
+          "fieldId": "Y5m86vp",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "报名截止",
+          "key": "field_2",
+          "fieldId": "rQJRUYf",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "开标日期",
+          "key": "date_2",
+          "fieldId": "Uv8wQjy",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "PqaLied",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "评标规则",
+          "key": "field_3",
+          "fieldId": "lo5Iwyg",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "保证金",
+          "key": "field_4",
+          "fieldId": "XZOzIcn",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "投标文件",
+          "key": "file",
+          "fieldId": "FN5BtEu",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "技术得分",
+          "key": "field_5",
+          "fieldId": "WnnHmjO",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "商务得分",
+          "key": "field_6",
+          "fieldId": "KnvB9LH",
+          "apiType": "number",
+          "required": false
+        }
+      ]
+    },
+    "award-publicity": {
+      "moduleKey": "t25",
+      "tableId": "ynFtgxQ",
+      "tableName": "25 中标公示与授标",
+      "fields": [
+        {
+          "label": "公示编号",
+          "key": "code",
+          "fieldId": "TH5XIvc",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "项目名称",
+          "key": "name",
+          "fieldId": "0sXj9ZR",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "中标供应商",
+          "key": "supplier",
+          "fieldId": "mq2Azxv",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "中标金额",
+          "key": "amount",
+          "fieldId": "rJ543T5",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "公示开始日",
+          "key": "field",
+          "fieldId": "meOo1IB",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "公示结束日",
+          "key": "field_2",
+          "fieldId": "XJIBKTu",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "8RwWAnX",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "转出对象",
+          "key": "field_3",
+          "fieldId": "ovOVVUU",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "附件",
+          "key": "attachment",
+          "fieldId": "CKVXep2",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "contracts": {
+      "moduleKey": "t26",
+      "tableId": "1zALym4",
+      "tableName": "26 合同台账",
+      "fields": [
+        {
+          "label": "合同名称",
+          "key": "name",
+          "fieldId": "DED741W",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "合同编号",
+          "key": "code",
+          "fieldId": "lwXVNoX",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "签约相对方",
+          "key": "field",
+          "fieldId": "FZq9o3C",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "合同类型",
+          "key": "contract",
+          "fieldId": "BP0VVAI",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "合同金额",
+          "key": "amount",
+          "fieldId": "aZuSmLf",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "签订日期",
+          "key": "date",
+          "fieldId": "mFzYNVk",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "生效日期",
+          "key": "date_2",
+          "fieldId": "nBTjOOk",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "到期日期",
+          "key": "date_3",
+          "fieldId": "o8dPeSB",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "合同状态",
+          "key": "status",
+          "fieldId": "RraX0c9",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "负责人",
+          "key": "owner",
+          "fieldId": "a375nqw",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "合同正文",
+          "key": "contract_2",
+          "fieldId": "nyBwjUO",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "风险条款",
+          "key": "field_2",
+          "fieldId": "Est4Jmo",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "付款条件",
+          "key": "field_3",
+          "fieldId": "10hmLGs",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "contract-archive": {
+      "moduleKey": "t27",
+      "tableId": "WW9gAQh",
+      "tableName": "27 合同模板与用印归档",
+      "fields": [
+        {
+          "label": "名称",
+          "key": "name",
+          "fieldId": "mXxVrlE",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "mecTxTY",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "关联合同",
+          "key": "contract",
+          "fieldId": "rEpOO0M",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "版本",
+          "key": "version",
+          "fieldId": "FCYXXyu",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "用印方式",
+          "key": "field",
+          "fieldId": "XTTnPau",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "经办人",
+          "key": "field_2",
+          "fieldId": "fyNlACL",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "办理日期",
+          "key": "date",
+          "fieldId": "AQYOSc8",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "归档状态",
+          "key": "status",
+          "fieldId": "bUF7ugf",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "文件",
+          "key": "file",
+          "fieldId": "gv93haO",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "purchase-orders": {
+      "moduleKey": "t28",
+      "tableId": "VAZ3dj4",
+      "tableName": "28 采购订单 PO",
+      "fields": [
+        {
+          "label": "订单名称",
+          "key": "name",
+          "fieldId": "a1dECta",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "采购订单号",
+          "key": "doc_no",
+          "fieldId": "L36ezwR",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "nlYta0K",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "关联合同",
+          "key": "contract",
+          "fieldId": "eKk5n7J",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "订单金额",
+          "key": "amount",
+          "fieldId": "aEK9eSI",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "下单日期",
+          "key": "date",
+          "fieldId": "yvjPHti",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "期望交付日",
+          "key": "field",
+          "fieldId": "h0XP5hi",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "订单状态",
+          "key": "status",
+          "fieldId": "bb2NP4i",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "采购员",
+          "key": "field_2",
+          "fieldId": "3XZZ4gO",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "物料明细",
+          "key": "material",
+          "fieldId": "4GXAzI3",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "数量",
+          "key": "qty",
+          "fieldId": "elmgKrb",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "已收数量",
+          "key": "qty_2",
+          "fieldId": "OurfyHv",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "订单附件",
+          "key": "order",
+          "fieldId": "xZZir3B",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "delivery-plans": {
+      "moduleKey": "t29",
+      "tableId": "LTBcIPb",
+      "tableName": "29 交货计划与变更",
+      "fields": [
+        {
+          "label": "计划编号",
+          "key": "code",
+          "fieldId": "pAfpAJd",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "关联订单",
+          "key": "order",
+          "fieldId": "zg2DSk6",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "批次",
+          "key": "field",
+          "fieldId": "SdMzQSy",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "计划交货日",
+          "key": "plan",
+          "fieldId": "IB1oonj",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "计划数量",
+          "key": "qty",
+          "fieldId": "07jkcqG",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "变更类型",
+          "key": "type",
+          "fieldId": "o68BMaI",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "确认状态",
+          "key": "status",
+          "fieldId": "rMZv4eO",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "变更原因",
+          "key": "reason",
+          "fieldId": "iKeSOV1",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "确认日期",
+          "key": "date",
+          "fieldId": "EpG2tvV",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "附件",
+          "key": "attachment",
+          "fieldId": "sKGwEP8",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "asn-bookings": {
+      "moduleKey": "t30",
+      "tableId": "1kJCtgI",
+      "tableName": "30 送货预约与 ASN",
+      "fields": [
+        {
+          "label": "预约或ASN单号",
+          "key": "doc_no",
+          "fieldId": "uWfyuEg",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "关联订单",
+          "key": "order",
+          "fieldId": "p0qpENO",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "DrTyqRF",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "送货日期",
+          "key": "date",
+          "fieldId": "6scCLbI",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "预约时段",
+          "key": "field",
+          "fieldId": "CsEu4Et",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "车辆或物流",
+          "key": "field_2",
+          "fieldId": "dyNViUc",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "Ph7SRSo",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "箱数",
+          "key": "field_3",
+          "fieldId": "RtrXSiD",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "仓库",
+          "key": "warehouse",
+          "fieldId": "wxF1Run",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "附件",
+          "key": "attachment",
+          "fieldId": "qBr4zE1",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "receipts-returns": {
+      "moduleKey": "t31",
+      "tableId": "Ml13exk",
+      "tableName": "31 收货与退货",
+      "fields": [
+        {
+          "label": "单号",
+          "key": "doc_no",
+          "fieldId": "s3b1EM0",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "K6YiJtu",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "关联订单",
+          "key": "order",
+          "fieldId": "CWN3POt",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "9vlyJCZ",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "物料",
+          "key": "material",
+          "fieldId": "MTlrMkX",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "数量",
+          "key": "qty",
+          "fieldId": "ZGBMgbg",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "收货日期",
+          "key": "date",
+          "fieldId": "TRBTJnc",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "检验结果",
+          "key": "result",
+          "fieldId": "dmzpaLa",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "MlRynBH",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "退货原因",
+          "key": "reason",
+          "fieldId": "crTrMzL",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "凭证",
+          "key": "field",
+          "fieldId": "XnaL14t",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "inventory-balance": {
+      "moduleKey": "t32",
+      "tableId": "rWomnGH",
+      "tableName": "32 库存余额与预警",
+      "fields": [
+        {
+          "label": "物料",
+          "key": "material",
+          "fieldId": "zbaWJS0",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "仓库",
+          "key": "warehouse",
+          "fieldId": "1jkABJ8",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "库位",
+          "key": "location",
+          "fieldId": "fx4r4sC",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "现有库存",
+          "key": "field",
+          "fieldId": "ZD6jgaO",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "可用库存",
+          "key": "field_2",
+          "fieldId": "DtsDush",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "安全库存",
+          "key": "field_3",
+          "fieldId": "BtxnwGT",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "单位",
+          "key": "uom",
+          "fieldId": "HJf2Ers",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "预警状态",
+          "key": "status",
+          "fieldId": "oIoX8F5",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "VMI水位",
+          "key": "field_4",
+          "fieldId": "q9cosVu",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "最近更新时间",
+          "key": "time",
+          "fieldId": "N7XH2bj",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "备注",
+          "key": "remark",
+          "fieldId": "7Ro9Umv",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "inventory-transactions": {
+      "moduleKey": "t33",
+      "tableId": "FJKtOkn",
+      "tableName": "33 出入库与调拨盘点",
+      "fields": [
+        {
+          "label": "单号",
+          "key": "doc_no",
+          "fieldId": "8HIiscH",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "单据类型",
+          "key": "type",
+          "fieldId": "jye3dkG",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "仓库",
+          "key": "warehouse",
+          "fieldId": "cdkGONo",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "物料",
+          "key": "material",
+          "fieldId": "HoijR9G",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "数量",
+          "key": "qty",
+          "fieldId": "MtbUdSm",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "经办人",
+          "key": "field",
+          "fieldId": "CPjBZS0",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "单据日期",
+          "key": "date",
+          "fieldId": "fNJMaTb",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "wHDVPYm",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "关联单号",
+          "key": "doc_no_2",
+          "fieldId": "fndry96",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "凭证",
+          "key": "field_2",
+          "fieldId": "t7FIcHs",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "mall-products": {
+      "moduleKey": "t34",
+      "tableId": "sLOPrue",
+      "tableName": "34 商城商品与价格协议",
+      "fields": [
+        {
+          "label": "名称",
+          "key": "name",
+          "fieldId": "2GmzbJ5",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "ZwxWnZH",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "商品编码",
+          "key": "code",
+          "fieldId": "gYxU9BS",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "aSLhJcc",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "协议价",
+          "key": "field",
+          "fieldId": "EIdHLWk",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "市场价",
+          "key": "field_2",
+          "fieldId": "mwa6jPG",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "生效日期",
+          "key": "date",
+          "fieldId": "TzkjFXs",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "失效日期",
+          "key": "date_2",
+          "fieldId": "9g7SK5g",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "nUYwoN5",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "商品图片",
+          "key": "image",
+          "fieldId": "G5Nbmcu",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "协议附件",
+          "key": "attachment",
+          "fieldId": "03GOUOq",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "可见范围",
+          "key": "field_3",
+          "fieldId": "wr3oEZv",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "mall-cart": {
+      "moduleKey": "t35",
+      "tableId": "RzfrkyO",
+      "tableName": "35 购物车与商城公告",
+      "fields": [
+        {
+          "label": "名称",
+          "key": "name",
+          "fieldId": "FNYW3Nx",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "mN7A7ub",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "用户",
+          "key": "field",
+          "fieldId": "7Rhbhok",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "商品",
+          "key": "field_2",
+          "fieldId": "ndR0L60",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "数量",
+          "key": "qty",
+          "fieldId": "DTvmI1E",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "加入日期",
+          "key": "date",
+          "fieldId": "2tsI0dS",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "公告内容",
+          "key": "content",
+          "fieldId": "rilCZom",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "VwnXWj1",
+          "apiType": "string(enum)",
+          "required": false
+        }
+      ]
+    },
+    "payment-plans": {
+      "moduleKey": "t36",
+      "tableId": "aqH99Kt",
+      "tableName": "36 付款计划与付款申请",
+      "fields": [
+        {
+          "label": "单号",
+          "key": "doc_no",
+          "fieldId": "Ufn4q2n",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "WYyCIIZ",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "关联合同",
+          "key": "contract",
+          "fieldId": "bTlb9N7",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "yDjtg2u",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "金额",
+          "key": "amount",
+          "fieldId": "JbYRyUl",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "计划付款日",
+          "key": "plan",
+          "fieldId": "6NaXDDN",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "付款节点",
+          "key": "field",
+          "fieldId": "xYFK7bh",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "xtAWKHr",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "申请人",
+          "key": "applicant",
+          "fieldId": "LXxasLT",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "附件",
+          "key": "attachment",
+          "fieldId": "FzAzSuJ",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "reconciliation-invoices": {
+      "moduleKey": "t37",
+      "tableId": "Mk53J3i",
+      "tableName": "37 对账与发票",
+      "fields": [
+        {
+          "label": "单号",
+          "key": "doc_no",
+          "fieldId": "knxwe1u",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "tsvF3R9",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "LJT4HrO",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "对账周期",
+          "key": "field",
+          "fieldId": "19lCBSW",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "对账金额",
+          "key": "amount",
+          "fieldId": "qjBpTII",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "发票号码",
+          "key": "invoice",
+          "fieldId": "G5NV4Qo",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "发票金额",
+          "key": "amount_2",
+          "fieldId": "VAh2Nsn",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "开票日期",
+          "key": "date",
+          "fieldId": "CseqED8",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "Q8lcyCv",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "发票附件",
+          "key": "invoice_2",
+          "fieldId": "oPw6ZSi",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "payment-execution": {
+      "moduleKey": "t38",
+      "tableId": "qKQRmb6",
+      "tableName": "38 扣款与付款执行",
+      "fields": [
+        {
+          "label": "单号",
+          "key": "doc_no",
+          "fieldId": "N40p5F8",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "Y9nn9a1",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "供应商",
+          "key": "supplier",
+          "fieldId": "5v6uIxE",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "扣款原因",
+          "key": "reason",
+          "fieldId": "L8jrCu5",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "金额",
+          "key": "amount",
+          "fieldId": "EWmveEk",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "执行日期",
+          "key": "date",
+          "fieldId": "WNVcLez",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "付款方式",
+          "key": "field",
+          "fieldId": "GOlKeZM",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "银行流水号",
+          "key": "serial_no",
+          "fieldId": "M0NhNuR",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "IJ6I7Ng",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "凭证",
+          "key": "field_2",
+          "fieldId": "9A5mJEl",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "bi-alerts": {
+      "moduleKey": "t39",
+      "tableId": "IBnhdrn",
+      "tableName": "39 经营看板与预警",
+      "fields": [
+        {
+          "label": "名称",
+          "key": "name",
+          "fieldId": "BmTzNmG",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "YDRQihs",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "指标",
+          "key": "field",
+          "fieldId": "e6smQzb",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "阈值",
+          "key": "field_2",
+          "fieldId": "rvXa9bJ",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "当前值",
+          "key": "field_3",
+          "fieldId": "A57cleb",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "触发状态",
+          "key": "status",
+          "fieldId": "6b8VeYy",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "推送渠道",
+          "key": "field_4",
+          "fieldId": "keaHip0",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "负责人",
+          "key": "owner",
+          "fieldId": "b29wLAz",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "发生日期",
+          "key": "date",
+          "fieldId": "ZLQ39Xr",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "处理说明",
+          "key": "description",
+          "fieldId": "ShilppT",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "loading-shipments": {
+      "moduleKey": "t40",
+      "tableId": "wvVO47C",
+      "tableName": "40 装柜柜次与核对闸门",
+      "fields": [
+        {
+          "label": "柜次编号",
+          "key": "code",
+          "fieldId": "J0HRt6b",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "采购订单号",
+          "key": "doc_no",
+          "fieldId": "pBYGVeO",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "集装箱号",
+          "key": "field",
+          "fieldId": "0t8Ze9h",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "封条号",
+          "key": "field_2",
+          "fieldId": "fBpODKL",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "车牌号",
+          "key": "field_3",
+          "fieldId": "LzhPKRa",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "司机",
+          "key": "field_4",
+          "fieldId": "ftZFOvJ",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "装柜日期",
+          "key": "date",
+          "fieldId": "QwBAnwZ",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "起运港",
+          "key": "field_5",
+          "fieldId": "1kA2Pw5",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "目的港",
+          "key": "field_6",
+          "fieldId": "tjl8Meg",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "VZ0icWk",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "五要素核对",
+          "key": "field_7",
+          "fieldId": "QVYP0AV",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "箱数",
+          "key": "field_8",
+          "fieldId": "EnhRvIP",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "毛重kg",
+          "key": "gross_weight",
+          "fieldId": "ZNPZRHq",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "净重kg",
+          "key": "net_weight",
+          "fieldId": "0fu229z",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "异常说明",
+          "key": "description",
+          "fieldId": "8jOh85m",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "审核员",
+          "key": "field_9",
+          "fieldId": "Oh7aStr",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "附件",
+          "key": "attachment",
+          "fieldId": "hehBCjB",
+          "apiType": "Attachment[]",
+          "required": false
+        }
+      ]
+    },
+    "photo-standards": {
+      "moduleKey": "t41",
+      "tableId": "Mz4rMxh",
+      "tableName": "41 装柜拍照标准与槽位",
+      "fields": [
+        {
+          "label": "槽位名称",
+          "key": "name",
+          "fieldId": "xgCQtRs",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "槽位编码",
+          "key": "code",
+          "fieldId": "QNg2xV3",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "照片类别",
+          "key": "photo",
+          "fieldId": "zFfmUXf",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "序号",
+          "key": "field",
+          "fieldId": "PyiYhml",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "是否必拍",
+          "key": "is_",
+          "fieldId": "ZwnTeOq",
+          "apiType": "boolean",
+          "required": false
+        },
+        {
+          "label": "拍摄要求",
+          "key": "field_2",
+          "fieldId": "8IXg2FW",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "对应海关字段",
+          "key": "field_3",
+          "fieldId": "MQ4VkCN",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "标准示例图",
+          "key": "field_4",
+          "fieldId": "KQNO0eN",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "状态",
+          "key": "status",
+          "fieldId": "AWPvlMY",
+          "apiType": "string(enum)",
+          "required": false
+        }
+      ]
+    },
+    "loading-photos": {
+      "moduleKey": "t42",
+      "tableId": "QX5wonu",
+      "tableName": "42 装柜留痕照片",
+      "fields": [
+        {
+          "label": "照片记录",
+          "key": "photo",
+          "fieldId": "nxyutu1",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "关联柜次",
+          "key": "shipment",
+          "fieldId": "dY2SAPQ",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "槽位",
+          "key": "field",
+          "fieldId": "rvJMGx0",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "拍摄时间",
+          "key": "time",
+          "fieldId": "1diInAP",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "拍摄人",
+          "key": "field_2",
+          "fieldId": "1Vfrlae",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "现场照片",
+          "key": "photo_2",
+          "fieldId": "UZIyRua",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "照片说明",
+          "key": "photo_3",
+          "fieldId": "klgQr3B",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "核验状态",
+          "key": "status",
+          "fieldId": "7KgeXUt",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "柜号识别",
+          "key": "field_3",
+          "fieldId": "5uyBtFI",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "备注",
+          "key": "remark",
+          "fieldId": "COzudEp",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    },
+    "weight-audit": {
+      "moduleKey": "t43",
+      "tableId": "RDET54W",
+      "tableName": "43 重量核查与审核归档",
+      "fields": [
+        {
+          "label": "单号",
+          "key": "doc_no",
+          "fieldId": "VQw8um4",
+          "apiType": "string",
+          "required": true
+        },
+        {
+          "label": "类型",
+          "key": "type",
+          "fieldId": "oDAX6SH",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "关联柜次",
+          "key": "shipment",
+          "fieldId": "6niVH3q",
+          "apiType": "string",
+          "required": false
+        },
+        {
+          "label": "单件净重",
+          "key": "net_weight",
+          "fieldId": "u0lrrYZ",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "每箱毛重",
+          "key": "gross_weight",
+          "fieldId": "Uw1Y1NX",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "箱数",
+          "key": "field",
+          "fieldId": "6APEMsN",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "总毛重",
+          "key": "gross_weight_2",
+          "fieldId": "SfMOv1s",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "申报值",
+          "key": "field_2",
+          "fieldId": "2KGCjyo",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "偏差",
+          "key": "field_3",
+          "fieldId": "mYcsQEb",
+          "apiType": "number",
+          "required": false
+        },
+        {
+          "label": "核验结论",
+          "key": "conclusion",
+          "fieldId": "QaMWeJ4",
+          "apiType": "string(enum)",
+          "required": false
+        },
+        {
+          "label": "审核员",
+          "key": "field_4",
+          "fieldId": "JBl6HCM",
+          "apiType": "string(userId)",
+          "required": false
+        },
+        {
+          "label": "归档日期",
+          "key": "date",
+          "fieldId": "dGA7UM4",
+          "apiType": "string(date)",
+          "required": false
+        },
+        {
+          "label": "证据包",
+          "key": "field_5",
+          "fieldId": "w2okXJz",
+          "apiType": "Attachment[]",
+          "required": false
+        },
+        {
+          "label": "备注",
+          "key": "remark",
+          "fieldId": "8EVclhc",
+          "apiType": "string",
+          "required": false
+        }
+      ]
+    }
+  }
+}

@@ -799,7 +799,9 @@ window.ERP_CONFIG = {
           "backup",
           "reset",
           "portal",
-          "audit"
+          "audit",
+          "contract",
+          "sync"
         ],
         "rowScope": "all",
         "writable": [
@@ -1182,15 +1184,12 @@ window.ERP_CONFIG = {
           "t43": []
         },
         "export": true,
-        "boardExport": true,
+        "boardExport": false,
         "system": [
-          "guide",
-          "dict",
-          "board",
-          "flow",
           "notify",
           "permissions",
-          "identity"
+          "identity",
+          "sync"
         ],
         "rowScope": "all",
         "writable": [
@@ -1413,15 +1412,12 @@ window.ERP_CONFIG = {
           ]
         },
         "export": true,
-        "boardExport": true,
+        "boardExport": false,
         "system": [
-          "guide",
-          "dict",
-          "board",
-          "flow",
           "notify",
           "permissions",
-          "identity"
+          "identity",
+          "sync"
         ],
         "rowScope": "all",
         "writable": [
@@ -1586,15 +1582,12 @@ window.ERP_CONFIG = {
           "t43": []
         },
         "export": true,
-        "boardExport": true,
+        "boardExport": false,
         "system": [
-          "guide",
-          "dict",
-          "board",
-          "flow",
           "notify",
           "permissions",
-          "identity"
+          "identity",
+          "sync"
         ],
         "rowScope": "all",
         "writable": [
@@ -1781,15 +1774,12 @@ window.ERP_CONFIG = {
           "t43": []
         },
         "export": true,
-        "boardExport": true,
+        "boardExport": false,
         "system": [
-          "guide",
-          "dict",
-          "board",
-          "flow",
           "notify",
           "permissions",
-          "identity"
+          "identity",
+          "sync"
         ],
         "rowScope": "all",
         "writable": [
@@ -1974,13 +1964,10 @@ window.ERP_CONFIG = {
         "export": false,
         "boardExport": false,
         "system": [
-          "guide",
-          "dict",
-          "board",
-          "flow",
           "notify",
           "permissions",
-          "identity"
+          "identity",
+          "sync"
         ],
         "rowScope": "supplier",
         "writable": [
@@ -2150,7 +2137,11 @@ window.ERP_CONFIG = {
       "approvers": [
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「00 系统导航与流程说明」，共 8 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「00 系统导航与流程说明」，共 8 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t01",
@@ -2273,7 +2264,11 @@ window.ERP_CONFIG = {
       "approvers": [
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「01 组织与部门」，共 8 个字段、2 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「01 组织与部门」，共 8 个字段、2 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t02",
@@ -2420,7 +2415,11 @@ window.ERP_CONFIG = {
       "approvers": [
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「02 用户与角色」，共 9 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「02 用户与角色」，共 9 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t03",
@@ -2550,7 +2549,11 @@ window.ERP_CONFIG = {
       "approvers": [
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「03 数据字典与审批流」，共 8 个字段、2 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「03 数据字典与审批流」，共 8 个字段、2 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t04",
@@ -2695,7 +2698,11 @@ window.ERP_CONFIG = {
       "approvers": [
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「04 通知与操作日志」，共 8 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「04 通知与操作日志」，共 8 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t05",
@@ -2837,7 +2844,11 @@ window.ERP_CONFIG = {
       "approvers": [
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「05 附件中心」，共 8 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「05 附件中心」，共 8 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t06",
@@ -3003,7 +3014,11 @@ window.ERP_CONFIG = {
         "admin",
         "buyer"
       ],
-      "guide": "本模块对应钉钉 AI 表格「06 物料主数据」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「06 物料主数据」，共 10 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t07",
@@ -3138,7 +3153,11 @@ window.ERP_CONFIG = {
         "admin",
         "buyer"
       ],
-      "guide": "本模块对应钉钉 AI 表格「07 仓库与库位」，共 9 个字段、2 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「07 仓库与库位」，共 9 个字段、2 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t08",
@@ -3258,7 +3277,11 @@ window.ERP_CONFIG = {
         "admin",
         "buyer"
       ],
-      "guide": "本模块对应钉钉 AI 表格「08 单位币种与汇率」，共 7 个字段、2 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「08 单位币种与汇率」，共 7 个字段、2 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t09",
@@ -3447,7 +3470,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「09 供应商档案」，共 12 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「09 供应商档案」，共 12 个字段、3 个视图。",
+      "hasBackendForm": true,
+      "formUrl": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_UbiNWwS_NsmUd81",
+      "backendFormName": "供应商自助登记",
+      "entryModeDefault": "backend"
     },
     {
       "key": "t10",
@@ -3610,7 +3637,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「10 供应商准入申请」，共 9 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「10 供应商准入申请」，共 9 个字段、3 个视图。",
+      "hasBackendForm": true,
+      "formUrl": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_csKJkCD_UDvWWsF",
+      "backendFormName": "供应商准入申请",
+      "entryModeDefault": "backend"
     },
     {
       "key": "t11",
@@ -3762,7 +3793,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「11 供应商资质证照」，共 8 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「11 供应商资质证照」，共 8 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t12",
@@ -3892,7 +3927,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「12 供应商变更与品类」，共 8 个字段、2 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「12 供应商变更与品类」，共 8 个字段、2 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t13",
@@ -4046,7 +4085,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「13 供应商评审」，共 9 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「13 供应商评审」，共 9 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t14",
@@ -4207,7 +4250,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「14 来料检验」，共 11 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「14 来料检验」，共 11 个字段、3 个视图。",
+      "hasBackendForm": true,
+      "formUrl": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_Q7qB42B_L5JL3PL",
+      "backendFormName": "来料检验登记",
+      "entryModeDefault": "backend"
     },
     {
       "key": "t15",
@@ -4376,7 +4423,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「15 不合格与整改」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「15 不合格与整改」，共 10 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t16",
@@ -4531,7 +4582,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「16 质量记分卡与考察」，共 11 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「16 质量记分卡与考察」，共 11 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t17",
@@ -4688,7 +4743,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「17 采购项目」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「17 采购项目」，共 10 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t18",
@@ -4870,7 +4929,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「18 采购申请 PR」，共 12 个字段、4 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「18 采购申请 PR」，共 12 个字段、4 个视图。",
+      "hasBackendForm": true,
+      "formUrl": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_s1IYdZt_EFEBSSz",
+      "backendFormName": "采购申请提报",
+      "entryModeDefault": "backend"
     },
     {
       "key": "t19",
@@ -5037,7 +5100,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「19 需求池与寻源派发」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「19 需求池与寻源派发」，共 10 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t20",
@@ -5182,7 +5249,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「20 意见征集与定标」，共 10 个字段、2 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「20 意见征集与定标」，共 10 个字段、2 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t21",
@@ -5371,7 +5442,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「21 询价单 RFQ」，共 12 个字段、4 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「21 询价单 RFQ」，共 12 个字段、4 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t22",
@@ -5529,7 +5604,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「22 供应商报价」，共 9 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「22 供应商报价」，共 9 个字段、3 个视图。",
+      "hasBackendForm": true,
+      "formUrl": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_SeRdd62_sHsnOfj",
+      "backendFormName": "供应商报价提交",
+      "entryModeDefault": "backend"
     },
     {
       "key": "t23",
@@ -5691,7 +5770,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「23 竞价场次与出价」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「23 竞价场次与出价」，共 10 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t24",
@@ -5872,7 +5955,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「24 招标计划与投标评标」，共 12 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「24 招标计划与投标评标」，共 12 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t25",
@@ -6018,7 +6105,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「25 中标公示与授标」，共 9 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「25 中标公示与授标」，共 9 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t26",
@@ -6241,7 +6332,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「26 合同台账」，共 13 个字段、5 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「26 合同台账」，共 13 个字段、5 个视图。",
+      "hasBackendForm": true,
+      "formUrl": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_1zALym4_DqwoTNO",
+      "backendFormName": "合同起草登记",
+      "entryModeDefault": "backend"
     },
     {
       "key": "t27",
@@ -6391,7 +6486,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「27 合同模板与用印归档」，共 9 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「27 合同模板与用印归档」，共 9 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t28",
@@ -6586,7 +6685,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「28 采购订单 PO」，共 13 个字段、4 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「28 采购订单 PO」，共 13 个字段、4 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t29",
@@ -6736,7 +6839,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「29 交货计划与变更」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「29 交货计划与变更」，共 10 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t30",
@@ -6898,7 +7005,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「30 送货预约与 ASN」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「30 送货预约与 ASN」，共 10 个字段、3 个视图。",
+      "hasBackendForm": true,
+      "formUrl": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_1kJCtgI_xtoau1F",
+      "backendFormName": "供应商送货预约",
+      "entryModeDefault": "backend"
     },
     {
       "key": "t31",
@@ -7070,7 +7181,11 @@ window.ERP_CONFIG = {
         "buyer",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「31 收货与退货」，共 11 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「31 收货与退货」，共 11 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t32",
@@ -7240,7 +7355,11 @@ window.ERP_CONFIG = {
         "warehouse",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「32 库存余额与预警」，共 11 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「32 库存余额与预警」，共 11 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t33",
@@ -7400,7 +7519,11 @@ window.ERP_CONFIG = {
         "warehouse",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「33 出入库与调拨盘点」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「33 出入库与调拨盘点」，共 10 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t34",
@@ -7577,7 +7700,11 @@ window.ERP_CONFIG = {
         "warehouse",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「34 商城商品与价格协议」，共 12 个字段、4 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「34 商城商品与价格协议」，共 12 个字段、4 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t35",
@@ -7705,7 +7832,11 @@ window.ERP_CONFIG = {
         "warehouse",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「35 购物车与商城公告」，共 8 个字段、2 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「35 购物车与商城公告」，共 8 个字段、2 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t36",
@@ -7882,7 +8013,11 @@ window.ERP_CONFIG = {
         "finance",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「36 付款计划与付款申请」，共 10 个字段、4 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「36 付款计划与付款申请」，共 10 个字段、4 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t37",
@@ -8050,7 +8185,11 @@ window.ERP_CONFIG = {
         "finance",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「37 对账与发票」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「37 对账与发票」，共 10 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t38",
@@ -8204,7 +8343,11 @@ window.ERP_CONFIG = {
         "finance",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「38 扣款与付款执行」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「38 扣款与付款执行」，共 10 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t39",
@@ -8360,7 +8503,11 @@ window.ERP_CONFIG = {
         "finance",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「39 经营看板与预警」，共 10 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「39 经营看板与预警」，共 10 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t40",
@@ -8580,7 +8727,11 @@ window.ERP_CONFIG = {
         "warehouse",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「40 装柜柜次与核对闸门」，共 17 个字段、4 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「40 装柜柜次与核对闸门」，共 17 个字段、4 个视图。",
+      "hasBackendForm": true,
+      "formUrl": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_wvVO47C_UkYzwjQ",
+      "backendFormName": "装柜柜次登记",
+      "entryModeDefault": "backend"
     },
     {
       "key": "t41",
@@ -8719,7 +8870,11 @@ window.ERP_CONFIG = {
         "warehouse",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「41 装柜拍照标准与槽位」，共 9 个字段、3 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「41 装柜拍照标准与槽位」，共 9 个字段、3 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     },
     {
       "key": "t42",
@@ -8887,7 +9042,11 @@ window.ERP_CONFIG = {
         "warehouse",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「42 装柜留痕照片」，共 10 个字段、4 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「42 装柜留痕照片」，共 10 个字段、4 个视图。",
+      "hasBackendForm": true,
+      "formUrl": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_QX5wonu_z70MqKP",
+      "backendFormName": "现场拍照上传",
+      "entryModeDefault": "backend"
     },
     {
       "key": "t43",
@@ -9079,7 +9238,11 @@ window.ERP_CONFIG = {
         "warehouse",
         "admin"
       ],
-      "guide": "本模块对应钉钉 AI 表格「43 重量核查与审核归档」，共 14 个字段、4 个视图。"
+      "guide": "本模块对应钉钉 AI 表格「43 重量核查与审核归档」，共 14 个字段、4 个视图。",
+      "hasBackendForm": false,
+      "formUrl": "",
+      "backendFormName": "",
+      "entryModeDefault": "frontend"
     }
   ],
   "capLabels": {
@@ -9104,7 +9267,9 @@ window.ERP_CONFIG = {
     "backup": "全量数据备份",
     "reset": "重置演示数据",
     "portal": "钉钉全量入口",
-    "audit": "全局审计与权限矩阵"
+    "audit": "全局审计与权限矩阵",
+    "contract": "后端字段契约",
+    "sync": "数据对齐与自动化流"
   },
   "flow": [
     {
@@ -9406,6 +9571,980 @@ window.ERP_CONFIG = {
       }
     ]
   },
+  "stages": [
+    {
+      "id": "01",
+      "name": "供应商准入",
+      "domain": "02",
+      "owners": [
+        "supplier",
+        "buyer",
+        "admin"
+      ],
+      "input": "供应商自助登记、采购邀请",
+      "output": "合格供应商档案与供货品类",
+      "desc": "外部供应商提交准入与资质，采购方核验后生成合格档案；这是全链路的起点。",
+      "modules": [
+        "t09",
+        "t10",
+        "t11",
+        "t12",
+        "t13"
+      ],
+      "entry": "t10",
+      "forms": [
+        "t09",
+        "t10",
+        "t11"
+      ]
+    },
+    {
+      "id": "02",
+      "name": "需求提报",
+      "domain": "03",
+      "owners": [
+        "buyer",
+        "admin"
+      ],
+      "input": "业务部门采购需求、年度采购项目",
+      "output": "已生效 PR 与需求池派发",
+      "desc": "立项与 PR 提报、预算审批，通过后自动归集到需求池并派发寻源方式。",
+      "modules": [
+        "t17",
+        "t18",
+        "t19"
+      ],
+      "entry": "t18",
+      "forms": [
+        "t17",
+        "t18",
+        "t19"
+      ]
+    },
+    {
+      "id": "03",
+      "name": "寻源定标",
+      "domain": "03",
+      "owners": [
+        "buyer",
+        "supplier",
+        "admin"
+      ],
+      "input": "需求池派发结果",
+      "output": "授标结果与中标公示",
+      "desc": "RFQ / 竞价 / 招标三条寻源路径并行，供应商报价投标，采购方比价定标。",
+      "modules": [
+        "t20",
+        "t21",
+        "t22",
+        "t23",
+        "t24",
+        "t25"
+      ],
+      "entry": "t21",
+      "forms": [
+        "t20",
+        "t21",
+        "t22",
+        "t23",
+        "t24",
+        "t25"
+      ]
+    },
+    {
+      "id": "04",
+      "name": "合同订单",
+      "domain": "04",
+      "owners": [
+        "buyer",
+        "admin"
+      ],
+      "input": "授标结果",
+      "output": "已生效合同与下达的采购订单",
+      "desc": "合同起草、风险条款与用印归档，随后下达 PO 并生成交货计划。",
+      "modules": [
+        "t26",
+        "t27",
+        "t28",
+        "t29"
+      ],
+      "entry": "t26",
+      "forms": [
+        "t26",
+        "t27",
+        "t28",
+        "t29"
+      ]
+    },
+    {
+      "id": "05",
+      "name": "交付收货",
+      "domain": "04",
+      "owners": [
+        "supplier",
+        "warehouse",
+        "quality",
+        "admin"
+      ],
+      "input": "采购订单与交货计划",
+      "output": "收货确认与来料检验结论",
+      "desc": "供应商预约送货、仓库收货登记、质量来料检验与不合格整改闭环。",
+      "modules": [
+        "t30",
+        "t31",
+        "t14",
+        "t15"
+      ],
+      "entry": "t30",
+      "forms": [
+        "t30",
+        "t31",
+        "t14",
+        "t15"
+      ]
+    },
+    {
+      "id": "06",
+      "name": "仓储入库",
+      "domain": "05",
+      "owners": [
+        "warehouse",
+        "quality",
+        "admin"
+      ],
+      "input": "合格收货单",
+      "output": "入库过账后的可用库存",
+      "desc": "入库过账、库存余额与水位预警、调拨盘点、商城价格协议与质量记分卡。",
+      "modules": [
+        "t32",
+        "t33",
+        "t34",
+        "t35",
+        "t16"
+      ],
+      "entry": "t33",
+      "forms": [
+        "t32",
+        "t33",
+        "t34",
+        "t35",
+        "t16"
+      ]
+    },
+    {
+      "id": "07",
+      "name": "财务结算",
+      "domain": "06",
+      "owners": [
+        "finance",
+        "supplier",
+        "admin"
+      ],
+      "input": "入库与收货记录、供应商发票",
+      "output": "付款执行凭证与对账闭环",
+      "desc": "对账开票、付款计划与申请、扣款与付款执行，供应商可查看本公司对账结果。",
+      "modules": [
+        "t36",
+        "t37",
+        "t38",
+        "t39"
+      ],
+      "entry": "t37",
+      "forms": [
+        "t36",
+        "t37",
+        "t38",
+        "t39"
+      ]
+    },
+    {
+      "id": "08",
+      "name": "装柜留痕",
+      "domain": "07",
+      "owners": [
+        "warehouse",
+        "admin"
+      ],
+      "input": "出库柜次与出货计划",
+      "output": "可导出的证据包与归档裁定",
+      "desc": "五要素核对闸门、标准槽位拍照留痕、重量核查与审核归档。",
+      "modules": [
+        "t40",
+        "t41",
+        "t42",
+        "t43"
+      ],
+      "entry": "t40",
+      "forms": [
+        "t40",
+        "t41",
+        "t42",
+        "t43"
+      ]
+    }
+  ],
+  "baseGroup": {
+    "id": "00",
+    "name": "基础资料",
+    "domain": "00/01",
+    "owners": [
+      "admin"
+    ],
+    "input": "企业组织、用户、字典与主数据",
+    "output": "全链路共用的基础配置",
+    "desc": "组织、用户角色、审批流、附件中心、物料与仓库主数据。配置一次，全链路复用。",
+    "modules": [
+      "t00",
+      "t01",
+      "t02",
+      "t03",
+      "t04",
+      "t05",
+      "t06",
+      "t07",
+      "t08"
+    ],
+    "entry": "t06",
+    "forms": []
+  },
+  "allGroups": [
+    {
+      "id": "00",
+      "name": "基础资料",
+      "domain": "00/01",
+      "owners": [
+        "admin"
+      ],
+      "input": "企业组织、用户、字典与主数据",
+      "output": "全链路共用的基础配置",
+      "desc": "组织、用户角色、审批流、附件中心、物料与仓库主数据。配置一次，全链路复用。",
+      "modules": [
+        "t00",
+        "t01",
+        "t02",
+        "t03",
+        "t04",
+        "t05",
+        "t06",
+        "t07",
+        "t08"
+      ],
+      "entry": "t06",
+      "forms": []
+    },
+    {
+      "id": "01",
+      "name": "供应商准入",
+      "domain": "02",
+      "owners": [
+        "supplier",
+        "buyer",
+        "admin"
+      ],
+      "input": "供应商自助登记、采购邀请",
+      "output": "合格供应商档案与供货品类",
+      "desc": "外部供应商提交准入与资质，采购方核验后生成合格档案；这是全链路的起点。",
+      "modules": [
+        "t09",
+        "t10",
+        "t11",
+        "t12",
+        "t13"
+      ],
+      "entry": "t10",
+      "forms": [
+        "t09",
+        "t10",
+        "t11"
+      ]
+    },
+    {
+      "id": "02",
+      "name": "需求提报",
+      "domain": "03",
+      "owners": [
+        "buyer",
+        "admin"
+      ],
+      "input": "业务部门采购需求、年度采购项目",
+      "output": "已生效 PR 与需求池派发",
+      "desc": "立项与 PR 提报、预算审批，通过后自动归集到需求池并派发寻源方式。",
+      "modules": [
+        "t17",
+        "t18",
+        "t19"
+      ],
+      "entry": "t18",
+      "forms": [
+        "t17",
+        "t18",
+        "t19"
+      ]
+    },
+    {
+      "id": "03",
+      "name": "寻源定标",
+      "domain": "03",
+      "owners": [
+        "buyer",
+        "supplier",
+        "admin"
+      ],
+      "input": "需求池派发结果",
+      "output": "授标结果与中标公示",
+      "desc": "RFQ / 竞价 / 招标三条寻源路径并行，供应商报价投标，采购方比价定标。",
+      "modules": [
+        "t20",
+        "t21",
+        "t22",
+        "t23",
+        "t24",
+        "t25"
+      ],
+      "entry": "t21",
+      "forms": [
+        "t20",
+        "t21",
+        "t22",
+        "t23",
+        "t24",
+        "t25"
+      ]
+    },
+    {
+      "id": "04",
+      "name": "合同订单",
+      "domain": "04",
+      "owners": [
+        "buyer",
+        "admin"
+      ],
+      "input": "授标结果",
+      "output": "已生效合同与下达的采购订单",
+      "desc": "合同起草、风险条款与用印归档，随后下达 PO 并生成交货计划。",
+      "modules": [
+        "t26",
+        "t27",
+        "t28",
+        "t29"
+      ],
+      "entry": "t26",
+      "forms": [
+        "t26",
+        "t27",
+        "t28",
+        "t29"
+      ]
+    },
+    {
+      "id": "05",
+      "name": "交付收货",
+      "domain": "04",
+      "owners": [
+        "supplier",
+        "warehouse",
+        "quality",
+        "admin"
+      ],
+      "input": "采购订单与交货计划",
+      "output": "收货确认与来料检验结论",
+      "desc": "供应商预约送货、仓库收货登记、质量来料检验与不合格整改闭环。",
+      "modules": [
+        "t30",
+        "t31",
+        "t14",
+        "t15"
+      ],
+      "entry": "t30",
+      "forms": [
+        "t30",
+        "t31",
+        "t14",
+        "t15"
+      ]
+    },
+    {
+      "id": "06",
+      "name": "仓储入库",
+      "domain": "05",
+      "owners": [
+        "warehouse",
+        "quality",
+        "admin"
+      ],
+      "input": "合格收货单",
+      "output": "入库过账后的可用库存",
+      "desc": "入库过账、库存余额与水位预警、调拨盘点、商城价格协议与质量记分卡。",
+      "modules": [
+        "t32",
+        "t33",
+        "t34",
+        "t35",
+        "t16"
+      ],
+      "entry": "t33",
+      "forms": [
+        "t32",
+        "t33",
+        "t34",
+        "t35",
+        "t16"
+      ]
+    },
+    {
+      "id": "07",
+      "name": "财务结算",
+      "domain": "06",
+      "owners": [
+        "finance",
+        "supplier",
+        "admin"
+      ],
+      "input": "入库与收货记录、供应商发票",
+      "output": "付款执行凭证与对账闭环",
+      "desc": "对账开票、付款计划与申请、扣款与付款执行，供应商可查看本公司对账结果。",
+      "modules": [
+        "t36",
+        "t37",
+        "t38",
+        "t39"
+      ],
+      "entry": "t37",
+      "forms": [
+        "t36",
+        "t37",
+        "t38",
+        "t39"
+      ]
+    },
+    {
+      "id": "08",
+      "name": "装柜留痕",
+      "domain": "07",
+      "owners": [
+        "warehouse",
+        "admin"
+      ],
+      "input": "出库柜次与出货计划",
+      "output": "可导出的证据包与归档裁定",
+      "desc": "五要素核对闸门、标准槽位拍照留痕、重量核查与审核归档。",
+      "modules": [
+        "t40",
+        "t41",
+        "t42",
+        "t43"
+      ],
+      "entry": "t40",
+      "forms": [
+        "t40",
+        "t41",
+        "t42",
+        "t43"
+      ]
+    }
+  ],
+  "roleStage": {
+    "admin": "02",
+    "buyer": "02",
+    "supplier": "01",
+    "warehouse": "06",
+    "finance": "07",
+    "quality": "05"
+  },
+  "moduleCode": {
+    "t00": "system-navigation",
+    "t01": "organizations",
+    "t02": "users-roles",
+    "t03": "dict-approval",
+    "t04": "notifications",
+    "t05": "attachments",
+    "t06": "materials",
+    "t07": "warehouses",
+    "t08": "uom-currency",
+    "t09": "suppliers",
+    "t10": "supplier-admission",
+    "t11": "supplier-licenses",
+    "t12": "supplier-changes",
+    "t13": "supplier-reviews",
+    "t14": "incoming-inspection",
+    "t15": "ncr-corrective",
+    "t16": "quality-scorecard",
+    "t17": "purchase-projects",
+    "t18": "purchase-requisitions",
+    "t19": "demand-pool",
+    "t20": "opinion-award",
+    "t21": "rfq-requests",
+    "t22": "rfq-quotes",
+    "t23": "auctions",
+    "t24": "tenders",
+    "t25": "award-publicity",
+    "t26": "contracts",
+    "t27": "contract-archive",
+    "t28": "purchase-orders",
+    "t29": "delivery-plans",
+    "t30": "asn-bookings",
+    "t31": "receipts-returns",
+    "t32": "inventory-balance",
+    "t33": "inventory-transactions",
+    "t34": "mall-products",
+    "t35": "mall-cart",
+    "t36": "payment-plans",
+    "t37": "reconciliation-invoices",
+    "t38": "payment-execution",
+    "t39": "bi-alerts",
+    "t40": "loading-shipments",
+    "t41": "photo-standards",
+    "t42": "loading-photos",
+    "t43": "weight-audit"
+  },
+  "moduleSql": {
+    "t00": [
+      "sys_permission",
+      "sys_approval_flow",
+      "sys_approval_node"
+    ],
+    "t01": [
+      "sys_org",
+      "sys_dept"
+    ],
+    "t02": [
+      "sys_user",
+      "sys_role",
+      "sys_user_role",
+      "sys_role_permission"
+    ],
+    "t03": [
+      "sys_dict_type",
+      "sys_dict_item",
+      "sys_approval_flow",
+      "sys_approval_node"
+    ],
+    "t04": [
+      "sys_notification",
+      "sys_operation_log",
+      "sys_approval_task",
+      "sys_approval_instance"
+    ],
+    "t05": [
+      "sys_attachment"
+    ],
+    "t06": [
+      "md_material",
+      "md_material_category"
+    ],
+    "t07": [
+      "md_warehouse",
+      "md_warehouse_location"
+    ],
+    "t08": [
+      "md_uom",
+      "md_currency",
+      "md_exchange_rate"
+    ],
+    "t09": [
+      "sp_supplier",
+      "sp_supplier_contact",
+      "sp_supplier_bank",
+      "sp_supplier_tax"
+    ],
+    "t10": [
+      "sp_admit_application",
+      "sp_invite"
+    ],
+    "t11": [
+      "sp_supplier_license"
+    ],
+    "t12": [
+      "sp_change_request",
+      "sp_status_log",
+      "sp_supplier_category"
+    ],
+    "t13": [
+      "qa_supplier_review",
+      "qa_supplier_review_score",
+      "qa_review_template",
+      "qa_review_template_item"
+    ],
+    "t14": [
+      "qa_incoming_inspection"
+    ],
+    "t15": [
+      "qa_ncr",
+      "qa_corrective_action"
+    ],
+    "t16": [
+      "qa_scorecard",
+      "qa_audit_standard",
+      "qa_audit_plan"
+    ],
+    "t17": [
+      "pur_project"
+    ],
+    "t18": [
+      "pur_requisition",
+      "pur_requisition_item"
+    ],
+    "t19": [
+      "pur_demand_pool",
+      "pur_sourcing_dispatch"
+    ],
+    "t20": [
+      "pur_opinion_collect",
+      "pur_opinion_proposal",
+      "pur_award_result"
+    ],
+    "t21": [
+      "rfq_request",
+      "rfq_item",
+      "rfq_invite",
+      "rfq_quote_template"
+    ],
+    "t22": [
+      "rfq_quote",
+      "rfq_quote_item",
+      "rfq_award",
+      "rfq_exception"
+    ],
+    "t23": [
+      "auc_rule_config",
+      "auc_invitation",
+      "auc_item",
+      "auc_participant",
+      "auc_bid",
+      "auc_award"
+    ],
+    "t24": [
+      "td_eval_rule",
+      "td_plan",
+      "td_registration",
+      "td_deposit",
+      "td_bid_document",
+      "td_eval_score"
+    ],
+    "t25": [
+      "td_award",
+      "td_second_quote"
+    ],
+    "t26": [
+      "ct_contract",
+      "ct_contract_item",
+      "ct_payment_schedule",
+      "ct_contract_version"
+    ],
+    "t27": [
+      "ct_template",
+      "ct_seal",
+      "ct_risk_clause",
+      "ct_contract_risk_link",
+      "ct_sign_record",
+      "ct_archive"
+    ],
+    "t28": [
+      "po_order",
+      "po_order_item"
+    ],
+    "t29": [
+      "po_delivery_plan",
+      "po_delivery_change"
+    ],
+    "t30": [
+      "po_delivery_booking",
+      "po_asn",
+      "po_asn_item"
+    ],
+    "t31": [
+      "po_receipt",
+      "po_receipt_item",
+      "po_return",
+      "po_return_item"
+    ],
+    "t32": [
+      "inv_stock",
+      "inv_stock_txn",
+      "inv_vmi_setting",
+      "inv_alert"
+    ],
+    "t33": [
+      "wh_inbound",
+      "wh_inbound_item",
+      "wh_outbound",
+      "wh_outbound_item",
+      "wh_transfer",
+      "wh_count",
+      "wh_requisition"
+    ],
+    "t34": [
+      "mall_category",
+      "mall_price_agreement",
+      "mall_price_agreement_item",
+      "mall_agreement_scope",
+      "mall_product"
+    ],
+    "t35": [
+      "mall_cart",
+      "mall_cart_item",
+      "mall_notice"
+    ],
+    "t36": [
+      "fin_payment_plan",
+      "fin_payment_plan_item",
+      "fin_payment_request",
+      "fin_payment_request_item"
+    ],
+    "t37": [
+      "fin_reconciliation",
+      "fin_reconciliation_item",
+      "fin_invoice",
+      "fin_recon_setting"
+    ],
+    "t38": [
+      "fin_deduction",
+      "fin_payment_execution"
+    ],
+    "t39": [
+      "bi_dashboard",
+      "bi_widget",
+      "bi_alert_rule",
+      "bi_alert_event",
+      "bi_subscription",
+      "bi_access_log"
+    ],
+    "t40": [
+      "lt_shipment",
+      "lt_shipment_fba",
+      "lt_gate_check"
+    ],
+    "t41": [
+      "lt_photo_standard",
+      "lt_slot_template"
+    ],
+    "t42": [
+      "lt_shipment_slot",
+      "lt_customs_field_map"
+    ],
+    "t43": [
+      "lt_weight_record",
+      "lt_audit",
+      "lt_export_package"
+    ]
+  },
+  "sync": {
+    "host": "erp.nexduo.xyz",
+    "site": "https://erp.nexduo.xyz",
+    "gateway": {
+      "base": "https://erp.nexduo.xyz/api/sync",
+      "pull": "GET  /api/sync/pull?since={ts}&module={code}",
+      "push": "POST /api/sync/push",
+      "status": "GET  /api/sync/status",
+      "resolve": "POST /api/sync/resolve",
+      "webhook": "POST /api/sync/webhook"
+    },
+    "mode": "demo",
+    "autoSync": true,
+    "interval": "5m",
+    "defaultEntryMode": "backend",
+    "modeNote": "钉钉 AI 表格已开启 9 张在线表单在收集数据。前端默认不重复建表单：有钉钉表单的模块走「钉钉录入 → 同步拉取 → 前端推进」；其余模块走「前端填写 → 自动同步回写」。可在下方逐模块切换。",
+    "liveNote": "静态页面无法直连钉钉开放平台（跨域与应用鉴权）。把 worker/sync-gateway.js 部署到 erp.nexduo.xyz 后切到「实时」模式，前端即按 GATEWAY 契约发起真实请求；未部署时全部行为由本地队列模拟。"
+  },
+  "flows": [
+    {
+      "id": "F01",
+      "name": "钉钉表单提交 → 同步生成前端单据",
+      "source": "dingtalk",
+      "trigger": "钉钉表单新增提交 / 每 5 分钟增量拉取",
+      "condition": "表单所属模块在当前角色可见范围内，且 remoteId 未存在",
+      "actions": [
+        "拉取 /api/sync/pull",
+        "按字段契约映射 DTO",
+        "幂等 upsert 到本地单据",
+        "标记 origin=dingtalk-form"
+      ],
+      "fieldMap": "contract.js 的 fields[].key ↔ 钉钉表字段",
+      "desc": "供应商在钉钉填完准入/报价/送货预约后，前端对应角色登录即可看到单据，无需二次录入。",
+      "modules": [
+        "t09",
+        "t10",
+        "t14",
+        "t18",
+        "t22",
+        "t26",
+        "t30",
+        "t40",
+        "t42"
+      ]
+    },
+    {
+      "id": "F02",
+      "name": "前端填单 → 自动回写钉钉数据表",
+      "source": "frontend",
+      "trigger": "前端新建 / 编辑 / 提交单据",
+      "condition": "模块录入模式为 frontend 或 both，且 autoSync 开启",
+      "actions": [
+        "写入 outbox 队列",
+        "POST /api/sync/push",
+        "回写 remoteId",
+        "标记 sync=synced"
+      ],
+      "fieldMap": "中文显示名 → DTO 列名 → 钉钉 AI 表格字段",
+      "desc": "不想用钉钉表单时，直接在前端填；保存即入队，网关把记录写回钉钉数据表。",
+      "modules": []
+    },
+    {
+      "id": "F03",
+      "name": "审批通过 → 派生下游单据",
+      "source": "both",
+      "trigger": "单据状态 running → done",
+      "condition": "config.links 中存在该模块的联动规则",
+      "actions": [
+        "按 map 复制字段",
+        "生成下游草稿单",
+        "写入 source 来源链",
+        "派生单入同步队列",
+        "通知下一环节角色"
+      ],
+      "fieldMap": "14 条 LINK_RULES 的 map",
+      "desc": "PR 生效派发需求池、授标生成合同、收货派生入库等，前后端生成结果保持同源。",
+      "modules": []
+    },
+    {
+      "id": "F04",
+      "name": "状态流转 → 通知与看板刷新",
+      "source": "both",
+      "trigger": "提交 / 通过 / 驳回 / 撤销",
+      "condition": "动作合法且通过权限校验",
+      "actions": [
+        "写操作日志",
+        "按审批角色推送通知",
+        "刷新工作台与驾驶舱聚合",
+        "同步状态字段到钉钉"
+      ],
+      "fieldMap": "statusField + states",
+      "desc": "状态是单一事实来源，任何一侧变更都要让另一侧与看板同步。",
+      "modules": []
+    },
+    {
+      "id": "F05",
+      "name": "定时增量对齐（09:00 / 18:00）",
+      "source": "scheduled",
+      "trigger": "每日 09:00、18:00（GMT+08:00）",
+      "condition": "存在 since 之后的变更",
+      "actions": [
+        "拉取增量",
+        "推送 outbox",
+        "冲突检测",
+        "生成同步简报通知"
+      ],
+      "fieldMap": "since 时间戳增量游标",
+      "desc": "与钉钉侧已建的定时自动化对齐，保证最终一致。",
+      "modules": []
+    },
+    {
+      "id": "F06",
+      "name": "冲突检测与人工裁决",
+      "source": "both",
+      "trigger": "同一 remoteId 在前后端都被修改",
+      "condition": "本地 updatedAt 与远端 updatedAt 均晚于 lastSync",
+      "actions": [
+        "标记 conflict",
+        "冻结自动覆盖",
+        "展示双版本差异",
+        "人工选择保留哪一侧"
+      ],
+      "fieldMap": "remoteId + updatedAt + lastSync",
+      "desc": "不静默覆盖数据；冲突必须显式裁决后才能继续自动同步。",
+      "modules": []
+    },
+    {
+      "id": "F07",
+      "name": "附件与 AI 字段对齐",
+      "source": "both",
+      "trigger": "上传附件 / 钉钉 AI 字段产出结果",
+      "condition": "模块含附件字段或 AI 字段",
+      "actions": [
+        "附件转存网关",
+        "回写附件 URL 数组",
+        "拉取 AI 字段结果",
+        "更新单据并标记来源"
+      ],
+      "fieldMap": "type=a 附件 / type=ai 智能字段",
+      "desc": "钉钉的附件与 AI 字段是后端能力，前端只做展示与引用，不重复造一套。",
+      "modules": []
+    },
+    {
+      "id": "F08",
+      "name": "链路闸门校验",
+      "source": "frontend",
+      "trigger": "提交单据前",
+      "condition": "必填字段完整 / 装柜五要素齐备 / 上游单据已生效",
+      "actions": [
+        "字段级校验",
+        "上游来源链校验",
+        "不通过则阻断并提示缺失项",
+        "通过后放行入队"
+      ],
+      "fieldMap": "required + source + gate_check",
+      "desc": "把风控前置到填单环节，避免脏数据同步到后端。",
+      "modules": []
+    }
+  ],
+  "formModules": [
+    "t09",
+    "t10",
+    "t14",
+    "t18",
+    "t22",
+    "t26",
+    "t30",
+    "t40",
+    "t42"
+  ],
+  "formLinks": {
+    "t09": {
+      "name": "供应商自助登记",
+      "url": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_UbiNWwS_NsmUd81"
+    },
+    "t10": {
+      "name": "供应商准入申请",
+      "url": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_csKJkCD_UDvWWsF"
+    },
+    "t14": {
+      "name": "来料检验登记",
+      "url": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_Q7qB42B_L5JL3PL"
+    },
+    "t18": {
+      "name": "采购申请提报",
+      "url": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_s1IYdZt_EFEBSSz"
+    },
+    "t22": {
+      "name": "供应商报价提交",
+      "url": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_SeRdd62_sHsnOfj"
+    },
+    "t26": {
+      "name": "合同起草登记",
+      "url": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_1zALym4_DqwoTNO"
+    },
+    "t30": {
+      "name": "供应商送货预约",
+      "url": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_1kJCtgI_xtoau1F"
+    },
+    "t40": {
+      "name": "装柜柜次登记",
+      "url": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_wvVO47C_UkYzwjQ"
+    },
+    "t42": {
+      "name": "现场拍照上传",
+      "url": "https://alidocs.dingtalk.com/notable/share/form/v01Jdl6m36j9rGr7Oke_QX5wonu_z70MqKP"
+    }
+  },
+  "queueStates": {
+    "pending": "待推送",
+    "synced": "已同步",
+    "conflict": "冲突待裁决",
+    "pulled": "已拉取",
+    "failed": "失败待重试",
+    "skipped": "已跳过"
+  },
+  "siteHost": "erp.nexduo.xyz",
   "supplierCompany": "苏州启能力精密制造有限公司",
   "automations": [
     {

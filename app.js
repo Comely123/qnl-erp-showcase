@@ -1,17 +1,29 @@
 /* 启能力 ERP · 全链路协同中枢 —— 运行态前端应用
  * 纯静态、零依赖、hash 路由；所有业务数据由 engine.js 在本地持久化。
- * 页面：登录 / 工作台 / 业务域(两级Tab) / 单据模块 / 全链路流程 / 经营看板 /
- *       通知中心 / 搭建指南 / 架构字典 / 我的权限 / 系统设置
+ * v4 信息架构：面向使用者，全站只有一条主线 —— 八个业务环节串起来的填单链路。
+ *   我的工作（链路工作台）→ 单据中心（跨模块检索）→ 单据模块（列表/详情）→ 表单抽屉
+ *   管理员另有经营驾驶舱、后端契约、系统设置等管理视角入口。
  * 权限：所有入口统一走 engine.js 的 can / canSystem，越权默认拒绝。
  */
 (function () {
   'use strict';
 
-  var CFG = window.ERP_CONFIG, DB = window.ERP_DB;
+  var CFG = window.ERP_CONFIG, DB = window.ERP_DB, CONTRACT = window.ERP_CONTRACT;
+  var SYNC = window.ERP_SYNC;
   var MOD = DB.MOD, ROLE = DB.ROLE, U = DB.util;
   var $ = function (id) { return document.getElementById(id); };
+  var STAGES = CFG.stages, BASE_GROUP = CFG.baseGroup;
+  var STAGE_BY_ID = {};
+  STAGES.forEach(function (s) { STAGE_BY_ID[s.id] = s; });
+  STAGE_BY_ID[BASE_GROUP.id] = BASE_GROUP;
+  var MODULE_STAGE = {};
+  [BASE_GROUP].concat(STAGES).forEach(function (s) {
+    s.modules.forEach(function (k) { MODULE_STAGE[k] = s.id; });
+  });
   var UI = { formData: {}, listQ: '', listSt: 'all', listPage: 1, pageSize: 10,
-    groupIdx: 0, drawerMode: '', formMod: '', formId: '', lastDetailMod: '', lastDetailId: '' };
+    groupIdx: 0, drawerMode: '', formMod: '', formId: '', lastDetailMod: '', lastDetailId: '',
+    stage: '', docSt: 'all', docStage: 'all', docQ: '', docPage: 1, docSize: 12,
+    contractMod: 't18', newMenu: false, syncTab: 'outbox' };
 
   // ---------------------------------------------------------------- 基础工具
   function esc(s) {
@@ -136,6 +148,7 @@
     // 切换身份后清空所有可能残留越权状态的临时 UI
     closeDrawer();
     UI.formData = {}; UI.listQ = ''; UI.listSt = 'all'; UI.listPage = 1; UI.groupIdx = 0;
+    UI.stage = ''; UI.newMenu = false; UI.docSt = 'all'; UI.docStage = 'all'; UI.docQ = ''; UI.docPage = 1;
     UI.lastDetailMod = ''; UI.lastDetailId = '';
     $('roleMenu').classList.add('hidden');
     $('gsResults').classList.add('hidden'); $('globalSearch').value = '';
@@ -163,22 +176,23 @@
     // 钉钉全量入口属于系统级能力，不对业务角色开放
     $('dingtalkBtn').classList.toggle('hidden', !DB.canSystem(r.id, 'portal'));
 
-    var domains = DB.visibleDomains(r.id);
-    var nav = '<div class="sb-group-label">工作台</div>' +
-      navItem('workbench', '', 'home', '工作台', '', route.page === 'workbench') +
-      '<div class="sb-group-label">业务域 · ' + domains.length + '</div>';
-    domains.forEach(function (d) {
-      nav += navItem('domain', d.id, 'box', d.name, d.count, route.page === 'domain' && route.a === d.id);
-    });
-    nav += '<div class="sb-group-label">协同与分析</div>' +
-      navItem('flow', '', 'flow', '全链路流程', '', route.page === 'flow') +
-      navItem('board', '', 'chart', '经营看板', '', route.page === 'board') +
-      navItem('notify', '', 'bell', '通知中心', n || '', route.page === 'notify') +
-      '<div class="sb-group-label">系统</div>' +
-      navItem('permissions', '', 'shield', '我的权限', '', route.page === 'permissions') +
-      (DB.canSystem(r.id, 'guide') ? navItem('guide', '', 'book', '系统搭建指南', '', route.page === 'guide') : '') +
-      (DB.canSystem(r.id, 'dict') ? navItem('dict', '', 'list', '架构字典', '', route.page === 'dict') : '') +
-      (DB.canSystem(r.id, 'settings') ? navItem('settings', '', 'gear', '系统设置', '', route.page === 'settings') : '');
+    // v4 极简导航：业务角色只看得到「干活」的四个入口，
+    // 展示型 / 管理型页面全部收进管理员分组，避免使用者不知道该点哪里。
+    var todoN = DB.todoList(r.id).filter(function (t) { return t.canApprove; }).length;
+    var nav = '<div class="sb-group-label">我的工作</div>' +
+      navItem('workbench', '', 'home', '我的工作', '', route.page === 'workbench') +
+      navItem('docs', '', 'list', '单据中心', '', route.page === 'docs') +
+      navItem('notify', '', 'bell', '通知中心', n || '', route.page === 'notify');
+    var mgmt = '';
+    if (DB.canSystem(r.id, 'board')) mgmt += navItem('board', '', 'chart', '经营驾驶舱', '', route.page === 'board');
+    if (DB.canSystem(r.id, 'contract')) mgmt += navItem('contract', '', 'shield', '后端字段契约', '', route.page === 'contract');
+    if (DB.canSystem(r.id, 'flow')) mgmt += navItem('flow', '', 'flow', '全链路流程', '', route.page === 'flow');
+    if (DB.canSystem(r.id, 'dict')) mgmt += navItem('dict', '', 'list', '架构字典', '', route.page === 'dict');
+    if (DB.canSystem(r.id, 'guide')) mgmt += navItem('guide', '', 'book', '搭建指南', '', route.page === 'guide');
+    if (DB.canSystem(r.id, 'settings')) mgmt += navItem('settings', '', 'gear', '系统设置', '', route.page === 'settings');
+    if (mgmt) nav += '<div class="sb-group-label">管理视角</div>' + mgmt;
+    nav += '<div class="sb-group-label">系统</div>' +
+      navItem('permissions', '', 'shield', '我的权限', '', route.page === 'permissions');
     $('sbNav').innerHTML = nav;
     var crumbs = breadcrumb(route);
     $('crumb').innerHTML = crumbs.map(function (c, i) {
@@ -194,7 +208,8 @@
   }
   function breadcrumb(route) {
     var p = route.page, r = DB.role();
-    if (p === 'workbench') return [r.wbTitle];
+    if (p === 'workbench') return ['我的工作'];
+    if (p === 'docs') return ['我的工作', '单据中心'];
     if (p === 'domain') {
       var d = CFG.domains.filter(function (x) { return x.id === route.a; })[0];
       return ['业务域', d ? d.name : route.a];
@@ -203,10 +218,11 @@
       var m = MOD[route.a];
       return ['业务域', m ? m.domain : '', m ? m.name : route.a];
     }
-    return ({ flow: ['协同与分析', '全链路流程'], board: ['协同与分析', '经营看板'],
-      notify: ['协同与分析', '通知中心'], guide: ['系统', '系统搭建指南'],
-      dict: ['系统', '架构字典'], permissions: ['系统', '我的权限'],
-      settings: ['系统', '系统设置'] })[p] || ['启能力 ERP'];
+    return ({ flow: ['管理视角', '全链路流程'], board: ['管理视角', '经营驾驶舱'],
+      notify: ['我的工作', '通知中心'], guide: ['管理视角', '搭建指南'],
+      dict: ['管理视角', '架构字典'], contract: ['管理视角', '后端字段契约'],
+      sync: ['系统', '数据对齐与自动化流'],
+      permissions: ['系统', '我的权限'], settings: ['管理视角', '系统设置'] })[p] || ['启能力 ERP'];
   }
 
   // ---------------------------------------------------------------- 渲染入口
@@ -223,7 +239,9 @@
     if (route.page === 'login') { go('workbench'); return; }
     var cur = DB.role();
     // 统一路由门禁：直接改 hash 也不能越过权限边界
-    if (route.page === 'settings' && !DB.canSystem(cur.id, 'settings')) {
+    var adminOnly = { settings: 'settings', board: 'board', flow: 'flow',
+      dict: 'dict', guide: 'guide', contract: 'contract' };
+    if (adminOnly[route.page] && !DB.canSystem(cur.id, adminOnly[route.page])) {
       replaceHash('permissions');
       route = { page: 'permissions', a: '', b: '', q: {} };
     }
@@ -235,6 +253,9 @@
     var html = '';
     switch (route.page) {
       case 'workbench': html = pageWorkbench(); break;
+      case 'docs': html = pageDocs(route.q); break;
+      case 'sync': html = pageSync(); break;
+      case 'contract': html = pageContract(); break;
       case 'domain': html = pageDomain(route.a, route.q); break;
       case 'module': html = pageModule(route.a, route.q); break;
       case 'flow': html = pageFlow(); break;
@@ -279,83 +300,505 @@
   }
 
   // ---------------------------------------------------------------- 工作台
+  // ================================================================ 主链路工作台
+  // 全站唯一主线：八个环节串起来，每一步只回答三件事 ——
+  // 我在第几步 / 这一步要填哪张表 / 填完交给谁、下一步去哪。
+  function stageById(id) { return STAGE_BY_ID[id] || STAGES[0]; }
+  function stageRecords(sid, roleId) {
+    var g = stageById(sid), out = [];
+    g.modules.forEach(function (k) {
+      if (!DB.can(roleId, k, 'view')) return;
+      DB.visibleRecords(roleId, k).forEach(function (rec) {
+        out.push({ k: k, rec: rec, m: MOD[k] });
+      });
+    });
+    return out;
+  }
+  function stageStats(sid, roleId) {
+    var list = stageRecords(sid, roleId), g = stageById(sid);
+    var forms = 0, todo = 0, running = 0, done = 0, draft = 0;
+    g.modules.forEach(function (k) {
+      if (DB.can(roleId, k, 'view') && SYNC.canFrontend(k) && DB.can(roleId, k, 'create')) forms += 1;
+    });
+    list.forEach(function (x) {
+      if (x.rec.status === 'running') running += 1;
+      else if (x.rec.status === 'done') done += 1;
+      else if (x.rec.status === 'draft') draft += 1;
+      if (x.rec.status === 'running' && canApproveRecord(ROLE[roleId], x.m, x.rec)) todo += 1;
+    });
+    return { total: list.length, running: running, done: done, draft: draft,
+      forms: forms, todo: todo, list: list };
+  }
+  function defaultStage(roleId) {
+    var best = '', bestN = 0;
+    STAGES.forEach(function (s) {
+      var n = stageStats(s.id, roleId).todo;
+      if (n > bestN) { bestN = n; best = s.id; }
+    });
+    return bestN > 0 ? best : (CFG.roleStage[roleId] || '02');
+  }
+  function stageNavLinks(sid) {
+    var i = STAGES.map(function (s) { return s.id; }).indexOf(sid);
+    var prev = i > 0 ? STAGES[i - 1] : null, next = i >= 0 && i < STAGES.length - 1 ? STAGES[i + 1] : null;
+    return '<div class="stage-nav">' +
+      (prev ? '<button class="stage-nav-btn" data-act="stage" data-id="' + prev.id + '">' +
+        '<small>上一步</small><b>← ' + esc(prev.id + ' ' + prev.name) + '</b></button>' :
+        '<span class="stage-nav-btn muted"><small>链路起点</small><b>供应商准入</b></span>') +
+      '<div class="stage-nav-mid"><span>当前环节由 ' +
+        esc((stageById(sid).owners || []).map(function (o) { return ROLE[o] ? ROLE[o].name : o; }).join(' / ')) +
+        ' 主责</span><span class="mode-note">状态变更后自动派生下游单据并同步到钉钉</span></div>' +
+      (next ? '<button class="stage-nav-btn right" data-act="stage" data-id="' + next.id + '">' +
+        '<small>下一步</small><b>' + esc(next.id + ' ' + next.name) + ' →</b></button>' :
+        '<span class="stage-nav-btn right muted"><small>链路终点</small><b>证据归档</b></span>') +
+      '</div>';
+  }
+  function formCard(k, r) {
+    var m = MOD[k], mode = SYNC.modeOf(k), list = DB.visibleRecords(r.id, k);
+    var canWrite = DB.can(r.id, k, 'create'), frontend = SYNC.canFrontend(k);
+    var running = list.filter(function (x) { return x.status === 'running'; }).length;
+    var badges = '<span class="tag">' + m.fields.length + ' 字段</span>' +
+      '<span class="tag">' + (m.required || []).length + ' 必填</span>' +
+      (running ? pill('running', running + ' 在途') : '');
+    var actions = '';
+    if (frontend && canWrite) {
+      actions += '<button class="btn btn-primary btn-sm" data-act="open-form" data-mod="' + k +
+        '" data-stop="1">填写表单</button>';
+    }
+    if (m.hasBackendForm) {
+      actions += '<a class="btn btn-sm" href="' + esc(m.formUrl) +
+        '" target="_blank" rel="noopener" data-stop="1">钉钉表单 ↗</a>';
+    }
+    actions += '<button class="link-btn" data-act="nav" data-href="module/' + k +
+      '" data-stop="1">查看单据 (' + list.length + ')</button>';
+    return '<div class="form-card' + (!canWrite && !frontend ? ' ro' : '') + '">' +
+      '<div class="fc-top"><span class="fc-idx">' + esc((MODULE_STAGE[k] || '00')) + '</span>' +
+      '<h4>' + esc(m.name) + '</h4>' +
+      (m.hasBackendForm ? '<span class="fc-mode backend">钉钉已录入</span>' :
+        '<span class="fc-mode frontend">前端填写</span>') + '</div>' +
+      '<p class="fc-desc">' + esc(m.guide || m.fullName) + '</p>' +
+      '<div class="fc-meta">' + badges + '</div>' +
+      '<div class="fc-foot">' + actions + '</div></div>';
+  }
   function pageWorkbench() {
-    var r = DB.role(), s = DB.statsFor(r.id), todos = DB.todoList(r.id, 8), alerts = DB.alerts(r.id);
-    var h = '<div class="page-head"><div><h2>' + esc(r.wbTitle) + '</h2><p>' + esc(r.wbSub) +
-      ' · 数据实时来自本地单据，切换角色后口径随权限变化</p></div>' +
-      '<div class="head-actions"><button class="btn" data-act="nav" data-href="guide">如何搭建与填写</button>' +
-      '<button class="btn btn-primary" data-act="nav" data-href="flow">查看全链路流程</button></div></div>' +
-      scopeBar(r);
+    var r = DB.role();
+    var sid = UI.stage && STAGE_BY_ID[UI.stage] ? UI.stage : defaultStage(r.id);
+    UI.stage = sid;
+    var g = stageById(sid), st = stageStats(sid, r.id);
+    var allTodo = DB.todoList(r.id).filter(function (t) { return t.canApprove; }).length;
+    var myDraft = 0;
+    DB.visibleModules(r.id).forEach(function (k) {
+      myDraft += DB.visibleRecords(r.id, k).filter(function (x) {
+        return x.status === 'draft' && x.createdRole === r.id;
+      }).length;
+    });
+    var h = '<div class="page-head"><div><h2>我的工作</h2>' +
+      '<p>一条链路，八个环节 · 每一步只做一件事：填该填的单，交给下一个人</p></div>' +
+      '<div class="head-actions">' +
+      '<button class="btn" data-act="stage" data-id="00">基础资料</button>' +
+      '<button class="btn" data-act="nav" data-href="sync">数据同步</button>' +
+      '<button class="btn btn-primary" data-act="new-menu">＋ 新建单据</button></div></div>';
+    h += newMenuHTML(r);
 
-    h += '<div class="flow-hero"><h3>' + esc(r.wbTitle) + ' · 全链路进程总控</h3>' +
-      '<p>供应商准入 → 寻源定标 → 合同订单 → 交付收货 → 仓储入库 → 财务结算 → 装柜留痕 · 点击环节直达对应单据模块</p>' +
-      '<div class="steps">' + CFG.flow.map(function (f) {
-        return '<button class="step" data-act="step-go" data-mod="' + f.module + '"><b>' + f.step +
-          '</b>' + esc(f.name) + '</button>';
+    // 身份条：只讲"我是谁、我现在要办几件事"，不再堆 KPI 卡
+    h += '<div class="wb-hello"><div class="hello-main"><span class="hello-avatar" style="background:' +
+      esc(r.color) + '">' + esc(r.person.slice(0, 1)) + '</span><div><b>你好，' + esc(r.person) +
+      '</b><span>' + esc(r.name) + ' · ' + esc(r.scope) + '</span></div></div>' +
+      '<div class="hello-nums"><div><b>' + allTodo + '</b><span>待我处理</span></div>' +
+      '<div><b>' + myDraft + '</b><span>我的草稿</span></div>' +
+      '<div><b>' + DB.visibleModules(r.id).length + '</b><span>可用模块</span></div></div></div>';
+
+    // 唯一视觉主轴：链路轨道
+    h += '<div class="rail-wrap"><div class="rail-head"><b>全链路主线</b>' +
+      '<span>点击环节切换 · 高亮表示当前角色主责 · 数字为该环节在途单据</span></div>' +
+      '<div class="rail">' + STAGES.map(function (s, i) {
+        var ss = stageStats(s.id, r.id), mine = (s.owners || []).indexOf(r.id) >= 0;
+        return '<button class="rail-node' + (s.id === sid ? ' active' : '') +
+          (mine ? ' mine' : '') + '" data-act="stage" data-id="' + s.id + '">' +
+          '<span class="rn-no">' + esc(s.id) + '</span>' +
+          '<span class="rn-name">' + esc(s.name) + '</span>' +
+          '<span class="rn-meta">' + (ss.running ? ss.running + ' 在途' : ss.total + ' 单据') + '</span>' +
+          (ss.todo ? '<span class="rn-dot">' + ss.todo + '</span>' : '') +
+          (mine ? '<span class="rn-mine">我的环节</span>' : '') +
+          '</button>' + (i < STAGES.length - 1 ? '<span class="rail-arrow">→</span>' : '');
       }).join('') + '</div></div>';
 
-    var kpis = [
-      { cls: '', label: '可见业务单据', value: s.total, foot: '覆盖 ' + s.moduleCount + ' 个授权模块' },
-      { cls: 'warn', label: '在途待办', value: s.running, foot: '待提交 / 审批中 / 处理中' },
-      { cls: 'ok', label: '已完成', value: s.done, foot: '完成率 ' + (s.total ? Math.round(s.done / s.total * 100) : 0) + '%' },
-      { cls: 'purple', label: '涉及金额', value: moneyShort(s.amount), foot: '授权范围内金额字段合计' }
-    ];
-    h += '<div class="grid grid-4">' + kpis.map(function (k) {
-      return '<div class="kpi ' + k.cls + '"><div class="kpi-label">' + esc(k.label) + '</div>' +
-        '<div class="kpi-value">' + esc(k.value) + '</div><div class="kpi-foot">' + esc(k.foot) + '</div></div>';
-    }).join('') + '</div><div class="grid grid-2 section-gap">';
+    // 录入模式说明：明确告诉使用者不用重复填
+    h += '<div class="mode-strip"><b>录入分工</b><span>' +
+      '钉钉 AI 表格已有 9 张表单在收集数据，这些环节前端不重复建表单；' +
+      '其余模块在前端填写后自动同步回写。当前默认：<b>' +
+      (SYNC.config.defaultEntryMode === 'backend' ? '钉钉表单优先' : '前端填单优先') + '</b></span>' +
+      '<button class="link-btn" data-act="nav" data-href="sync">调整 / 查看自动化流 →</button></div>';
 
-    h += '<div class="card card-pad"><div class="card-title"><h3>今日待办 · 按角色收敛</h3>' +
-      '<span class="sub">共 ' + DB.todoList(r.id).length + ' 条</span></div>';
-    if (!todos.length) h += emptyBox('暂无在途单据', '新建一张单据并提交，这里就会出现待办');
-    else {
-      h += '<div class="table-wrap"><table class="data-table"><thead><tr><th>单据编号</th><th>业务模块</th><th>摘要</th><th>状态</th><th>操作</th></tr></thead><tbody>';
-      todos.forEach(function (t) {
-        var rec = t.rec, m = t.module;
-        h += '<tr data-act="open-detail" data-mod="' + m.key + '" data-id="' + rec.id + '">' +
-          '<td><span class="cell-main mono">' + esc(rec.no) + '</span></td>' +
-          '<td>' + esc(m.name) + '</td>' +
-          '<td><span class="cell-main">' + esc(txt(rec.data[m.titleField]).slice(0, 26)) + '</span></td>' +
-          '<td>' + pill(rec.status, fieldStatus(m, rec)) + '</td>' +
-          '<td><div class="row-actions">' +
-          (t.canApprove && DB.can(r.id, m.key, 'approve')
-            ? '<button class="link-btn" data-act="act" data-action="approve" data-mod="' + m.key + '" data-id="' + rec.id + '" data-stop="1">通过</button>' : '') +
-          '<button class="link-btn" data-act="open-detail" data-mod="' + m.key + '" data-id="' + rec.id + '" data-stop="1">详情</button>' +
-          '</div></td></tr>';
-      });
-      h += '</tbody></table></div>';
-    }
-    h += '</div>';
+    // 当前环节面板
+    h += '<div class="stage-panel"><div class="stage-hero">' +
+      '<div class="sh-id">' + esc(g.id) + '</div><div class="sh-main"><h3>' + esc(g.name) + '</h3>' +
+      '<p>' + esc(g.desc) + '</p></div>' +
+      '<div class="sh-flow"><span><small>上游输入</small>' + esc(g.input) + '</span>' +
+      '<i>→</i><span><small>下游输出</small>' + esc(g.output) + '</span></div></div>';
 
-    h += '<div class="card card-pad"><div class="card-title"><h3>风险与协同预警</h3><span class="sub">来自单据状态</span></div>';
-    if (!alerts.length) h += emptyBox('暂无预警', '当前授权范围内没有异常状态单据');
+    h += '<div class="stage-block"><div class="sb-head"><h3>本环节要办的事</h3>' +
+      '<span class="sub">' + g.modules.length + ' 个模块 · ' + st.forms + ' 个可在前端填写 · ' +
+      st.todo + ' 张待我处理</span></div><div class="grid grid-3">' +
+      g.modules.filter(function (k) { return DB.can(r.id, k, 'view'); })
+        .map(function (k) { return formCard(k, r); }).join('') + '</div>' +
+      (!g.modules.filter(function (k) { return DB.can(r.id, k, 'view'); }).length
+        ? emptyBox('当前角色在此环节无授权模块', '可切换到其它环节，或到「我的权限」查看授权范围') : '') +
+      '</div>';
+
+    h += '<div class="stage-block"><div class="sb-head"><h3>本环节单据</h3>' +
+      '<span class="sub">共 ' + st.total + ' 张 · ' + st.running + ' 在途 · ' + st.done + ' 已完成</span>' +
+      '<button class="link-btn" data-act="nav" data-href="docs">到单据中心检索 →</button></div>';
+    var rows = st.list.slice().sort(function (a, b) {
+      return String(b.rec.updatedAt).localeCompare(String(a.rec.updatedAt));
+    }).slice(0, 8);
+    if (!rows.length) h += emptyBox('本环节还没有单据', '在上方选择一张表单开始，或从钉钉表单同步');
     else {
-      h += alerts.slice(0, 7).map(function (a) {
-        return '<div class="ntf-item" style="margin-bottom:7px"><span class="ntf-dot" style="background:' +
-          (a.level === 'danger' ? 'var(--danger)' : 'var(--warn)') + '"></span><div class="ntf-main">' +
-          '<b>' + esc(a.rec.no) + ' · ' + esc(a.module.name) + '</b>' +
-          '<p>' + esc(txt(a.rec.data[a.module.titleField]).slice(0, 34)) + '</p>' +
-          '<small>' + esc(a.label) + ' · ' + esc(d10(a.rec.updatedAt)) + '</small></div>' +
-          '<button class="link-btn" data-act="open-detail" data-mod="' + a.module.key + '" data-id="' + a.rec.id + '">查看</button></div>';
-      }).join('');
+      h += '<div class="table-wrap"><table class="data-table"><thead><tr><th>单据编号</th>' +
+        '<th>业务模块</th><th>摘要</th><th>状态</th><th>来源</th><th>更新</th>' +
+        '<th style="text-align:right">操作</th></tr></thead><tbody>' + rows.map(function (x) {
+          return '<tr data-act="open-detail" data-mod="' + x.k + '" data-id="' + x.rec.id + '">' +
+            '<td><span class="cell-main mono">' + esc(x.rec.no) + '</span></td>' +
+            '<td>' + esc(x.m.name) + '</td>' +
+            '<td><span class="cell-main">' + esc(txt(x.rec.data[x.m.titleField]).slice(0, 24) || '—') + '</span></td>' +
+            '<td>' + pill(x.rec.status, fieldStatus(x.m, x.rec)) + '</td>' +
+            '<td>' + (x.rec.origin === 'dingtalk-form' ? '<span class="tag">钉钉表单</span>' :
+              x.rec.source ? '<span class="tag">自动派生</span>' : '<span class="tag">前端录入</span>') + '</td>' +
+            '<td class="small muted">' + esc(d10(x.rec.updatedAt)) + '</td>' +
+            '<td><div class="row-actions">' +
+            (canApproveRecord(r, x.m, x.rec)
+              ? '<button class="link-btn" data-act="act" data-action="approve" data-mod="' + x.k +
+                '" data-id="' + x.rec.id + '" data-stop="1">通过</button>' : '') +
+            '<button class="link-btn" data-act="open-detail" data-mod="' + x.k +
+              '" data-id="' + x.rec.id + '" data-stop="1">详情</button></div></td></tr>';
+        }).join('') + '</tbody></table></div>';
     }
     h += '</div></div>';
+    h += stageNavLinks(sid);
+    return h;
+  }
 
-    var domains = DB.visibleDomains(r.id);
-    h += '<div class="grid grid-2 section-gap"><div class="card card-pad"><div class="card-title"><h3>授权业务域</h3>' +
-      '<span class="sub">' + domains.length + ' / ' + CFG.domains.length + ' 个域可见</span></div><div class="grid grid-2">' +
-      domains.map(function (d) {
-        return '<div class="module-card" data-act="nav" data-href="domain/' + d.id + '">' +
-          '<div class="mc-top"><div class="module-icon">' + esc(d.id) + '</div><h4>' + esc(d.name) + '</h4></div>' +
-          '<div class="mc-desc">' + esc(d.desc) + '</div><div class="mc-meta"><span class="tag">' + d.count + ' 个模块</span>' +
-          '<span class="mc-count">' + (s.byDomain[d.id] || 0) + ' 张单据</span></div></div>';
+  function newMenuHTML(r) {
+    if (!UI.newMenu) return '';
+    var items = DB.visibleModules(r.id).filter(function (k) {
+      return SYNC.canFrontend(k) && DB.can(r.id, k, 'create');
+    });
+    return '<div class="new-menu"><div class="nm-head">新建单据 · 选择模块' +
+      '<button class="link-btn" data-act="new-menu">收起</button></div><div class="nm-grid">' +
+      (items.length ? items.map(function (k) {
+        return '<button class="nm-item" data-act="open-form" data-mod="' + k + '"><b>' +
+          esc(MOD[k].name) + '</b><small>' + esc((MODULE_STAGE[k] || '') + ' ' +
+            (stageById(MODULE_STAGE[k] || '00').name || '')) + '</small></button>';
+      }).join('') : '<span class="muted small">当前角色没有可新建的模块</span>') + '</div></div>';
+  }
+
+  // ================================================================ 单据中心
+  function pageDocs(q) {
+    var r = DB.role(), vis = DB.visibleModules(r.id);
+    UI.docSt = (q && q.s) || UI.docSt || 'all';
+    UI.docStage = (q && q.g) || UI.docStage || 'all';
+    UI.docPage = Math.max(1, parseInt((q && q.p) || UI.docPage || 1, 10) || 1);
+    var all = [];
+    vis.forEach(function (k) {
+      DB.visibleRecords(r.id, k).forEach(function (rec) {
+        all.push({ k: k, m: MOD[k], rec: rec, stage: MODULE_STAGE[k] || '00' });
+      });
+    });
+    var tabs = [['all', '全部'], ['draft', '草稿'], ['running', '在途'],
+                ['done', '已完成'], ['reject', '已驳回']];
+    var tabN = { all: all.length, draft: 0, running: 0, done: 0, reject: 0 };
+    all.forEach(function (x) { if (tabN[x.rec.status] != null) tabN[x.rec.status] += 1; });
+    var list = all.filter(function (x) {
+      if (UI.docSt !== 'all' && x.rec.status !== UI.docSt) return false;
+      if (UI.docStage !== 'all' && x.stage !== UI.docStage) return false;
+      if (UI.docQ) {
+        var s = (x.rec.no + x.m.name + txt(x.rec.data[x.m.titleField]) + x.stage).toLowerCase();
+        if (s.indexOf(UI.docQ.toLowerCase()) < 0) return false;
+      }
+      return true;
+    }).sort(function (a, b) { return String(b.rec.updatedAt).localeCompare(String(a.rec.updatedAt)); });
+    var pages = Math.max(1, Math.ceil(list.length / UI.docSize));
+    if (UI.docPage > pages) UI.docPage = pages;
+    var slice = list.slice((UI.docPage - 1) * UI.docSize, UI.docPage * UI.docSize);
+    var h = '<div class="page-head"><div><h2>单据中心</h2>' +
+      '<p>跨 ' + vis.length + ' 个授权模块统一检索 · 所有环节的单据都在这里</p></div>' +
+      '<div class="head-actions"><button class="btn btn-primary" data-act="new-menu">＋ 新建单据</button></div></div>';
+    h += newMenuHTML(r);
+    h += '<div class="doc-toolbar"><div class="tabs-primary inline">' + tabs.map(function (t) {
+      return '<button class="' + (UI.docSt === t[0] ? 'active' : '') +
+        '" data-act="doc-tab" data-v="' + t[0] + '">' + t[1] + ' <span class="tab-count">' +
+        tabN[t[0]] + '</span></button>';
+    }).join('') + '</div><div class="doc-filters">' +
+      '<select class="ctrl" id="docStageSel" data-act="doc-stage"><option value="all">全部环节</option>' +
+      [BASE_GROUP].concat(STAGES).map(function (s) {
+        return '<option value="' + s.id + '"' + (UI.docStage === s.id ? ' selected' : '') + '>' +
+          esc(s.id + ' ' + s.name) + '</option>';
+      }).join('') + '</select>' +
+      '<input class="ctrl" id="docQ" placeholder="搜索单号 / 模块 / 摘要" value="' +
+      esc(UI.docQ) + '" data-act="doc-q"></div></div>';
+    if (!slice.length) h += '<div class="card">' + emptyBox('没有匹配的单据', '调整状态、环节或关键词试试') + '</div>';
+    else {
+      h += '<div class="card"><div class="table-wrap"><table class="data-table"><thead><tr>' +
+        '<th>单据编号</th><th>环节</th><th>业务模块</th><th>摘要</th><th>状态</th>' +
+        '<th>来源</th><th>更新</th><th style="text-align:right">操作</th></tr></thead><tbody>' +
+        slice.map(function (x) {
+          return '<tr data-act="open-detail" data-mod="' + x.k + '" data-id="' + x.rec.id + '">' +
+            '<td><span class="cell-main mono">' + esc(x.rec.no) + '</span></td>' +
+            '<td class="small">' + esc(x.stage + ' ' + (stageById(x.stage).name || '')) + '</td>' +
+            '<td>' + esc(x.m.name) + '</td>' +
+            '<td><span class="cell-main">' + esc(txt(x.rec.data[x.m.titleField]).slice(0, 24) || '—') + '</span></td>' +
+            '<td>' + pill(x.rec.status, fieldStatus(x.m, x.rec)) + '</td>' +
+            '<td>' + (x.rec.origin === 'dingtalk-form' ? '<span class="tag">钉钉表单</span>' :
+              x.rec.source ? '<span class="tag">自动派生</span>' : '<span class="tag">前端录入</span>') + '</td>' +
+            '<td class="small muted">' + esc(d10(x.rec.updatedAt)) + '</td>' +
+            '<td><div class="row-actions">' +
+            (canApproveRecord(r, x.m, x.rec)
+              ? '<button class="link-btn" data-act="act" data-action="approve" data-mod="' + x.k +
+                '" data-id="' + x.rec.id + '" data-stop="1">通过</button>' : '') +
+            '<button class="link-btn" data-act="open-detail" data-mod="' + x.k +
+              '" data-id="' + x.rec.id + '" data-stop="1">详情</button></div></td></tr>';
+        }).join('') + '</tbody></table></div>' +
+        '<div class="pager"><span>共 ' + list.length + ' 条 · 第 ' + UI.docPage + ' / ' + pages + ' 页</span>' +
+        '<div class="pg-btns"><button class="btn btn-sm" data-act="doc-page" data-p="' + (UI.docPage - 1) +
+        '"' + (UI.docPage <= 1 ? ' disabled' : '') + '>上一页</button>' +
+        '<button class="btn btn-sm" data-act="doc-page" data-p="' + (UI.docPage + 1) +
+        '"' + (UI.docPage >= pages ? ' disabled' : '') + '>下一页</button></div></div></div>';
+    }
+    return h;
+  }
+
+  // ================================================================ 数据对齐与自动化流
+  function pageSync() {
+    var r = DB.role(), cfg = CFG.sync, st = SYNC.status(), S = SYNC.state;
+    var admin = DB.canSystem(r.id, 'settings');
+    var h = '<div class="page-head"><div><h2>数据对齐与自动化流</h2>' +
+      '<p>钉钉表单 / 数据表 ↔ 前端单据引擎 · 站点 ' + esc(cfg.host) + ' · 8 条自动化流</p></div>' +
+      '<div class="head-actions">' +
+      '<button class="btn" data-act="sync-pull">立即拉取</button>' +
+      '<button class="btn" data-act="sync-push">立即推送</button>' +
+      (admin ? '<button class="btn btn-primary" data-act="sync-runall">运行全部自动化流</button>' : '') +
+      '</div></div>';
+
+    h += '<div class="sync-status"><div class="ss-item"><span>站点</span><b>' + esc(cfg.host) +
+      '</b></div><div class="ss-item"><span>运行模式</span><b class="' +
+      (st.mode === 'live' ? 'live' : 'demo') + '">' + (st.mode === 'live' ? '实时 · 网关已连接' : '演示 · 本地队列模拟') +
+      '</b></div><div class="ss-item"><span>同步间隔</span><b>' + esc(cfg.interval) +
+      '</b></div><div class="ss-item"><span>最近同步</span><b>' + esc(dt(st.lastSync) || '尚未同步') +
+      '</b></div><div class="ss-item"><span>待推送</span><b>' + st.pending +
+      '</b></div><div class="ss-item"><span>已拉取</span><b>' + st.inbox +
+      '</b></div><div class="ss-item"><span>冲突</span><b>' + st.conflicts +
+      '</b></div></div>';
+    h += '<div class="sync-note">' + esc(cfg.liveNote) + '</div>';
+
+    // 数据流全貌：把"型"画清楚
+    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>数据对齐链路</h3>' +
+      '<span class="sub">静态页面不直连钉钉，统一经 ' + esc(cfg.host) + ' 网关</span></div>' +
+      '<div class="flow-line">' +
+      '<div class="fl-node"><b>钉钉 AI 表格</b><span>44 数据表 / 9 表单 / 12 自动化</span></div>' +
+      '<span class="fl-arrow">⇄</span>' +
+      '<div class="fl-node accent"><b>同步网关</b><span>' + esc(cfg.host) + '/api/sync/*</span></div>' +
+      '<span class="fl-arrow">⇄</span>' +
+      '<div class="fl-node"><b>前端单据引擎</b><span>CRUD / 状态机 / 权限 / localStorage</span></div>' +
+      '<span class="fl-arrow">→</span>' +
+      '<div class="fl-node"><b>自动化流</b><span>拉取 · 回写 · 派生 · 冲突 · 通知</span></div>' +
+      '<span class="fl-arrow">→</span>' +
+      '<div class="fl-node"><b>工作台 / 驾驶舱</b><span>按角色可见范围聚合</span></div>' +
+      '</div><div class="gateway-endpoints">' + Object.keys(cfg.gateway).filter(function (k) {
+        return k !== 'base';
+      }).map(function (k) {
+        return '<span class="ep">' + esc(cfg.gateway[k]) + '</span>';
+      }).join('') + '</div>' +
+      '<p class="mode-note">网关骨架已随仓库交付：<code>worker/sync-gateway.js</code> · ' +
+      '<code>worker/wrangler.toml</code> · <code>worker/table-map.json</code>（44 张钉钉表的 ' +
+      'tableId 与 444 个 fieldId 已精确映射）。部署后把上方模式切到「实时」即可走真实请求。</p></div>';
+
+    // 配置区（仅管理员）
+    if (admin) {
+      h += '<div class="card card-pad section-gap"><div class="card-title"><h3>同步配置</h3>' +
+        '<span class="sub">仅管理员可改 · 改动即时生效并持久化</span></div>' +
+        '<div class="sync-config"><label>运行模式</label><div class="seg" id="syncModeSeg">' +
+        '<button class="' + (st.mode === 'demo' ? 'on' : '') + '" data-act="sync-mode" data-v="demo">演示（本地模拟）</button>' +
+        '<button class="' + (st.mode === 'live' ? 'on' : '') + '" data-act="sync-mode" data-v="live">实时（走网关）</button>' +
+        '</div><label>自动同步</label><div class="seg">' +
+        '<button class="' + (st.autoSync ? 'on' : '') + '" data-act="sync-auto" data-v="1">开启</button>' +
+        '<button class="' + (!st.autoSync ? 'on' : '') + '" data-act="sync-auto" data-v="0">关闭</button>' +
+        '</div><label>默认录入方式</label><div class="seg">' +
+        '<button class="' + (SYNC.config.defaultEntryMode === 'backend' ? 'on' : '') +
+        '" data-act="sync-default" data-v="backend">钉钉表单优先</button>' +
+        '<button class="' + (SYNC.config.defaultEntryMode === 'frontend' ? 'on' : '') +
+        '" data-act="sync-default" data-v="frontend">前端填单优先</button>' +
+        '</div><label>同步令牌</label><input class="ctrl" id="syncToken" placeholder="X-Sync-Token（部署 Worker 后填写）" value="' +
+        esc(SYNC.config.token || '') + '"></div></div>';
+    }
+
+    // 9 张钉钉表单的分工矩阵 —— 直接回答"哪些不用重复填"
+    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>表单分工矩阵</h3>' +
+      '<span class="sub">9 张钉钉在线表单 · 逐模块决定由谁录入</span></div>' +
+      '<div class="table-wrap"><table class="data-table"><thead><tr><th>环节</th><th>业务模块</th>' +
+      '<th>钉钉表单</th><th>当前录入方式</th><th style="text-align:right">切换</th></tr></thead><tbody>' +
+      CFG.formModules.map(function (k) {
+        var m = MOD[k], mode = SYNC.modeOf(k);
+        var label = mode === 'backend' ? '钉钉表单录入（前端不重复填）' :
+          mode === 'frontend' ? '前端填写并自动回写' : '双通道（幂等去重）';
+        return '<tr><td class="small">' + esc((MODULE_STAGE[k] || '') + ' ' +
+          (stageById(MODULE_STAGE[k] || '00').name || '')) + '</td>' +
+          '<td><span class="cell-main">' + esc(m.name) + '</span></td>' +
+          '<td><a class="link-btn" href="' + esc(m.formUrl) + '" target="_blank" rel="noopener">' +
+          esc(m.backendFormName) + ' ↗</a></td>' +
+          '<td><span class="tag ' + (mode === 'backend' ? 'tag-dt' : '') + '">' + esc(label) + '</span></td>' +
+          '<td><div class="row-actions">' + (admin ? ['backend', 'frontend', 'both'].map(function (v) {
+            return '<button class="link-btn' + (mode === v ? ' strong' : '') +
+              '" data-act="sync-mode-mod" data-mod="' + k + '" data-v="' + v + '">' +
+              (v === 'backend' ? '钉钉' : v === 'frontend' ? '前端' : '双通道') + '</button>';
+          }).join('') : '<span class="muted small">只读</span>') + '</div></td></tr>';
+      }).join('') + '</tbody></table></div></div>';
+
+    // 自动化流
+    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>自动化流</h3>' +
+      '<span class="sub">触发器 → 条件 → 动作链 · 可单条运行、停用、看日志</span></div>' +
+      '<div class="flow-cards">' + CFG.flows.map(function (f) {
+        var s = S.flows[f.id];
+        return '<div class="flow-card' + (s.enabled ? '' : ' off') + '"><div class="fc-head">' +
+          '<span class="flow-id">' + esc(f.id) + '</span><b>' + esc(f.name) + '</b>' +
+          '<span class="src-tag">' + esc(f.source) + '</span></div>' +
+          '<div class="fc-chain"><span class="ch-trigger">' + esc(f.trigger) + '</span>' +
+          '<i>→</i><span class="ch-cond">' + esc(f.condition) + '</span>' +
+          '<i>→</i><span class="ch-acts">' + f.actions.map(esc).join(' · ') + '</span></div>' +
+          '<p class="fc-note">' + esc(f.desc) + '</p>' +
+          '<div class="fl-foot"><span class="flow-meta">运行 ' + s.runs + ' 次' +
+          (s.lastRun ? ' · 最近 ' + esc(dt(s.lastRun)) : '') + '</span>' +
+          '<span class="flow-meta">' + esc(s.lastResult || '尚未运行') + '</span>' +
+          (admin ? '<div class="row-actions">' +
+            '<button class="link-btn" data-act="flow-toggle" data-id="' + f.id + '">' +
+            (s.enabled ? '停用' : '启用') + '</button>' +
+            '<button class="btn btn-sm" data-act="flow-run" data-id="' + f.id + '">运行一次</button></div>' : '') +
+          '</div></div>';
       }).join('') + '</div></div>';
-    h += '<div class="card card-pad"><div class="card-title"><h3>最近操作日志</h3><span class="sub">本地审计</span></div>' +
-      DB.recentLogs(9).map(function (l) {
-        return '<div class="kv" style="gap:8px"><span class="k" style="width:76px">' + esc(dt(l.ts).slice(5)) + '</span>' +
-          '<span class="v" style="font-weight:500">' + esc(l.title) +
-          ' <span class="tag" style="margin-left:5px">' + esc(l.person) + '</span></span></div>';
+
+    // 队列与冲突
+    UI.syncTab = UI.syncTab || 'outbox';
+    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>同步队列与冲突</h3>' +
+      '<span class="sub">幂等键 remoteId · 失败保留可重试 · 冲突不静默覆盖</span></div>' +
+      '<div class="tabs-primary inline">' + [['outbox', '待推送 ' + S.outbox.length],
+        ['inbox', '已拉取 ' + S.inbox.length],
+        ['conflicts', '冲突 ' + S.conflicts.length],
+        ['logs', '日志 ' + S.logs.length]].map(function (t) {
+        return '<button class="' + (UI.syncTab === t[0] ? 'active' : '') +
+          '" data-act="sync-tab" data-v="' + t[0] + '">' + t[1] + '</button>';
+      }).join('') + '</div><div class="queue-body">';
+    if (UI.syncTab === 'outbox') {
+      h += S.outbox.length ? '<div class="table-wrap"><table class="data-table"><thead><tr>' +
+        '<th>单据</th><th>模块</th><th>动作</th><th>字段数</th><th>状态</th><th>时间</th>' +
+        '</tr></thead><tbody>' + S.outbox.slice(0, 30).map(function (x) {
+          return '<tr><td><span class="cell-main mono">' + esc(x.no) + '</span></td>' +
+            '<td>' + esc(MOD[x.moduleKey] ? MOD[x.moduleKey].name : x.moduleKey) + '</td>' +
+            '<td>' + esc(x.action) + '</td><td>' + (x.fieldCount || 0) + '</td>' +
+            '<td>' + (x.state === 'synced' ? pill('done', '已同步') :
+              x.state === 'failed' ? pill('reject', '失败待重试') : pill('running', '待推送')) + '</td>' +
+            '<td class="small muted">' + esc(dt(x.ts)) + '</td></tr>';
+        }).join('') + '</tbody></table></div>' : emptyBox('队列为空', '在前端填一张单据，或切换录入方式后即可看到待推送记录');
+    } else if (UI.syncTab === 'inbox') {
+      h += S.inbox.length ? S.inbox.slice(0, 30).map(function (x) {
+        return '<div class="queue-row"><span class="tag tag-dt">钉钉表单</span>' +
+          '<b>' + esc(x.no) + '</b><span>' + esc(x.formName) + '</span>' +
+          '<span class="muted small">' + esc(x.title) + '</span>' +
+          '<span class="push-right">' + esc(dt(x.ts)) + '</span></div>';
+      }).join('') : emptyBox('还没有拉取记录', '点右上角「立即拉取」模拟钉钉表单提交落到前端');
+    } else if (UI.syncTab === 'conflicts') {
+      h += S.conflicts.length ? S.conflicts.slice(0, 30).map(function (c) {
+        return '<div class="queue-row"><span class="tag">冲突</span><b>' + esc(c.no) + '</b>' +
+          '<span>' + esc(c.moduleName) + '</span><span class="muted small">本地 ' +
+          esc(dt(c.localTs)) + ' / 远端 ' + esc(dt(c.remoteTs)) + '</span>' +
+          '<span class="push-right">' + (c.state === 'open' && admin
+            ? '<button class="link-btn" data-act="conflict" data-id="' + esc(c.id) +
+              '" data-v="local">保留本地</button> <button class="link-btn" data-act="conflict" data-id="' +
+              esc(c.id) + '" data-v="remote">以钉钉为准</button>'
+            : esc(c.state)) + '</span></div>';
+      }).join('') : emptyBox('无冲突', '同一单据在前后端都被修改时会自动冻结并出现在这里');
+    } else {
+      h += S.logs.length ? S.logs.slice(0, 40).map(function (l) {
+        return '<div class="queue-row"><span class="log-dot ' + esc(l.level) + '"></span>' +
+          '<b>' + esc(l.title) + '</b><span class="tag">' + esc(l.flow) + '</span>' +
+          '<span class="muted small">' + esc(l.detail) + '</span>' +
+          '<span class="push-right">' + esc(dt(l.ts)) + '</span></div>';
+      }).join('') : emptyBox('暂无日志', '运行一条自动化流后这里会记录每一步');
+    }
+    h += '</div></div>';
+    return h;
+  }
+
+  // ================================================================ 后端字段契约
+  function pageContract() {
+    var r = DB.role();
+    if (!DB.canSystem(r.id, 'contract')) {
+      return denyPage('无权查看后端契约', '字段契约属于管理视角，仅超级管理员可见。', r);
+    }
+    var key = UI.contractMod, c = CONTRACT.modules[key] || CONTRACT.modules.t18;
+    var h = '<div class="page-head"><div><h2>后端字段契约</h2>' +
+      '<p>' + esc(CONTRACT.meta.source) + ' → 44 个表单模块 · 前端字段即 DTO</p></div>' +
+      '<div class="head-actions"><button class="btn btn-primary" data-act="contract-download">下载 api-contract.json</button></div></div>';
+    h += '<div class="sync-status"><div class="ss-item"><span>SQL 原表</span><b>' +
+      CONTRACT.meta.sqlTables + '</b></div><div class="ss-item"><span>原表列</span><b>' +
+      CONTRACT.meta.sqlColumns + '</b></div><div class="ss-item"><span>表单模块</span><b>' +
+      CONTRACT.meta.modules + '</b></div><div class="ss-item"><span>字段映射</span><b>' +
+      c.fields.length + '</b></div><div class="ss-item"><span>联动规则</span><b>' +
+      CONTRACT.meta.modules + ' 模块 / 14 条</b></div></div>';
+    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>选择模块</h3>' +
+      '<span class="sub">按主链路环节分组</span></div>' +
+      '<select class="ctrl" id="contractModSel" data-act="contract-mod">' +
+      [BASE_GROUP].concat(STAGES).map(function (s) {
+        return '<optgroup label="' + esc(s.id + ' ' + s.name) + '">' + s.modules.map(function (k) {
+          var m = MOD[k];
+          return '<option value="' + k + '"' + (k === key ? ' selected' : '') + '>' +
+            esc(m.name) + '</option>';
+        }).join('') + '</optgroup>';
+      }).join('') + '</select></div>';
+    h += '<div class="grid grid-2 section-gap"><div class="card card-pad"><div class="card-title">' +
+      '<h3>接口与资源</h3><span class="sub">' + esc(c.name) + '</span></div>' +
+      '<div class="kv"><span class="k">REST 资源码</span><span class="v mono">' + esc(c.code) + '</span></div>' +
+      '<div class="kv"><span class="k">主端点</span><span class="v mono">' + esc(c.endpoint) + '</span></div>' +
+      '<div class="kv"><span class="k">所在环节</span><span class="v">' + esc(c.stage) + ' ' +
+      esc((stageById(c.stage).name || '')) + '</span></div>' +
+      '<div class="kv"><span class="k">钉钉数据表</span><span class="v mono">' +
+      esc(c.dingtalk.tableId || '—') + '</span></div>' +
+      '<div class="kv"><span class="k">对应 SQL 表</span><span class="v">' +
+      c.sqlTables.map(function (t) { return '<span class="tag">' + esc(t) + '</span>'; }).join(' ') + '</span></div>' +
+      '<div class="endpoints">' + Object.keys(c.endpoints).map(function (k) {
+        return '<div><span>' + esc(k) + '</span><code>' + esc(c.endpoints[k]) + '</code></div>';
       }).join('') + '</div></div>';
+    h += '<div class="card card-pad"><div class="card-title"><h3>状态机与联动</h3>' +
+      '<span class="sub">前端动作即后端事件</span></div>' +
+      '<div class="kv"><span class="k">状态字段</span><span class="v">' + esc(c.statusField || '—') + '</span></div>' +
+      '<div class="kv"><span class="k">状态枚举</span><span class="v">' +
+      (c.statusOptions.length ? c.statusOptions.map(function (o) { return '<span class="tag">' + esc(o) + '</span>'; }).join(' ') : '—') +
+      '</span></div><div class="kv"><span class="k">审批角色</span><span class="v">' +
+      esc(c.approvers.map(function (a) { return ROLE[a] ? ROLE[a].name : a; }).join(' / ') || '—') + '</span></div>' +
+      '<h4 class="sub-title">下游联动</h4>' + (c.links.length ? c.links.map(function (l) {
+        return '<div class="link-row"><b>' + esc(l.title) + '</b><span class="muted small">→ ' +
+          esc(MOD[l.to] ? MOD[l.to].name : l.to) + '</span><div>' +
+          Object.keys(l.map).map(function (s) {
+            return '<span class="tag">' + esc(s) + ' → ' + esc(l.map[s]) + '</span>';
+          }).join(' ') + '</div></div>';
+      }).join('') : '<p class="mode-note">本模块无自动派生</p>') +
+      '<h4 class="sub-title">来源 SQL 列（节选）</h4>' +
+      (c.sqlTables[0] && CONTRACT.sqlTables[c.sqlTables[0]]
+        ? CONTRACT.sqlTables[c.sqlTables[0]].columns.slice(0, 10).map(function (col) {
+          return '<div class="kv"><span class="k mono">' + esc(col.name) + '</span><span class="v small">' +
+            esc(col.sqlType) + (col.comment ? ' · ' + esc(col.comment) : '') + '</span></div>';
+        }).join('') : '<p class="mode-note">无来源表</p>') + '</div></div>';
+    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>字段映射表</h3>' +
+      '<span class="sub">中文显示名 → DTO 列名 → API / SQL 类型 · 共 ' + c.fields.length + ' 个字段</span></div>' +
+      '<div class="table-wrap"><table class="data-table"><thead><tr><th>#</th><th>前端显示名</th>' +
+      '<th>DTO 列名</th><th>API 类型</th><th>SQL 类型</th><th>钉钉字段 ID</th>' +
+      '<th>必填</th><th>枚举 / 填写提示</th>' +
+      '</tr></thead><tbody>' + c.fields.map(function (f, i) {
+        return '<tr><td class="small muted">' + (i + 1) + '</td>' +
+          '<td><span class="cell-main">' + esc(f.label) + '</span></td>' +
+          '<td><code>' + esc(f.key) + '</code></td><td class="small">' + esc(f.apiType) + '</td>' +
+          '<td class="small mono">' + esc(f.sqlType) + '</td>' +
+          '<td class="small mono">' + esc(f.dingtalkFieldId || '—') + '</td>' +
+          '<td>' + (f.required ? '<span class="tag tag-dt">必填</span>' : '<span class="muted small">—</span>') + '</td>' +
+          '<td class="small">' + esc((f.options || []).join(' / ') || f.hint || '—') + '</td></tr>';
+      }).join('') + '</tbody></table></div></div>';
     return h;
   }
 
@@ -416,10 +859,21 @@
     var h = '<div class="page-head"><div><h2>' + esc(m.fullName) + '</h2><p>' + esc(m.guide) +
       ' · 状态字段「' + esc(m.statusField || '内置流程状态') + '」由流程动作自动推进</p></div>' +
       '<div class="head-actions">' +
-      '<button class="btn" data-act="nav" data-href="domain/' + m.domainId + '">返回业务域</button>' +
+      '<button class="btn" data-act="stage" data-id="' + esc(MODULE_STAGE[key] || '00') + '">← 返回所在环节</button>' +
       (DB.can(r.id, key, 'export') ? '<button class="btn" data-act="export-csv" data-mod="' + key + '">导出 CSV</button>' : '') +
-      (DB.can(r.id, key, 'create') ? '<button class="btn btn-primary" data-act="open-form" data-mod="' + key + '">' +
-        ico('plus', 15) + ' 新建单据</button>' : '<span class="tag">当前角色只读</span>') + '</div></div>';
+      (SYNC.canFrontend(key) && DB.can(r.id, key, 'create')
+        ? '<button class="btn btn-primary" data-act="open-form" data-mod="' + key + '">' +
+          ico('plus', 15) + ' 新建单据</button>'
+        : m.hasBackendForm
+          ? '<a class="btn btn-primary" href="' + esc(m.formUrl) + '" target="_blank" rel="noopener">在钉钉表单填写 ↗</a>'
+          : '<span class="tag">当前角色只读</span>') + '</div></div>';
+    if (m.hasBackendForm) {
+      h += '<div class="mode-strip"><b>录入分工</b><span>该模块由钉钉表单「' +
+        esc(m.backendFormName) + '」收集数据，前端默认不重复建表单；提交后由同步流拉取到此处。' +
+        '当前方式：<b>' + (SYNC.modeOf(key) === 'backend' ? '钉钉表单录入' :
+          SYNC.modeOf(key) === 'both' ? '双通道' : '前端填写并回写') + '</b></span>' +
+        '<button class="link-btn" data-act="nav" data-href="sync">调整录入方式 →</button></div>';
+    }
 
     var grp = groups.filter(function (g) { return g.modules.indexOf(key) >= 0; })[0];
     if (grp) {
@@ -570,6 +1024,12 @@
         '<button class="link-btn danger" data-act="att-remove" data-field="' + esc(field) + '" data-idx="' + i + '" data-stop="1">移除</button></div>';
     }).join('');
   }
+  function dtoOf(modKey, label) {
+    var c = CONTRACT && CONTRACT.modules[modKey];
+    if (!c) return '';
+    var f = c.fields.filter(function (x) { return x.label === label; })[0];
+    return f ? f.key : '';
+  }
   function formHTML(m, rec) {
     UI.formData = rec ? U.clone(rec.data) : {};
     var isEdit = !!rec;
@@ -589,7 +1049,8 @@
           var disabled = (f.name === m.noField && rec) || (f.name === m.statusField);
           return '<div class="field' + full + '" data-wrap="' + esc(f.name) + '">' +
             '<label>' + esc(f.name) + (req ? '<span class="req">*</span>' : '') +
-            ' <span class="tag">' + esc(f.typeName) + '</span></label>' +
+            ' <span class="tag">' + esc(f.typeName) + '</span>' +
+            '<code class="fkey" title="后端 DTO 列名">' + esc(dtoOf(m.key, f.name)) + '</code></label>' +
             (disabled
               ? '<div class="ctrl" style="background:var(--surface-2);color:var(--muted)">' +
                 esc(txt(UI.formData[f.name]) || (f.name === m.noField ? '提交后自动生成' : m.states.draft)) + '</div>'
@@ -603,7 +1064,17 @@
       section('③ 附件与说明', '本地演示模式，文件仅存于当前浏览器', extra) +
       (m.ai.length ? '<div class="ai-box"><b>AI 字段 · ' + esc(m.ai[0].name) +
         '</b><p>' + esc(m.ai[0].prompt) + '<br>演示态不调用模型，接入钉钉 AI 表格后会自动生成。</p></div>' : '') +
-      '</div><div class="form-guide"><h5>填写指引</h5><ol>' +
+      '</div><div class="form-guide"><h5>本单据在链路中的位置</h5>' +
+      '<div class="g-note"><b>环节：</b>' + esc((MODULE_STAGE[m.key] || '') + ' ' +
+        (stageById(MODULE_STAGE[m.key] || '00').name || '')) + '<br>' +
+      '<b>上游输入：</b>' + esc(stageById(MODULE_STAGE[m.key] || '00').input || '—') + '<br>' +
+      '<b>下游输出：</b>' + esc(stageById(MODULE_STAGE[m.key] || '00').output || '—') + '</div>' +
+      '<h5>提交后会发生什么</h5><ol class="g-steps">' +
+      '<li>状态推进为「' + esc(m.states.running) + '」，通知审批角色</li>' +
+      '<li>字段按契约映射为 DTO，进入同步队列</li>' +
+      '<li>同步网关回写钉钉数据表（当前 ' + esc(SYNC.config.mode === 'live' ? '实时' : '演示模拟') + '）</li>' +
+      '<li>审批通过后自动派生下游单据并继续同步</li></ol>' +
+      '<h5>填写指引</h5><ol>' +
       '<li>带 <b style="color:var(--danger)">*</b> 的字段为必填</li>' +
       '<li>编号留空，提交时自动生成 ' + esc(m.noPrefix) + '-年月-序号</li>' +
       '<li>状态字段由「提交 / 通过 / 驳回」推进，不可手填</li>' +
@@ -624,6 +1095,9 @@
     if (recId && !rec) { toast('单据不存在或不在当前数据范围内', '', 'error'); return; }
     if (!DB.can(r.id, key, rec ? 'edit' : 'create')) {
       toast('无权限', '当前角色不能' + (rec ? '编辑' : '新建') + '该模块单据', 'error'); return;
+    }
+    if (!recId && !SYNC.canFrontend(key)) {
+      toast('无需重复填写', '该模块由钉钉表单录入，请到「数据同步」切换为前端填写', 'warn'); return;
     }
     var f = formHTML(m, rec);
     UI.drawerMode = 'form'; UI.formMod = key; UI.formId = recId || '';
@@ -686,7 +1160,7 @@
       UI.formId = rec.id;
       if (submit) {
         DB.transition(key, rec.id, 'submit');
-        toast('已提交审批', rec.no + ' 进入「' + m.states.running + '」，已通知审批角色', 'ok');
+        toast('已提交审批', rec.no + ' 进入「' + m.states.running + '」，已通知审批角色并进入同步队列', 'ok');
       } else {
         toast('草稿已保存', rec.no + ' 可在列表中继续编辑或提交', 'ok');
       }
@@ -834,81 +1308,124 @@
   }
 
   // ---------------------------------------------------------------- 经营看板
+  // ================================================================ 经营驾驶舱（仅管理员）
+  // 设计原则：一屏一个焦点（全链路漏斗），其余图表收敛为两栏辅助，不堆砌。
   function pageBoard() {
-    var r = DB.role(), s = DB.statsFor(r.id), domains = DB.visibleDomains(r.id);
-    var h = '<div class="page-head"><div><h2>经营看板</h2><p>按当前角色可见范围实时聚合 · 图表为纯 SVG 渲染，无外部依赖</p></div>' +
-      '<div class="head-actions">' +
-      (r.policy.boardExport ? '<button class="btn" data-act="export-board">导出汇总 CSV</button>' :
-        '<span class="tag">汇总导出未授权</span>') + '</div></div>';
-    h += '<div class="grid grid-4">' +
-      [['单据总量', s.total, '授权范围内'], ['在途待办', s.running, '需处理'],
-       ['已完成', s.done, '完成率 ' + (s.total ? Math.round(s.done / s.total * 100) : 0) + '%'],
-       ['金额合计', moneyShort(s.amount), '金额字段汇总']].map(function (k, i) {
-        return '<div class="kpi ' + ['', 'warn', 'ok', 'purple'][i] + '"><div class="kpi-label">' + esc(k[0]) +
-          '</div><div class="kpi-value">' + esc(k[1]) + '</div><div class="kpi-foot">' + esc(k[2]) + '</div></div>';
-      }).join('') + '</div>';
-    h += '<div class="chart-grid section-gap">' +
-      chartPie('单据状态分布', '按流程状态聚合', [
-        { label: '草稿', v: s.byStatus.draft || 0, c: '#8A94AA' },
+    var r = DB.role();
+    if (!DB.canSystem(r.id, 'board')) {
+      return denyPage('无权查看经营驾驶舱', '经营看板是管理员视角，业务角色请在「我的工作」按链路办理单据。', r);
+    }
+    var s = DB.statsFor(r.id), domains = DB.visibleDomains(r.id);
+    var stageNums = STAGES.map(function (g) {
+      return { g: g, n: stageRecords(g.id, r.id).length };
+    });
+    var maxStage = Math.max.apply(null, stageNums.map(function (x) { return x.n; }).concat([1]));
+    var total = s.total || 1;
+    var rate = Math.round(s.done / total * 100);
+
+    var h = '<div class="page-head"><div><h2>经营驾驶舱</h2>' +
+      '<p>全域单据聚合 · 一条链路看流转，不逐表翻找 · 演示数据来自本地单据引擎</p></div>' +
+      '<div class="head-actions"><span class="tag">管理员视角</span>' +
+      '<button class="btn" data-act="nav" data-href="contract">字段契约</button>' +
+      (r.policy.boardExport ? '<button class="btn" data-act="export-board">导出汇总 CSV</button>' : '') +
+      '</div></div>';
+
+    // 指标条：一行四个，轻量，不带大色块
+    var kpis = [
+      { label: '单据总量', value: s.total, foot: '全域 44 个模块', tone: '' },
+      { label: '在途待办', value: s.running, foot: '需推进 / 待审批', tone: 'warn' },
+      { label: '已完成', value: s.done, foot: '完成率 ' + rate + '%', tone: 'ok' },
+      { label: '涉及金额', value: moneyShort(s.amount), foot: '金额字段汇总', tone: 'purple' }
+    ];
+    h += '<div class="bi-kpis">' + kpis.map(function (k) {
+      return '<div class="bi-kpi ' + k.tone + '"><span>' + esc(k.label) + '</span>' +
+        '<b>' + esc(k.value) + '</b><small>' + esc(k.foot) + '</small>' +
+        '<i style="width:' + (k.tone === 'ok' ? rate : Math.min(100, Math.round(
+          (Number(k.value) || 0) / Math.max(1, s.total) * 100)) + '%') + '"></i></div>';
+    }).join('') + '</div>';
+
+    // 主视觉：全链路漏斗，八个环节一条线
+    h += '<div class="bi-hero"><div class="bi-hero-head"><div><h3>全链路单据流转</h3>' +
+      '<p>从供应商准入到装柜留痕，逐环节看单量堆积</p></div>' +
+      '<div class="bi-legend"><span><i class="lg-blue"></i>单据量</span>' +
+      '<span><i class="lg-line"></i>环节顺序</span></div></div>' +
+      '<div class="bi-funnel">' + stageNums.map(function (x, i) {
+        var pct = Math.max(6, Math.round(x.n / maxStage * 100));
+        return '<button class="bf-step" data-act="stage" data-id="' + x.g.id + '" title="查看该环节">' +
+          '<span class="bf-count">' + x.n + '</span>' +
+          '<span class="bf-track"><i style="height:' + pct + '%"></i></span>' +
+          '<span class="bf-id">' + esc(x.g.id) + '</span>' +
+          '<span class="bf-name">' + esc(x.g.name) + '</span>' +
+          (i < stageNums.length - 1 ? '<span class="bf-link"></span>' : '') + '</button>';
+      }).join('') + '</div>' +
+      '<div class="bi-hero-foot"><span>链路起点 · 供应商准入</span>' +
+      '<span>共 ' + s.total + ' 张单据 / 8 个环节 / ' + CFG.links.length + ' 条自动联动</span>' +
+      '<span>链路终点 · 证据归档</span></div></div>';
+
+    // 辅助两栏
+    h += '<div class="grid grid-2 section-gap">';
+    h += '<div class="card card-pad bi-card"><div class="card-title"><h3>流程状态分布</h3>' +
+      '<span class="sub">按单据状态聚合</span></div>' + donut([
+        { label: '草稿', v: s.byStatus.draft || 0, c: '#98A2B3' },
         { label: '在途', v: s.byStatus.running || 0, c: '#F79009' },
         { label: '完成', v: s.byStatus.done || 0, c: '#12B76A' },
-        { label: '驳回', v: s.byStatus.reject || 0, c: '#F04438' }]) +
-      chartBar('各业务域单据量', '授权范围内的模块记录数', domains.map(function (d) {
-        return { label: d.name, v: s.byDomain[d.id] || 0 };
-      })) + '</div>';
-    h += '<div class="chart-grid section-gap"><div class="chart-box"><h4>全链路环节覆盖</h4>' +
-      '<p>每个环节已录入的单据数量</p>' + CFG.flow.map(function (f) {
-        var v = DB.visibleRecords(r.id, f.module).length;
-        var max = Math.max.apply(null, CFG.flow.map(function (x) {
-          return DB.visibleRecords(r.id, x.module).length;
-        }).concat([1]));
-        return '<div class="funnel-row"><span class="fl">' + esc(f.step + ' ' + f.name) + '</span>' +
-          '<span class="fb"><i style="width:' + Math.max(3, v / max * 100) + '%"></i></span>' +
-          '<span class="fv">' + v + '</span></div>';
-      }).join('') + '</div>';
-    var todoByRole = CFG.roles.map(function (x) {
-      return { label: x.name, v: DB.todoList(x.id).filter(function (t) { return t.canApprove; }).length, c: x.color };
-    });
-    h += chartBar('各角色待办分布', '按审批归属统计在途单据', todoByRole) + '</div>';
+        { label: '驳回', v: s.byStatus.reject || 0, c: '#F04438' }
+      ]) + '</div>';
+    h += '<div class="card card-pad bi-card"><div class="card-title"><h3>业务域负载</h3>' +
+      '<span class="sub">各域已录入单据数</span></div><div class="bi-bars">' +
+      domains.map(function (d) {
+        var v = s.byDomain[d.id] || 0;
+        return '<div class="bi-bar"><span class="bb-label">' + esc(d.name) + '</span>' +
+          '<span class="bb-track"><i style="width:' + Math.max(2, Math.round(v / Math.max(1, total) * 100 * 2)) + '%"></i></span>' +
+          '<b>' + v + '</b></div>';
+      }).join('') + '</div></div></div>';
+
+    // 最近动态 + 重点预警，精简两栏
+    var recent = DB.state.records && Object.keys(DB.state.records).length
+      ? DB.recentLogs(7, r.id) : [];
+    var alerts = DB.alerts(r.id).slice(0, 5);
+    h += '<div class="grid grid-2 section-gap"><div class="card card-pad bi-card">' +
+      '<div class="card-title"><h3>最近动态</h3><span class="sub">本地操作审计</span></div>' +
+      (recent.length ? recent.map(function (l) {
+        return '<div class="bi-row"><span class="br-time">' + esc(dt(l.ts).slice(5)) + '</span>' +
+          '<span class="br-title">' + esc(l.title) + '</span>' +
+          '<span class="tag">' + esc(l.person || '系统') + '</span></div>';
+      }).join('') : emptyBox('暂无动态', '提交或审批一张单据后会出现在这里')) + '</div>';
+    h += '<div class="card card-pad bi-card"><div class="card-title"><h3>重点预警</h3>' +
+      '<span class="sub">来自异常状态单据</span></div>' +
+      (alerts.length ? alerts.map(function (a) {
+        return '<div class="bi-row"><span class="br-dot ' +
+          (a.level === 'danger' ? 'danger' : 'warn') + '"></span>' +
+          '<span class="br-title">' + esc(a.rec.no) + ' · ' + esc(a.module.name) + '</span>' +
+          '<button class="link-btn" data-act="open-detail" data-mod="' + esc(a.module.key) +
+          '" data-id="' + esc(a.rec.id) + '">查看</button></div>';
+      }).join('') : emptyBox('暂无预警', '当前全域没有异常状态单据')) + '</div></div>';
     return h;
   }
-  function chartPie(title, sub, items) {
+  function donut(items) {
     var total = items.reduce(function (a, b) { return a + b.v; }, 0) || 1;
-    var cx = 110, cy = 110, R = 84, r = 52, acc = -Math.PI / 2, paths = '';
+    var cx = 96, cy = 96, R = 74, r = 50, acc = -Math.PI / 2, paths = '';
     items.forEach(function (it) {
-      var ang = it.v / total * Math.PI * 2, end = acc + ang;
       if (it.v <= 0) return;
+      var ang = it.v / total * Math.PI * 2, end = acc + ang;
       var large = ang > Math.PI ? 1 : 0;
-      var p = function (rad, a) { return [cx + rad * Math.cos(a), cy + rad * Math.sin(a)]; };
-      var a1 = p(R, acc), a2 = p(R, end), b1 = p(r, end), b2 = p(r, acc);
-      paths += '<path d="M' + a1[0] + ' ' + a1[1] + ' A' + R + ' ' + R + ' 0 ' + large + ' 1 ' + a2[0] + ' ' + a2[1] +
-        ' L' + b1[0] + ' ' + b1[1] + ' A' + r + ' ' + r + ' 0 ' + large + ' 0 ' + b2[0] + ' ' + b2[1] +
-        ' Z" fill="' + it.c + '" opacity=".92"/>';
+      function pt(rad, a) { return [cx + rad * Math.cos(a), cy + rad * Math.sin(a)]; }
+      var a1 = pt(R, acc), a2 = pt(R, end), b1 = pt(r, end), b2 = pt(r, acc);
+      paths += '<path d="M' + a1[0].toFixed(2) + ' ' + a1[1].toFixed(2) +
+        ' A' + R + ' ' + R + ' 0 ' + large + ' 1 ' + a2[0].toFixed(2) + ' ' + a2[1].toFixed(2) +
+        ' L' + b1[0].toFixed(2) + ' ' + b1[1].toFixed(2) +
+        ' A' + r + ' ' + r + ' 0 ' + large + ' 0 ' + b2[0].toFixed(2) + ' ' + b2[1].toFixed(2) +
+        ' Z" fill="' + it.c + '"/>';
       acc = end;
     });
-    return '<div class="chart-box"><h4>' + esc(title) + '</h4><p>' + esc(sub) + '</p>' +
-      '<div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap"><svg viewBox="0 0 220 220" style="width:200px;flex:none">' +
-      '<circle cx="110" cy="110" r="84" fill="#F1F4FA"/>' + paths +
-      '<text x="110" y="105" text-anchor="middle" font-size="24" font-weight="700" fill="#1B233A">' + total + '</text>' +
-      '<text x="110" y="124" text-anchor="middle" font-size="11" fill="#8A94AA">单据总数</text></svg>' +
-      '<div style="flex:1;min-width:130px">' + items.map(function (it) {
-        return '<div style="display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #EFF2F8;font-size:12px">' +
-          '<span><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:' + it.c +
-          ';margin-right:7px"></i>' + esc(it.label) + '</span><b>' + it.v + '</b></div>';
-      }).join('') + '</div></div></div>';
-  }
-  function chartBar(title, sub, items) {
-    var max = Math.max.apply(null, items.map(function (x) { return x.v; }).concat([1]));
-    var h = 34;
-    var rows = items.map(function (it, i) {
-      var y = i * h + 8, w = Math.max(2, it.v / max * 300);
-      return '<text x="0" y="' + (y + 15) + '" font-size="11" fill="#495471">' + esc(it.label.slice(0, 8)) + '</text>' +
-        '<rect x="88" y="' + y + '" width="300" height="20" rx="4" fill="#F1F4FA"/>' +
-        '<rect x="88" y="' + y + '" width="' + w + '" height="20" rx="4" fill="' + (it.c || '#2E5BFF') + '" opacity=".9"/>' +
-        '<text x="' + (88 + w + 7) + '" y="' + (y + 15) + '" font-size="11" font-weight="700" fill="#1B233A">' + it.v + '</text>';
-    }).join('');
-    return '<div class="chart-box"><h4>' + esc(title) + '</h4><p>' + esc(sub) + '</p>' +
-      '<svg viewBox="0 0 420 ' + (items.length * h + 12) + '">' + rows + '</svg></div>';
+    return '<div class="donut-wrap"><svg viewBox="0 0 192 192" width="176" height="176">' +
+      '<circle cx="96" cy="96" r="74" fill="#F1F4FA"/>' + paths +
+      '<text x="96" y="92" text-anchor="middle" font-size="26" font-weight="700" fill="#1B233A">' + total + '</text>' +
+      '<text x="96" y="112" text-anchor="middle" font-size="11" fill="#8A94AA">单据总数</text></svg>' +
+      '<div class="donut-legend">' + items.map(function (it) {
+        return '<div><i style="background:' + it.c + '"></i><span>' + esc(it.label) +
+          '</span><b>' + it.v + '</b><small>' + Math.round(it.v / total * 100) + '%</small></div>';
+      }).join('') + '</div></div>';
   }
 
   // ---------------------------------------------------------------- 通知中心
@@ -1154,6 +1671,49 @@
     if (t.dataset.stop) e.stopPropagation();
     var act = t.dataset.act, a = t.dataset;
     switch (act) {
+      case 'stage': UI.stage = a.id; UI.newMenu = false; replaceHash('workbench'); render(); break;
+      case 'new-menu': UI.newMenu = !UI.newMenu; render(); break;
+      case 'doc-tab': UI.docSt = a.v; UI.docPage = 1;
+        replaceHash('docs', { s: UI.docSt, g: UI.docStage, p: 1 }); render(); break;
+      case 'doc-page': UI.docPage = Math.max(1, parseInt(a.p, 10) || 1);
+        replaceHash('docs', { s: UI.docSt, g: UI.docStage, p: UI.docPage }); render(); break;
+      case 'sync-tab': UI.syncTab = a.v; render(); break;
+      case 'sync-pull':
+        toast('正在拉取', '从钉钉表单增量同步到前端单据', 'info');
+        SYNC.pull({ limit: 3 }).then(function (res) {
+          toast(res.title, res.detail, res.ok ? 'ok' : 'error'); render();
+        }); break;
+      case 'sync-push':
+        SYNC.push().then(function (res) {
+          toast(res.title, res.detail, res.ok ? 'ok' : 'warn'); render();
+        }); break;
+      case 'sync-runall':
+        if (!DB.canSystem(DB.role().id, 'settings')) { toast('无权限', '仅管理员可运行全部自动化流', 'error'); break; }
+        toast('正在运行', '按 F01 → F08 顺序执行已启用的自动化流', 'info');
+        SYNC.runAll().then(function () { toast('自动化流执行完毕', '队列、日志与冲突已更新', 'ok'); render(); }); break;
+      case 'sync-mode': case 'sync-auto': case 'sync-default': case 'sync-mode-mod':
+      case 'flow-toggle': case 'flow-run': case 'conflict': {
+        if (!DB.canSystem(DB.role().id, 'settings')) { toast('无权限', '同步配置仅管理员可修改', 'error'); break; }
+        if (act === 'sync-mode') SYNC.setConfig({ mode: a.v });
+        if (act === 'sync-auto') SYNC.setConfig({ autoSync: a.v === '1' });
+        if (act === 'sync-default') {
+          SYNC.setConfig({ defaultEntryMode: a.v, overrides: {} });
+          toast('默认录入方式已更新', a.v === 'backend' ? '钉钉表单优先，前端不重复填' : '前端填单优先，自动回写', 'ok');
+        }
+        if (act === 'sync-mode-mod') SYNC.setMode(a.mod, a.v);
+        if (act === 'flow-toggle') SYNC.toggleFlow(a.id);
+        if (act === 'conflict') SYNC.resolveConflict(a.id, a.v);
+        if (act === 'flow-run') {
+          SYNC.runFlow(a.id).then(function (res) {
+            toast(res.title, res.detail, res.ok ? 'ok' : 'warn'); render();
+          });
+          break;
+        }
+        render(); break;
+      }
+      case 'contract-download':
+        download('api-contract.json', JSON.stringify(CONTRACT, null, 2), 'application/json');
+        toast('契约已下载', '44 模块 / 144 张 SQL 原表 / 完整端点与字段映射', 'ok'); break;
       case 'login-role': doLogin(a.role); break;
       case 'switch-role': doLogin(a.role); $('roleMenu').classList.add('hidden'); break;
       case 'nav': closeDrawer(); go(a.href); break;
@@ -1313,6 +1873,20 @@
   function onInput(e) {
     var el = e.target;
     if (el.id === 'globalSearch') { globalSearch(el.value); return; }
+    if (el.id === 'docQ') {
+      UI.docQ = el.value; UI.docPage = 1;
+      replaceHash('docs', { s: UI.docSt, g: UI.docStage, p: 1 });
+      render();
+      var dq = $('docQ');
+      if (dq) { dq.focus(); try { dq.setSelectionRange(dq.value.length, dq.value.length); } catch (e) {} }
+      return;
+    }
+    if (el.id === 'docStageSel') {
+      UI.docStage = el.value; UI.docPage = 1;
+      replaceHash('docs', { s: UI.docSt, g: UI.docStage, p: 1 }); render(); return;
+    }
+    if (el.id === 'contractModSel') { UI.contractMod = el.value; render(); return; }
+    if (el.id === 'syncToken') { SYNC.setConfig({ token: el.value.trim() }); return; }
     if (el.id === 'listSearch') {
       UI.listQ = el.value; UI.listPage = 1;
       var rt = parseHash();

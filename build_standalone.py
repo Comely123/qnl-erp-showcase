@@ -9,7 +9,7 @@ styles.css 与 *.js，导致 .hidden 失效、登录层与主界面叠加显示�
 源文件（保持不变，仍是唯一的真源）：
     index.template.html   外链版 HTML 骨架
     styles.css
-    data.js / config.js / engine.js / app.js
+    data.js / config.js / contract.js / engine.js / sync.js / app.js
 产物：
     index.html            自包含单文件入口
 
@@ -25,7 +25,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 SITE = HERE if (HERE / "styles.css").exists() else HERE / "site"
 TEMPLATE = SITE / "index.template.html"
 OUTPUT = SITE / "index.html"
-ASSET_ORDER = ["data.js", "config.js", "engine.js", "app.js"]
+ASSET_ORDER = ["data.js", "config.js", "contract.js", "engine.js", "sync.js", "app.js"]
 
 
 def ensure_template():
