@@ -3,72 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="启能力ERP系统 · 全链路协同中枢 —— 钉钉 AI 多维表格架构展示站">
-<title>启能力ERP系统 · 全链路协同中枢</title>
+<meta name="description" content="启能力 ERP 系统 · 全链路协同中枢 —— 可操作的采购寻源履约仓存财务一体化系统">
+<title>启能力 ERP · 全链路协同中枢</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="app-shell">
-    <!-- 左侧固定侧边栏：品牌 + 工作台入口 + 8 个业务域 -->
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 7l8-4 8 4v10l-8 4-8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/>
-          </svg>
-        </span>
-        <span class="brand-text">
-          <strong>启能力 ERP</strong>
-          <small>全链路协同中枢</small>
-        </span>
-        <button class="sidebar-close" id="sidebarClose" type="button" aria-label="收起侧栏">
-          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
-      </div>
-      <nav class="nav" id="nav" aria-label="主导航"></nav>
-      <div class="sidebar-foot">
-        <span class="dot"></span>
-        <span>钉钉 AI 多维表格 · 静态展示站</span>
-      </div>
-    </aside>
 
-    <!-- 右侧主工作区 -->
-    <div class="workarea">
-      <header class="topbar">
-        <button class="menu-toggle" id="menuToggle" type="button" aria-label="展开侧栏">
-          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </button>
-        <div class="crumb" id="crumb"></div>
-        <div class="topbar-right">
-          <div class="global-search" id="globalSearchWrap">
-            <span class="gs-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-              </svg>
-            </span>
-            <input id="globalSearch" type="search" placeholder="搜索数据表 / 字段 / 业务域" autocomplete="off" aria-label="全局搜索">
-            <kbd class="gs-hint">/</kbd>
-            <div class="gs-results" id="gsResults" role="listbox"></div>
-          </div>
-          <a class="btn btn-primary" id="dingtalkTopBtn" href="https://alidocs.dingtalk.com/i/nodes/0eMKjyp81YYeX2ZAsZE9YXLg8xAZB1Gv" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
-            <span>打开钉钉 AI 表格</span>
-          </a>
-        </div>
-      </header>
-      <main class="content" id="main" tabindex="-1"></main>
+<!-- 登录层 -->
+<div id="loginView" class="login-view">
+  <div class="login-brand">
+    <div class="login-brand-inner">
+      <div class="login-logo"><span class="logo-mark">启</span><span>启能力 ERP</span></div>
+      <h1>启能力 ERP</h1>
+      <p class="login-slogan">采购 · 寻源 · 履约 · 仓存 · 财务一体化平台</p>
+      <ul class="login-points">
+        <li><b>全链路业务协同</b><span>44 个业务模块，八大业务域一站式打通</span></li>
+        <li><b>供应商门户</b><span>注册准入 · 报价协同 · 对账开票</span></li>
+        <li><b>角色权限隔离</b><span>6 套角色视图，模块与数据双层收敛</span></li>
+        <li><b>经营透明化</b><span>单据自动联动，端到端状态可追溯</span></li>
+      </ul>
+      <div class="login-brand-foot">基于钉钉 AI 多维表格架构 · 可操作演示系统 v2.0</div>
     </div>
   </div>
-  <div class="backdrop" id="backdrop"></div>
+  <div class="login-panel">
+    <div class="login-card">
+      <h2>欢迎登录</h2>
+      <p class="login-sub">请使用企业账号登入启能力平台</p>
+      <label class="login-label" for="loginAccount">请输入手机号或邮箱</label>
+      <input id="loginAccount" class="login-input" type="text" placeholder="13800138000" autocomplete="username">
+      <label class="login-label" for="loginPwd">请输入密码</label>
+      <input id="loginPwd" class="login-input" type="password" placeholder="已选 · 演示环境免密" autocomplete="current-password">
+      <div class="login-row">
+        <label class="login-check"><input type="checkbox" id="loginRemember" checked><span>记住登录状态</span></label>
+        <a class="login-link" href="javascript:void(0)" id="forgotPwd">忘记密码？</a>
+      </div>
+      <button class="btn btn-primary btn-login" id="loginBtn">登 录</button>
+      <div class="login-divider">演示角色快速进入</div>
+      <div class="login-roles" id="loginRoles"></div>
+      <p class="login-note">本机演示：无需真实账号，选择任一角色即可进入对应权限视图。所有数据保存在当前浏览器。</p>
+    </div>
+  </div>
+</div>
 
-  <!-- 纯静态：先加载数据，再加载应用逻辑，无任何构建与外部依赖 -->
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+<!-- 主应用 -->
+<div id="appView" class="app-view hidden">
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo"><span class="logo-mark">启</span></div>
+      <div class="sb-brand-text"><b id="sbBrand">启能力 ERP</b><span id="sbSlogan">企业采购协同平台</span></div>
+    </div>
+    <div class="sb-scroll" id="sbNav"></div>
+    <div class="sb-foot">
+      <div class="sb-mode"><i class="dot dot-green"></i><span>本地演示模式 · 数据存于浏览器</span></div>
+      <button class="sb-logout" id="logoutBtn">退出登录 / 切换角色</button>
+    </div>
+  </aside>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <button class="icon-btn sb-toggle" id="sbToggle" title="收起/展开导航" aria-label="切换导航"></button>
+      <div class="crumb" id="crumb"></div>
+      <div class="top-actions">
+        <div class="global-search">
+          <span class="gs-icon" aria-hidden="true"></span>
+          <input id="globalSearch" type="search" placeholder="搜索单据编号、模块、字段…" autocomplete="off">
+          <div class="gs-results hidden" id="gsResults"></div>
+        </div>
+        <a class="top-link" id="dingtalkBtn" href="https://alidocs.dingtalk.com/i/nodes/0eMKjyp81YYeX2ZAsZE9YXLg8xAZB1Gv" target="_blank" rel="noopener">钉钉 AI 表格</a>
+        <button class="icon-btn bell-btn" id="bellBtn" title="通知中心" aria-label="通知中心">
+          <span class="bell-svg" aria-hidden="true"></span><i class="badge hidden" id="bellBadge">0</i>
+        </button>
+        <button class="role-chip" id="roleChip" title="切换角色">
+          <span class="avatar" id="topAvatar">张</span>
+          <span class="role-chip-text"><b id="topRole">超级管理员</b><i id="topPerson">张账号</i></span>
+          <span class="caret"></span>
+        </button>
+        <div class="role-menu hidden" id="roleMenu"></div>
+      </div>
+    </header>
+
+    <main class="content" id="content"></main>
+  </div>
+</div>
+
+<!-- 抽屉：单据表单 / 详情 / 全局面板 -->
+<div class="drawer-overlay hidden" id="drawerOverlay"></div>
+<section class="drawer hidden" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-head">
+    <div><h3 id="drawerTitle">标题</h3><p id="drawerSub">副标题</p></div>
+    <button class="icon-btn" id="drawerClose" aria-label="关闭"></button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</section>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="data.js"></script>
+<script src="config.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
