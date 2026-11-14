@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="启能力ERP系统 · 全链路协同中枢 —— 钉钉 AI 多维表格架构展示站">
+<title>启能力ERP系统 · 全链路协同中枢</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- 左侧固定侧边栏：品牌 + 工作台入口 + 8 个业务域 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 7l8-4 8 4v10l-8 4-8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <strong>启能力 ERP</strong>
+          <small>全链路协同中枢</small>
+        </span>
+        <button class="sidebar-close" id="sidebarClose" type="button" aria-label="收起侧栏">
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <nav class="nav" id="nav" aria-label="主导航"></nav>
+      <div class="sidebar-foot">
+        <span class="dot"></span>
+        <span>钉钉 AI 多维表格 · 静态展示站</span>
+      </div>
+    </aside>
+
+    <!-- 右侧主工作区 -->
+    <div class="workarea">
+      <header class="topbar">
+        <button class="menu-toggle" id="menuToggle" type="button" aria-label="展开侧栏">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <div class="crumb" id="crumb"></div>
+        <div class="topbar-right">
+          <div class="global-search" id="globalSearchWrap">
+            <span class="gs-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </span>
+            <input id="globalSearch" type="search" placeholder="搜索数据表 / 字段 / 业务域" autocomplete="off" aria-label="全局搜索">
+            <kbd class="gs-hint">/</kbd>
+            <div class="gs-results" id="gsResults" role="listbox"></div>
+          </div>
+          <a class="btn btn-primary" id="dingtalkTopBtn" href="https://alidocs.dingtalk.com/i/nodes/0eMKjyp81YYeX2ZAsZE9YXLg8xAZB1Gv" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            <span>打开钉钉 AI 表格</span>
+          </a>
+        </div>
+      </header>
+      <main class="content" id="main" tabindex="-1"></main>
+    </div>
+  </div>
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- 纯静态：先加载数据，再加载应用逻辑，无任何构建与外部依赖 -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
