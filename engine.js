@@ -154,17 +154,25 @@
     },
 
     reset: function () {
+      this.assertSystem('reset');
+      var session = this.state.session;
       this.state = buildInitialState();
+      this.state.session = session; // 重置数据不应改变当前登录身份
       this.save();
       return this.state;
     },
 
-    exportJSON: function () { return JSON.stringify(this.state, null, 2); },
+    exportJSON: function () {
+      this.assertSystem('backup');
+      return JSON.stringify(this.state, null, 2);
+    },
 
     importJSON: function (raw) {
+      this.assertSystem('backup');
       var s = JSON.parse(raw);
       if (!s || !s.records || !s.v) throw new Error('文件格式不正确');
       s.v = VERSION;
+      s.session = this.state.session; // 导入备份不得提权到其它角色
       this.state = s;
       this.save();
       return this.state;
@@ -183,22 +191,60 @@
     logout: function () { this.state.session = null; this.save(); },
     role: function () { return this.state.session ? ROLE[this.state.session.roleId] : null; },
 
+    // v3 权限内核：所有能力判定只有一个入口，默认拒绝。
+    // 能力来自 config.js 中程序化展开的「角色 × 模块」矩阵，
+    // 系统级功能单独由 policy.system 白名单控制，不再有角色级扁平 caps 的越权空间。
     can: function (roleId, moduleKey, action) {
       var r = ROLE[roleId];
-      if (!r) return false;
-      if (r.caps.indexOf(action) < 0) return false;
-      if (action === 'config') return r.id === 'admin';
-      return this.visibleModules(roleId).indexOf(moduleKey) >= 0;
+      if (!r || !r.policy) return false;
+      if (action === 'config') return this.canSystem(roleId, 'settings');
+      return (r.policy.modules[moduleKey] || []).indexOf(action) >= 0;
+    },
+    canSystem: function (roleId, feature) {
+      var r = ROLE[roleId];
+      return !!(r && r.policy && r.policy.system.indexOf(feature) >= 0);
+    },
+    capsOf: function (roleId, moduleKey) {
+      var r = ROLE[roleId];
+      return r && r.policy ? (r.policy.modules[moduleKey] || []).slice() : [];
+    },
+    assertCap: function (moduleKey, action) {
+      var role = this.role();
+      if (!role) throw new Error('登录状态已失效，请重新选择角色');
+      if (!this.can(role.id, moduleKey, action)) {
+        var m = MOD[moduleKey];
+        throw new Error('「' + role.name + '」无权在「' + (m ? m.name : moduleKey) + '」执行' +
+          ((CFG.capLabels || {})[action] || action) +
+          '；该模块对当前角色为只读或不可见');
+      }
+      return role;
+    },
+    assertSystem: function (feature) {
+      var role = this.role();
+      if (!role || !this.canSystem(role.id, feature)) {
+        throw new Error('「' + (role ? role.name : '当前会话') + '」无权使用' +
+          ((CFG.systemLabels || {})[feature] || feature) + '；该功能仅对授权角色开放');
+      }
+      return role;
+    },
+    assertRecord: function (moduleKey, rec) {
+      var role = this.role();
+      if (!role) throw new Error('登录状态已失效，请重新选择角色');
+      if (!rec) throw new Error('单据不存在或已删除');
+      var self = this, visible = this.visibleRecords(role.id, moduleKey).some(function (x) {
+        return x.id === rec.id;
+      });
+      if (!visible) throw new Error('该单据不在当前角色的数据范围内');
+      // 门户角色只能操作自己创建的单据；内部角色在其主责模块内可协作处理
+      if (role.policy.rowScope === 'supplier' && rec.createdRole !== role.id) {
+        throw new Error('门户角色只能操作本公司自己提交的单据');
+      }
+      return role;
     },
 
     visibleModules: function (roleId) {
       var r = ROLE[roleId];
-      if (!r) return [];
-      var keys = [];
-      CFG.modules.forEach(function (m) {
-        if (r.domains.indexOf(m.domainId) >= 0 || r.extra.indexOf(m.key) >= 0) keys.push(m.key);
-      });
-      return keys.filter(function (k) { return r.deny.indexOf(k) < 0; });
+      return r && r.policy ? r.policy.visible.slice() : [];
     },
 
     visibleDomains: function (roleId) {
@@ -220,20 +266,18 @@
       }).filter(function (g) { return g.modules.length > 0; });
     },
 
-    // 供应商门户：行级数据隔离
+    // 行级数据隔离：默认拒绝未授权模块；门户角色严格只看本公司相关 / 自己提交的单据
     visibleRecords: function (roleId, moduleKey) {
       var r = ROLE[roleId];
+      if (!r || !r.policy || !this.can(roleId, moduleKey, 'view')) return [];
       var list = (this.state.records[moduleKey] || []).slice();
-      if (!r || r.rowFilter !== 'supplier') return list;
+      if (r.policy.rowScope !== 'supplier') return list;
       var company = CFG.supplierCompany;
-      var strict = ['t09', 't22', 't26', 't28', 't30', 't31', 't37'].indexOf(moduleKey) >= 0;
       return list.filter(function (rec) {
         if (rec.createdRole === roleId) return true;
-        var hit = Object.keys(rec.data).some(function (k) {
+        return Object.keys(rec.data).some(function (k) {
           return text(rec.data[k]).indexOf(company) >= 0;
         });
-        if (strict) return hit;
-        return hit || rec.status !== 'draft';
       });
     },
 
@@ -241,9 +285,20 @@
       var role = this.role();
       return role ? this.visibleRecords(role.id, moduleKey) : [];
     },
-    allRecords: function (moduleKey) { return (this.state.records[moduleKey] || []).slice(); },
-    get: function (moduleKey, id) {
+    allRecords: function (moduleKey) {
+      // 仅供引擎内部与管理员审计使用，UI 不得直接调用
+      return (this.state.records[moduleKey] || []).slice();
+    },
+    _raw: function (moduleKey, id) {
       return (this.state.records[moduleKey] || []).filter(function (r) { return r.id === id; })[0] || null;
+    },
+    get: function (moduleKey, id) {
+      var role = this.role();
+      if (!role || !this.can(role.id, moduleKey, 'view')) return null;
+      var rec = this._raw(moduleKey, id);
+      if (!rec) return null;
+      var visible = this.visibleRecords(role.id, moduleKey).some(function (x) { return x.id === id; });
+      return visible ? rec : null; // 禁止凭 id 越权读取详情
     },
 
     // -------------------------------------------------------- 日志与通知
@@ -268,8 +323,12 @@
     },
 
     notificationsFor: function (roleId) {
+      var self = this;
       return this.state.notifications.filter(function (n) {
-        return n.to.indexOf(roleId) >= 0 || n.to.indexOf('all') >= 0;
+        if (!(n.to.indexOf(roleId) >= 0 || n.to.indexOf('all') >= 0)) return false;
+        // 通知不得泄露当前角色不可见模块的信息
+        if (n.moduleKey && !self.can(roleId, n.moduleKey, 'view')) return false;
+        return true;
       });
     },
     markRead: function (id, roleId) {
@@ -326,8 +385,7 @@
       var mod = MOD[moduleKey];
       opts = opts || {};
       if (!mod) throw new Error('未知模块');
-      var role = this.role();
-      if (!this.can(role.id, moduleKey, 'create')) throw new Error('当前角色无新建权限');
+      var role = this.assertCap(moduleKey, 'create');
       var rec = makeRecord(mod, data, {
         createdBy: role.id, createdRole: role.id, person: role.person,
         note: opts.note || ''
@@ -343,10 +401,10 @@
     },
 
     update: function (moduleKey, id, data) {
-      var mod = MOD[moduleKey], role = this.role();
-      if (!this.can(role.id, moduleKey, 'edit')) throw new Error('当前角色无编辑权限');
-      var rec = this.get(moduleKey, id);
-      if (!rec) throw new Error('单据不存在');
+      var mod = MOD[moduleKey];
+      var role = this.assertCap(moduleKey, 'edit');
+      var rec = this._raw(moduleKey, id);
+      this.assertRecord(moduleKey, rec);
       if (rec.status === 'done') throw new Error('已完成的单据不可编辑，请先撤销');
       var d = clone(data);
       if (mod.noField) d[mod.noField] = rec.no;
@@ -360,14 +418,20 @@
     },
 
     transition: function (moduleKey, id, action, note) {
-      var mod = MOD[moduleKey], role = this.role();
-      var rec = this.get(moduleKey, id);
-      if (!rec) throw new Error('单据不存在');
+      var mod = MOD[moduleKey];
+      if (!mod) throw new Error('未知模块');
       var need = action === 'approve' ? 'approve' : action === 'reject' ? 'reject' :
         action === 'remove' ? 'delete' : 'submit';
-      if (!this.can(role.id, moduleKey, need)) throw new Error('当前角色无「' + action + '」权限');
+      var role = this.assertCap(moduleKey, need);
+      var rec = this._raw(moduleKey, id);
+      this.assertRecord(moduleKey, rec);
       if (action === 'approve' && mod.approvers.indexOf(role.id) < 0 && role.id !== 'admin') {
         throw new Error('该单据由「' + mod.approvers.map(function (a) { return ROLE[a].name; }).join('/') + '」审批');
+      }
+      // 职责分离：创建人不得审批 / 驳回自己的单据（超级管理员除外）
+      if ((action === 'approve' || action === 'reject') && rec.createdRole === role.id && role.id !== 'admin') {
+        throw new Error('职责分离：不能审批自己创建的单据，请由「' +
+          mod.approvers.map(function (a) { return ROLE[a].name; }).join('/') + '」处理');
       }
       var from = rec.status, to = from;
       var label = '';
@@ -508,7 +572,10 @@
         var m = MOD[k];
         self.visibleRecords(roleId, k).forEach(function (r) {
           if (r.status !== 'running') return;
-          out.push({ rec: r, module: m, canApprove: m.approvers.indexOf(roleId) >= 0,
+          var approveOK = self.can(roleId, k, 'approve') &&
+            (m.approvers.indexOf(roleId) >= 0 || roleId === 'admin') &&
+            !(r.createdRole === roleId && roleId !== 'admin');
+          out.push({ rec: r, module: m, canApprove: approveOK,
             isMine: r.createdRole === roleId });
         });
       });
@@ -532,10 +599,19 @@
       return out.slice(0, 12);
     },
 
-    recentLogs: function (n) { return this.state.logs.slice(0, n || 12); },
+    recentLogs: function (n, roleId) {
+      var self = this, rid = roleId || (this.role() ? this.role().id : '');
+      var logs = this.state.logs.filter(function (l) {
+        if (!l.moduleKey) return self.canSystem(rid, 'audit') || l.role === rid;
+        return self.can(rid, l.moduleKey, 'view');
+      });
+      return logs.slice(0, n || 12);
+    },
 
     // -------------------------------------------------------- 导出
     exportCSV: function (moduleKey, roleId) {
+      var rid = roleId || (this.role() ? this.role().id : '');
+      if (!this.can(rid, moduleKey, 'export')) throw new Error('当前角色无导出权限');
       var mod = MOD[moduleKey];
       var cols = mod.fields.map(function (f) { return f.name; });
       var rows = this.visibleRecords(roleId, moduleKey).map(function (r) {

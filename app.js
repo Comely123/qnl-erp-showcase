@@ -1,7 +1,8 @@
 /* 启能力 ERP · 全链路协同中枢 —— 运行态前端应用
  * 纯静态、零依赖、hash 路由；所有业务数据由 engine.js 在本地持久化。
  * 页面：登录 / 工作台 / 业务域(两级Tab) / 单据模块 / 全链路流程 / 经营看板 /
- *       通知中心 / 搭建指南 / 架构字典 / 系统设置
+ *       通知中心 / 搭建指南 / 架构字典 / 我的权限 / 系统设置
+ * 权限：所有入口统一走 engine.js 的 can / canSystem，越权默认拒绝。
  */
 (function () {
   'use strict';
@@ -36,6 +37,12 @@
     var i = stInfo(status);
     return '<span class="pill ' + i[1] + '">' + esc(label || i[0]) + '</span>';
   }
+  // 审批权限 = 模块能力 + 审批角色 + 职责分离（不能审批自己创建的单据）
+  function canApproveRecord(role, mod, rec) {
+    return DB.can(role.id, mod.key, 'approve') &&
+      (mod.approvers.indexOf(role.id) >= 0 || role.id === 'admin') &&
+      !(rec.createdRole === role.id && role.id !== 'admin');
+  }
   function fieldStatus(mod, rec) {
     return mod.statusField ? (txt(rec.data[mod.statusField]) || mod.states[rec.status]) : mod.states[rec.status];
   }
@@ -57,6 +64,7 @@
     flow: '<circle cx="5" cy="12" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="19" cy="18" r="2"/><path d="M7 12h5l5-6M12 12l5 6"/>',
     book: '<path d="M4 4h7a3 3 0 0 1 3 3v13a3 3 0 0 0-3-3H4zM20 4h-3a3 3 0 0 0-3 3v13a3 3 0 0 1 3-3h3z"/>',
     list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+    shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
     gear: '<circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14 3h-4l-.6 2.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2L10 21h4l.6-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5A7 7 0 0 0 19 12z"/>',
     plus: '<path d="M12 5v14M5 12h14"/>',
     arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>'
@@ -125,6 +133,12 @@
   }
   function doLogin(roleId) {
     DB.login(roleId);
+    // 切换身份后清空所有可能残留越权状态的临时 UI
+    closeDrawer();
+    UI.formData = {}; UI.listQ = ''; UI.listSt = 'all'; UI.listPage = 1; UI.groupIdx = 0;
+    UI.lastDetailMod = ''; UI.lastDetailId = '';
+    $('roleMenu').classList.add('hidden');
+    $('gsResults').classList.add('hidden'); $('globalSearch').value = '';
     $('loginView').classList.add('hidden');
     $('appView').classList.remove('hidden');
     go('workbench');
@@ -146,6 +160,8 @@
     $('bellBadge').textContent = n > 99 ? '99+' : n;
     $('bellBadge').classList.toggle('hidden', n === 0);
     $('dingtalkBtn').href = 'https://alidocs.dingtalk.com/i/nodes/' + CFG.meta.baseId;
+    // 钉钉全量入口属于系统级能力，不对业务角色开放
+    $('dingtalkBtn').classList.toggle('hidden', !DB.canSystem(r.id, 'portal'));
 
     var domains = DB.visibleDomains(r.id);
     var nav = '<div class="sb-group-label">工作台</div>' +
@@ -159,9 +175,10 @@
       navItem('board', '', 'chart', '经营看板', '', route.page === 'board') +
       navItem('notify', '', 'bell', '通知中心', n || '', route.page === 'notify') +
       '<div class="sb-group-label">系统</div>' +
-      navItem('guide', '', 'book', '系统搭建指南', '', route.page === 'guide') +
-      navItem('dict', '', 'list', '架构字典', '', route.page === 'dict') +
-      navItem('settings', '', 'gear', '系统设置', '', route.page === 'settings');
+      navItem('permissions', '', 'shield', '我的权限', '', route.page === 'permissions') +
+      (DB.canSystem(r.id, 'guide') ? navItem('guide', '', 'book', '系统搭建指南', '', route.page === 'guide') : '') +
+      (DB.canSystem(r.id, 'dict') ? navItem('dict', '', 'list', '架构字典', '', route.page === 'dict') : '') +
+      (DB.canSystem(r.id, 'settings') ? navItem('settings', '', 'gear', '系统设置', '', route.page === 'settings') : '');
     $('sbNav').innerHTML = nav;
     var crumbs = breadcrumb(route);
     $('crumb').innerHTML = crumbs.map(function (c, i) {
@@ -188,7 +205,8 @@
     }
     return ({ flow: ['协同与分析', '全链路流程'], board: ['协同与分析', '经营看板'],
       notify: ['协同与分析', '通知中心'], guide: ['系统', '系统搭建指南'],
-      dict: ['系统', '架构字典'], settings: ['系统', '系统设置'] })[p] || ['启能力 ERP'];
+      dict: ['系统', '架构字典'], permissions: ['系统', '我的权限'],
+      settings: ['系统', '系统设置'] })[p] || ['启能力 ERP'];
   }
 
   // ---------------------------------------------------------------- 渲染入口
@@ -203,6 +221,16 @@
     $('appView').classList.remove('hidden');
     var route = parseHash();
     if (route.page === 'login') { go('workbench'); return; }
+    var cur = DB.role();
+    // 统一路由门禁：直接改 hash 也不能越过权限边界
+    if (route.page === 'settings' && !DB.canSystem(cur.id, 'settings')) {
+      replaceHash('permissions');
+      route = { page: 'permissions', a: '', b: '', q: {} };
+    }
+    if (route.page === 'domain' && !DB.groupsFor(cur.id, route.a).length) {
+      replaceHash('workbench');
+      route = { page: 'workbench', a: '', b: '', q: {} };
+    }
     shell(route);
     var html = '';
     switch (route.page) {
@@ -214,6 +242,7 @@
       case 'notify': html = pageNotify(); break;
       case 'guide': html = pageGuide(); break;
       case 'dict': html = pageDict(route.q); break;
+      case 'permissions': html = pagePermissions(); break;
       case 'settings': html = pageSettings(); break;
       default: html = pageWorkbench();
     }
@@ -223,13 +252,30 @@
   }
 
   function scopeBar(role) {
+    var p = role.policy;
     return '<div class="scope-bar"><b>当前角色权限</b><span>' + esc(role.scope) +
-      '</span><span class="scope-spacer"></span><span class="scope-pill">' + esc(role.name) + ' · ' +
-      esc(role.person) + '</span></div>';
+      '</span><span class="scope-spacer"></span>' +
+      '<span class="scope-pill">可见 ' + p.visible.length + ' · 可写 ' + p.writable.length +
+      ' · 只读 ' + p.readonly.length + ' · 可审批 ' + p.approvable.length + '</span>' +
+      '<span class="scope-pill">' + esc(role.name) + ' · ' + esc(role.person) + '</span>' +
+      '<button class="link-btn" data-act="nav" data-href="permissions">权限明细</button></div>';
   }
   function emptyBox(title, desc) {
     return '<div class="empty"><div class="empty-icon">' + ico('list', 24) + '</div><h4>' + esc(title) +
       '</h4><p>' + esc(desc) + '</p></div>';
+  }
+  // 统一的越权提示页：路由、模块、功能入口共用
+  function denyPage(title, desc, role) {
+    var p = role.policy;
+    return '<div class="page-head"><div><h2>' + esc(title) + '</h2>' +
+      '<p>权限隔离生效 · 所有入口都经过统一鉴权，越权默认拒绝</p></div>' +
+      '<div class="head-actions"><button class="btn" data-act="nav" data-href="workbench">回到工作台</button></div></div>' +
+      '<div class="deny-box"><b>当前身份：' + esc(role.name) + ' · ' + esc(role.person) + '</b>' +
+      '<p>' + esc(desc) + '</p><div class="perm-legend">' +
+      '<span class="cap-chip on">可见 ' + p.visible.length + ' 模块</span>' +
+      '<span class="cap-chip on">可写 ' + p.writable.length + ' 模块</span>' +
+      '<span class="cap-chip off">系统功能 ' + p.system.length + ' 项</span></div>' +
+      '<button class="btn btn-primary" data-act="nav" data-href="permissions">查看我的权限</button></div>';
   }
 
   // ---------------------------------------------------------------- 工作台
@@ -359,8 +405,11 @@
   function pageModule(key, q) {
     var m = MOD[key], r = DB.role();
     if (!m || !DB.can(r.id, key, 'view')) {
-      return '<div class="notice-box"><b>权限隔离生效：</b>当前角色无权访问该模块。</div>' +
-        emptyBox('无权访问', '请在顶部切换为有权限的角色');
+      var owners = CFG.roles.filter(function (x) { return DB.can(x.id, key, 'view'); })
+        .map(function (x) { return x.name; }).join(' / ');
+      return denyPage('无权访问该模块',
+        '「' + (m ? m.name : key) + '」不在当前角色的授权范围内。可访问角色：' + (owners || '无') +
+        '。该模块的名称、字段与单据均不会出现在搜索、通知与看板中。', r);
     }
     UI.listQ = q.q || ''; UI.listSt = q.st || 'all'; UI.listPage = parseInt(q.p || '1', 10) || 1;
     var groups = DB.groupsFor(r.id, m.domainId);
@@ -448,7 +497,7 @@
         (rec.status === 'draft' || rec.status === 'reject'
           ? (DB.can(r.id, key, 'submit') ? '<button class="link-btn" data-act="act" data-action="submit" data-mod="' + key + '" data-id="' + rec.id + '" data-stop="1">提交</button>' : '')
           : rec.status === 'running'
-            ? (DB.can(r.id, key, 'approve') && (m.approvers.indexOf(r.id) >= 0 || r.id === 'admin')
+            ? (canApproveRecord(r, m, rec)
               ? '<button class="link-btn" data-act="act" data-action="approve" data-mod="' + key + '" data-id="' + rec.id + '" data-stop="1">通过</button>' : '')
             : '') +
         '</div></td></tr>';
@@ -572,6 +621,7 @@
   }
   function openForm(key, recId) {
     var m = MOD[key], r = DB.role(), rec = recId ? DB.get(key, recId) : null;
+    if (recId && !rec) { toast('单据不存在或不在当前数据范围内', '', 'error'); return; }
     if (!DB.can(r.id, key, rec ? 'edit' : 'create')) {
       toast('无权限', '当前角色不能' + (rec ? '编辑' : '新建') + '该模块单据', 'error'); return;
     }
@@ -649,21 +699,28 @@
 
   // ---------------------------------------------------------------- 单据详情
   function openDetail(key, recId) {
-    var m = MOD[key], rec = DB.get(key, recId);
-    if (!rec) { toast('单据不存在', '', 'error'); return; }
+    var m = MOD[key], r = DB.role();
+    if (!m || !DB.can(r.id, key, 'view')) {
+      toast('无权限', '该模块不在当前角色的可见范围内', 'error'); return;
+    }
+    var rec = DB.get(key, recId);
+    if (!rec) { toast('单据不存在或不在当前数据范围内', '', 'error'); return; }
     UI.lastDetailMod = key; UI.lastDetailId = recId;
-    var r = DB.role();
     var h = '<div class="detail-head"><div><div class="dh-title">' + esc(txt(rec.data[m.titleField]) || rec.no) +
       '</div><div class="dh-sub mono">' + esc(rec.no) + ' · ' + esc(m.fullName) + ' · 创建于 ' +
       esc(dt(rec.createdAt)) + '</div></div><div>' + pill(rec.status, fieldStatus(m, rec)) + '</div></div>';
     if (rec.source) {
       h += '<div class="source-box" style="margin-bottom:14px">本单据由上游 <b>' + esc(rec.source.no) +
-        '</b> 审批通过后自动派生 · <button class="link-btn" data-act="open-detail" data-mod="' +
-        esc(rec.source.moduleKey) + '" data-id="' + esc(rec.source.id) + '">查看来源单据</button></div>';
+        '</b> 审批通过后自动派生 · ' +
+        (DB.can(r.id, rec.source.moduleKey, 'view')
+          ? '<button class="link-btn" data-act="open-detail" data-mod="' +
+            esc(rec.source.moduleKey) + '" data-id="' + esc(rec.source.id) + '">查看来源单据</button>'
+          : '<span class="muted small">来源模块不在当前权限范围内</span>') + '</div>';
     }
     var kids = [];
-    Object.keys(DB.state.records).forEach(function (k) {
-      DB.state.records[k].forEach(function (x) {
+    // 派生链也按可见模块过滤，避免泄露未授权模块的单号
+    DB.visibleModules(r.id).forEach(function (k) {
+      DB.visibleRecords(r.id, k).forEach(function (x) {
         if (x.source && x.source.id === rec.id) kids.push({ k: k, r: x });
       });
     });
@@ -702,7 +759,7 @@
       (rec.status === 'draft' || rec.status === 'reject'
         ? (DB.can(r.id, key, 'submit') ? '<button class="btn btn-primary" data-act="act" data-action="submit" data-mod="' + key + '" data-id="' + rec.id + '">提交审批</button>' : '')
         : rec.status === 'running'
-          ? ((DB.can(r.id, key, 'approve') && (m.approvers.indexOf(r.id) >= 0 || r.id === 'admin'))
+          ? (canApproveRecord(r, m, rec)
               ? '<button class="btn" data-act="act" data-action="reject" data-mod="' + key + '" data-id="' + rec.id + '">驳回</button>' +
                 '<button class="btn btn-primary" data-act="act" data-action="approve" data-mod="' + key + '" data-id="' + rec.id + '">审批通过</button>'
               : '<span class="tag">等待 ' + esc(m.approvers.map(function (a) { return ROLE[a].name; }).join(' / ')) + ' 审批</span>')
@@ -780,7 +837,9 @@
   function pageBoard() {
     var r = DB.role(), s = DB.statsFor(r.id), domains = DB.visibleDomains(r.id);
     var h = '<div class="page-head"><div><h2>经营看板</h2><p>按当前角色可见范围实时聚合 · 图表为纯 SVG 渲染，无外部依赖</p></div>' +
-      '<div class="head-actions"><button class="btn" data-act="export-board">导出汇总 CSV</button></div></div>';
+      '<div class="head-actions">' +
+      (r.policy.boardExport ? '<button class="btn" data-act="export-board">导出汇总 CSV</button>' :
+        '<span class="tag">汇总导出未授权</span>') + '</div></div>';
     h += '<div class="grid grid-4">' +
       [['单据总量', s.total, '授权范围内'], ['在途待办', s.running, '需处理'],
        ['已完成', s.done, '完成率 ' + (s.total ? Math.round(s.done / s.total * 100) : 0) + '%'],
@@ -892,38 +951,43 @@
           esc(f.flow) + '</p><ul style="margin:0;padding-left:17px;font-size:11.5px;color:var(--muted);line-height:1.8">' +
           f.tips.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>';
       }).join('') + '</div>';
-    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>权限矩阵</h3><span class="sub">模块可见数 / 操作权限</span></div>' +
+    var gr = DB.role(), audit = DB.canSystem(gr.id, 'audit');
+    var shown = audit ? CFG.roles : CFG.roles.filter(function (x) { return x.id === gr.id; });
+    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>权限矩阵</h3><span class="sub">' +
+      (audit ? '全局审计视图' : '仅显示当前角色 · 完整矩阵仅管理员可见') + '</span></div>' +
       '<div class="table-wrap"><table class="data-table matrix"><thead><tr><th>角色</th><th>可见模块</th>' +
-      ['新建', '编辑', '提交', '审批', '删除', '配置'].map(function (x) { return '<th>' + x + '</th>'; }).join('') +
-      '</tr></thead><tbody>' + CFG.roles.map(function (r) {
-        var caps = { '新建': 'create', '编辑': 'edit', '提交': 'submit', '审批': 'approve', '删除': 'delete', '配置': 'config' };
-        return '<tr><td><span class="cell-main">' + esc(r.name) + '</span></td><td>' + DB.visibleModules(r.id).length + ' / 44</td>' +
-          Object.keys(caps).map(function (k) {
-            return '<td class="' + (r.caps.indexOf(caps[k]) >= 0 ? 'yes' : 'no') + '">' +
-              (r.caps.indexOf(caps[k]) >= 0 ? '✓' : '—') + '</td>';
-          }).join('') + '</tr>';
-      }).join('') + '</tbody></table></div></div></div></div>';
+      '<th>可写</th><th>只读</th><th>可审批</th><th>系统功能</th></tr></thead><tbody>' + shown.map(function (x) {
+        return '<tr><td><span class="cell-main">' + esc(x.name) + '</span></td>' +
+          '<td>' + x.policy.visible.length + ' / 44</td><td>' + x.policy.writable.length + '</td>' +
+          '<td>' + x.policy.readonly.length + '</td><td>' + x.policy.approvable.length + '</td>' +
+          '<td>' + x.policy.system.length + ' 项</td></tr>';
+      }).join('') + '</tbody></table></div>' +
+      '<p class="mode-note">逐个模块的精确能力清单见「我的权限」页。' +
+      '<button class="link-btn" data-act="nav" data-href="permissions">查看我的权限</button></p></div></div></div>';
     return h;
   }
 
   // ---------------------------------------------------------------- 架构字典
   function pageDict(q) {
     var kw = (q.q || '').trim().toLowerCase(), r = DB.role(), vis = DB.visibleModules(r.id);
+    // 字典也按角色收敛：未授权模块的名称与字段一律不展示
     var list = CFG.modules.filter(function (m) {
+      if (vis.indexOf(m.key) < 0) return false;
       if (!kw) return true;
       return (m.name + m.fullName + m.domain + m.fields.map(function (f) { return f.name; }).join(' '))
         .toLowerCase().indexOf(kw) >= 0;
     });
-    var h = '<div class="page-head"><div><h2>架构字典</h2><p>44 个业务模块 / 444 个字段 / 135 个钉钉视图 · 这是系统的数据底座，不是业务操作入口</p></div>' +
-      '<div class="head-actions"><button class="btn" data-act="nav" data-href="flow">看运行链路</button></div></div>';
+    var h = '<div class="page-head"><div><h2>架构字典</h2><p>当前角色可见 ' + vis.length +
+      ' / 44 个业务模块 · 未授权模块已从字典中移除；这里是数据底座，不是业务操作入口</p></div>' +
+      '<div class="head-actions"><button class="btn" data-act="nav" data-href="permissions">我的权限</button>' +
+      '<button class="btn" data-act="nav" data-href="flow">看运行链路</button></div></div>';
     h += '<div class="toolbar"><div class="search-box"><input id="dictSearch" type="search" placeholder="搜索模块 / 字段…" value="' +
       esc(kw) + '"></div><span class="muted small">匹配 ' + list.length + ' 个模块</span></div>';
     h += '<div class="grid grid-3">' + list.map(function (m) {
-      var locked = vis.indexOf(m.key) < 0;
-      return '<div class="module-card" ' + (locked ? '' : 'data-act="nav" data-href="module/' + m.key + '"') +
-        ' style="' + (locked ? 'opacity:.55' : '') + '"><div class="mc-top"><div class="module-icon">' +
-        esc(m.domainId) + '</div><h4>' + esc(m.name) + '</h4>' +
-        (locked ? '<span class="tag">无权限</span>' : '') + '</div>' +
+      var readonly = DB.can(r.id, m.key, 'create') ? '' : '<span class="tag">只读</span>';
+      return '<div class="module-card" data-act="nav" data-href="module/' + m.key + '">' +
+        '<div class="mc-top"><div class="module-icon">' +
+        esc(m.domainId) + '</div><h4>' + esc(m.name) + '</h4>' + readonly + '</div>' +
         '<div class="mc-desc">' + esc(m.domain) + ' · ' + m.fields.length + ' 字段 · ' + m.views.length + ' 视图</div>' +
         '<div class="mc-meta">' + m.fields.slice(0, 3).map(function (f) {
           return '<span class="tag">' + esc(f.name) + '</span>';
@@ -932,10 +996,77 @@
     return h;
   }
 
+  // ---------------------------------------------------------------- 我的权限
+  function pagePermissions() {
+    var r = DB.role(), p = r.policy;
+    var sys = CFG.systemLabels || {}, labs = CFG.capLabels || {};
+    var domains = DB.visibleDomains(r.id);
+    var h = '<div class="page-head"><div><h2>我的权限</h2>' +
+      '<p>当前身份的精确授权清单 · 由「角色 × 模块」能力矩阵实时计算，所有入口统一鉴权</p></div>' +
+      '<div class="head-actions"><button class="btn" data-act="nav" data-href="workbench">回到工作台</button></div></div>';
+    h += '<div class="perm-summary">' +
+      '<div><b>' + esc(r.name) + '</b><span>' + esc(r.person) + ' · ' + esc(r.account) + '</span></div>' +
+      '<div><b>' + p.visible.length + '</b><span>可见模块</span></div>' +
+      '<div><b>' + p.writable.length + '</b><span>可新建/编辑</span></div>' +
+      '<div><b>' + p.readonly.length + '</b><span>只读模块</span></div>' +
+      '<div><b>' + p.approvable.length + '</b><span>可审批模块</span></div>' +
+      '<div><b>' + p.system.length + '</b><span>系统功能</span></div></div>';
+    h += '<div class="scope-card"><b>数据范围</b><p>' + esc(r.scope) + '</p><p class="mode-note">' +
+      (p.rowScope === 'supplier'
+        ? '行级隔离：仅可见与「' + esc(CFG.supplierCompany) + '」相关或自己提交的单据；不能审批、不能查看其它供应商数据。'
+        : '按业务域授权：可见模块内的单据均可查看；写操作与审批按下方模块能力矩阵执行，创建人不能审批自己的单据。') +
+      '</p></div>';
+    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>系统功能白名单</h3>' +
+      '<span class="sub">未列出的功能一律不可见、不可调用</span></div><div class="perm-legend">' +
+      Object.keys(sys).map(function (k) {
+        var on = p.system.indexOf(k) >= 0;
+        return '<span class="cap-chip ' + (on ? 'on' : 'off') + '">' +
+          (on ? '✓ ' : '— ') + esc(sys[k]) + '</span>';
+      }).join('') + '</div><p class="mode-note">' +
+      (p.system.indexOf('settings') < 0
+        ? '系统设置、全量数据备份、重置演示数据、钉钉全量入口、全局审计矩阵均不可访问；直接修改地址栏 hash 也会被路由门禁拦截。'
+        : '当前为全域管理员，全部系统功能可用；业务角色的系统功能由白名单收敛。') +
+      '</p></div>';
+    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>模块能力矩阵</h3>' +
+      '<span class="sub">' + p.visible.length + ' / 44 个可见模块</span></div>' +
+      '<div class="perm-legend"><span class="cap-chip on">绿色 = 可写</span>' +
+      '<span class="cap-chip off">灰色 = 只读</span>' +
+      '<span class="mode-note">未授权模块不显示；悬停标签可看完整能力</span></div>';
+    domains.forEach(function (d) {
+      h += '<div class="perm-row"><b>' + esc(d.name) + '</b><div class="perm-legend">' +
+        CFG.modules.filter(function (m) {
+          return m.domainId === d.id && p.modules[m.key] && p.modules[m.key].length;
+        }).map(function (m) {
+          var caps = p.modules[m.key], rw = caps.indexOf('create') >= 0;
+          return '<span class="cap-chip ' + (rw ? 'on' : 'off') + '" title="' +
+            esc(caps.map(function (c) { return labs[c] || c; }).join(' / ')) + '">' +
+            esc(m.name) + ' · ' + (rw ? '可写' : '只读') +
+            (caps.indexOf('approve') >= 0 ? ' · 可审批' : '') + '</span>';
+        }).join('') + '</div></div>';
+    });
+    h += '</div>';
+    h += '<div class="role-switch-banner">演示身份切换器：以下切换仅用于对比权限隔离效果，不属于业务功能；真实部署时身份由登录认证决定。每次切换都会写入审计日志、清空当前会话的临时状态并回到工作台。</div>';
+    h += '<div class="card card-pad section-gap"><div class="card-title"><h3>切换演示身份</h3>' +
+      '<span class="sub">切换后权限与数据口径同步变化</span></div><div class="grid grid-3">' +
+      CFG.roles.map(function (x) {
+        return '<div class="ntf-item ' + (x.id === r.id ? 'unread' : '') + '">' +
+          '<span class="avatar" style="background:' + esc(x.color) + '">' + esc(x.person.slice(0, 1)) + '</span>' +
+          '<div class="ntf-main"><b>' + esc(x.name) + '</b><p>' + esc(x.person) + ' · 可见 ' +
+          x.policy.visible.length + ' 模块 / 可写 ' + x.policy.writable.length + ' 模块</p></div>' +
+          (x.id === r.id ? '<span class="tag">当前</span>' :
+            '<button class="link-btn" data-act="switch-role" data-role="' + esc(x.id) + '">切换</button>') +
+          '</div>';
+      }).join('') + '</div></div>';
+    return h;
+  }
+
   // ---------------------------------------------------------------- 系统设置
   function pageSettings() {
     var r = DB.role();
-    var h = '<div class="page-head"><div><h2>系统设置</h2><p>演示数据管理、自动化规则与钉钉真实入口</p></div></div>';
+    if (!DB.canSystem(r.id, 'settings')) {
+      return denyPage('无权访问系统设置', '系统设置、全量备份与重置仅对超级管理员开放。', r);
+    }
+    var h = '<div class="page-head"><div><h2>系统设置</h2><p>演示数据管理、自动化规则与钉钉真实入口 · 仅超级管理员可见</p></div></div>';
     h += '<div class="grid grid-2"><div class="card card-pad"><div class="card-title"><h3>本地数据管理</h3>' +
       '<span class="sub">localStorage · ' + esc(DB.state.createdAt.slice(0, 10)) + ' 初始化</span></div>' +
       '<div class="notice-box"><b>' + esc(CFG.meta.modeLabel) + '</b><br>' + esc(CFG.meta.note) + '</div>' +
@@ -949,6 +1080,7 @@
       '<button class="btn" data-act="settings-import">导入备份</button>' +
       '<button class="btn btn-danger" data-act="settings-reset">重置演示数据</button></div>' +
       '<p class="small muted" style="margin:12px 0 0">重置会清空本地新增的单据、日志与附件，恢复到初始演示状态，不可撤销。</p></div>';
+    h += '<div class="role-switch-banner">演示身份切换器：此处切换角色仅用于对比权限隔离效果，不属于业务功能；真实部署时身份由登录认证决定。</div>';
     h += '<div class="card card-pad"><div class="card-title"><h3>角色与权限</h3><span class="sub">切换角色以验证隔离</span></div>' +
       CFG.roles.map(function (x) {
         return '<div class="ntf-item ' + (x.id === r.id ? 'unread' : '') + '"><span class="avatar" style="background:' +
@@ -1059,10 +1191,15 @@
         updateList(rt2.a); break;
       }
       case 'export-csv':
-        download(MOD[a.mod].name + '.csv', DB.exportCSV(a.mod, DB.role().id), 'text/csv;charset=utf-8');
-        toast('已导出 CSV', MOD[a.mod].name, 'ok'); break;
+        try {
+          download(MOD[a.mod].name + '.csv', DB.exportCSV(a.mod, DB.role().id), 'text/csv;charset=utf-8');
+          toast('已导出 CSV', MOD[a.mod].name, 'ok');
+        } catch (err) { toast('导出被拒绝', err.message, 'error'); }
+        break;
       case 'export-board': {
-        var r = DB.role(), lines = ['业务域,模块,单据数'];
+        var r = DB.role();
+        if (!r.policy.boardExport) { toast('导出被拒绝', '当前角色无汇总导出权限', 'error'); break; }
+        var lines = ['业务域,模块,单据数'];
         DB.visibleDomains(r.id).forEach(function (d) {
           CFG.modules.filter(function (m) { return m.domainId === d.id && DB.can(r.id, m.key, 'view'); })
             .forEach(function (m) {
@@ -1143,8 +1280,11 @@
       }
       case 'att-back': openDetail(UI.lastDetailMod, UI.lastDetailId); break;
       case 'settings-export':
-        download('启能力ERP-本地数据备份.json', DB.exportJSON(), 'application/json');
-        toast('备份已导出', '包含单据、日志、通知与附件', 'ok'); break;
+        try {
+          download('启能力ERP-本地数据备份.json', DB.exportJSON(), 'application/json');
+          toast('备份已导出', '包含单据、日志、通知与附件', 'ok');
+        } catch (err) { toast('导出被拒绝', err.message, 'error'); }
+        break;
       case 'settings-import': {
         var fi = document.createElement('input');
         fi.type = 'file'; fi.accept = '.json,application/json'; fi.style.display = 'none';
@@ -1154,7 +1294,7 @@
           var rd = new FileReader();
           rd.onload = function () {
             try { DB.importJSON(rd.result); toast('导入成功', '本地数据已还原', 'ok'); render(); }
-            catch (err) { toast('导入失败', err.message, 'error'); }
+            catch (err) { toast('导入被拒绝', err.message, 'error'); }
             fi.remove();
           };
           rd.readAsText(file);
@@ -1163,7 +1303,8 @@
       }
       case 'settings-reset':
         if (window.confirm('确认重置演示数据？将清空本地新增的单据、日志与附件，且不可撤销。')) {
-          DB.reset(); toast('已重置', '演示数据恢复到初始状态', 'ok'); render();
+          try { DB.reset(); toast('已重置', '演示数据恢复到初始状态', 'ok'); render(); }
+          catch (err) { toast('重置被拒绝', err.message, 'error'); }
         }
         break;
     }
@@ -1213,7 +1354,7 @@
       e.stopPropagation();
       var menu = $('roleMenu'), r = DB.role();
       if (!menu.classList.contains('hidden')) { menu.classList.add('hidden'); return; }
-      menu.innerHTML = '<div class="role-menu-head">切换演示角色（权限实时生效）</div>' +
+      menu.innerHTML = '<div class="role-menu-head">演示身份切换器 · 非业务权限，仅用于对比隔离效果</div>' +
         CFG.roles.map(function (x) {
           return '<button class="role-menu-item ' + (x.id === r.id ? 'active' : '') +
             '" data-act="switch-role" data-role="' + x.id + '"><span class="avatar" style="background:' +

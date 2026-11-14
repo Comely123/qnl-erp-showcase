@@ -3,7 +3,7 @@ window.ERP_CONFIG = {
   "meta": {
     "baseId": "0eMKjyp81YYeX2ZAsZE9YXLg8xAZB1Gv",
     "baseName": "启能力ERP系统 · 全链路协同中枢",
-    "version": "2.0",
+    "version": "3.0",
     "mode": "local",
     "modeLabel": "本地演示模式 · 未连接后端",
     "note": "所有单据、日志、通知与附件保存在浏览器 localStorage，刷新不丢失；换浏览器或清缓存不会同步。"
@@ -274,7 +274,628 @@ window.ERP_CONFIG = {
       "rowFilter": null,
       "scope": "全域可见 · 44 个模块可操作",
       "wbTitle": "超级管理后台",
-      "wbSub": "全链路进程总控 · 五大业务线一站式协同"
+      "wbSub": "全链路进程总控 · 五大业务线一站式协同",
+      "policy": {
+        "ownDomains": [
+          "00",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          "07"
+        ],
+        "ownModules": [],
+        "approveDomains": [
+          "00",
+          "01",
+          "02",
+          "03",
+          "04",
+          "05",
+          "06",
+          "07"
+        ],
+        "visible": [
+          "t00",
+          "t01",
+          "t02",
+          "t03",
+          "t04",
+          "t05",
+          "t06",
+          "t07",
+          "t08",
+          "t09",
+          "t10",
+          "t11",
+          "t12",
+          "t13",
+          "t14",
+          "t15",
+          "t16",
+          "t17",
+          "t18",
+          "t19",
+          "t20",
+          "t21",
+          "t22",
+          "t23",
+          "t24",
+          "t25",
+          "t26",
+          "t27",
+          "t28",
+          "t29",
+          "t30",
+          "t31",
+          "t32",
+          "t33",
+          "t34",
+          "t35",
+          "t36",
+          "t37",
+          "t38",
+          "t39",
+          "t40",
+          "t41",
+          "t42",
+          "t43"
+        ],
+        "modules": {
+          "t00": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t01": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t02": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t03": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t04": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t05": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t06": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t07": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t08": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t09": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t10": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t11": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t12": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t13": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t14": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t15": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t16": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t17": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t18": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t19": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t20": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t21": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t22": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t23": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t24": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t25": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t26": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t27": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t28": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t29": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t30": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t31": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t32": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t33": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t34": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t35": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t36": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t37": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t38": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t39": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t40": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t41": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t42": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ],
+          "t43": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "delete",
+            "export"
+          ]
+        },
+        "export": true,
+        "boardExport": true,
+        "system": [
+          "guide",
+          "dict",
+          "board",
+          "flow",
+          "notify",
+          "permissions",
+          "identity",
+          "settings",
+          "backup",
+          "reset",
+          "portal",
+          "audit"
+        ],
+        "rowScope": "all",
+        "writable": [
+          "t00",
+          "t01",
+          "t02",
+          "t03",
+          "t04",
+          "t05",
+          "t06",
+          "t07",
+          "t08",
+          "t09",
+          "t10",
+          "t11",
+          "t12",
+          "t13",
+          "t14",
+          "t15",
+          "t16",
+          "t17",
+          "t18",
+          "t19",
+          "t20",
+          "t21",
+          "t22",
+          "t23",
+          "t24",
+          "t25",
+          "t26",
+          "t27",
+          "t28",
+          "t29",
+          "t30",
+          "t31",
+          "t32",
+          "t33",
+          "t34",
+          "t35",
+          "t36",
+          "t37",
+          "t38",
+          "t39",
+          "t40",
+          "t41",
+          "t42",
+          "t43"
+        ],
+        "readonly": [],
+        "approvable": [
+          "t00",
+          "t01",
+          "t02",
+          "t03",
+          "t04",
+          "t05",
+          "t06",
+          "t07",
+          "t08",
+          "t09",
+          "t10",
+          "t11",
+          "t12",
+          "t13",
+          "t14",
+          "t15",
+          "t16",
+          "t17",
+          "t18",
+          "t19",
+          "t20",
+          "t21",
+          "t22",
+          "t23",
+          "t24",
+          "t25",
+          "t26",
+          "t27",
+          "t28",
+          "t29",
+          "t30",
+          "t31",
+          "t32",
+          "t33",
+          "t34",
+          "t35",
+          "t36",
+          "t37",
+          "t38",
+          "t39",
+          "t40",
+          "t41",
+          "t42",
+          "t43"
+        ]
+      }
     },
     {
       "id": "buyer",
@@ -310,7 +931,320 @@ window.ERP_CONFIG = {
       "rowFilter": null,
       "scope": "授权模块：需求与寻源 / 合同与订单 / 供应商 / 主数据",
       "wbTitle": "采购方工作台",
-      "wbSub": "寻源到履约 · 采购方运营台"
+      "wbSub": "寻源到履约 · 采购方运营台",
+      "policy": {
+        "ownDomains": [
+          "01",
+          "03",
+          "04"
+        ],
+        "ownModules": [],
+        "approveDomains": [
+          "01",
+          "03",
+          "04"
+        ],
+        "visible": [
+          "t06",
+          "t07",
+          "t08",
+          "t09",
+          "t10",
+          "t11",
+          "t12",
+          "t13",
+          "t14",
+          "t15",
+          "t16",
+          "t17",
+          "t18",
+          "t19",
+          "t20",
+          "t21",
+          "t22",
+          "t23",
+          "t24",
+          "t25",
+          "t26",
+          "t27",
+          "t28",
+          "t29",
+          "t30",
+          "t31",
+          "t32"
+        ],
+        "modules": {
+          "t00": [],
+          "t01": [],
+          "t02": [],
+          "t03": [],
+          "t04": [],
+          "t05": [],
+          "t06": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t07": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t08": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t09": [
+            "view"
+          ],
+          "t10": [
+            "view"
+          ],
+          "t11": [
+            "view"
+          ],
+          "t12": [
+            "view"
+          ],
+          "t13": [
+            "view"
+          ],
+          "t14": [
+            "view"
+          ],
+          "t15": [
+            "view"
+          ],
+          "t16": [
+            "view"
+          ],
+          "t17": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t18": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t19": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t20": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t21": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t22": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t23": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t24": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t25": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t26": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t27": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t28": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t29": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t30": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t31": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t32": [
+            "view"
+          ],
+          "t33": [],
+          "t34": [],
+          "t35": [],
+          "t36": [],
+          "t37": [],
+          "t38": [],
+          "t39": [],
+          "t40": [],
+          "t41": [],
+          "t42": [],
+          "t43": []
+        },
+        "export": true,
+        "boardExport": true,
+        "system": [
+          "guide",
+          "dict",
+          "board",
+          "flow",
+          "notify",
+          "permissions",
+          "identity"
+        ],
+        "rowScope": "all",
+        "writable": [
+          "t06",
+          "t07",
+          "t08",
+          "t17",
+          "t18",
+          "t19",
+          "t20",
+          "t21",
+          "t22",
+          "t23",
+          "t24",
+          "t25",
+          "t26",
+          "t27",
+          "t28",
+          "t29",
+          "t30",
+          "t31"
+        ],
+        "readonly": [
+          "t09",
+          "t10",
+          "t11",
+          "t12",
+          "t13",
+          "t14",
+          "t15",
+          "t16",
+          "t32"
+        ],
+        "approvable": [
+          "t06",
+          "t07",
+          "t08",
+          "t17",
+          "t18",
+          "t19",
+          "t20",
+          "t21",
+          "t22",
+          "t23",
+          "t24",
+          "t25",
+          "t26",
+          "t27",
+          "t28",
+          "t29",
+          "t30",
+          "t31"
+        ]
+      }
     },
     {
       "id": "warehouse",
@@ -343,7 +1277,180 @@ window.ERP_CONFIG = {
       "rowFilter": null,
       "scope": "授权模块：仓存与商城 / 装柜留痕 / 交付收货",
       "wbTitle": "仓存工作台",
-      "wbSub": "收货 · 入库 · 盘点 · 装柜留痕"
+      "wbSub": "收货 · 入库 · 盘点 · 装柜留痕",
+      "policy": {
+        "ownDomains": [
+          "05",
+          "07"
+        ],
+        "ownModules": [],
+        "approveDomains": [
+          "05",
+          "07"
+        ],
+        "visible": [
+          "t06",
+          "t07",
+          "t30",
+          "t31",
+          "t32",
+          "t33",
+          "t34",
+          "t35",
+          "t40",
+          "t41",
+          "t42",
+          "t43"
+        ],
+        "modules": {
+          "t00": [],
+          "t01": [],
+          "t02": [],
+          "t03": [],
+          "t04": [],
+          "t05": [],
+          "t06": [
+            "view"
+          ],
+          "t07": [
+            "view"
+          ],
+          "t08": [],
+          "t09": [],
+          "t10": [],
+          "t11": [],
+          "t12": [],
+          "t13": [],
+          "t14": [],
+          "t15": [],
+          "t16": [],
+          "t17": [],
+          "t18": [],
+          "t19": [],
+          "t20": [],
+          "t21": [],
+          "t22": [],
+          "t23": [],
+          "t24": [],
+          "t25": [],
+          "t26": [],
+          "t27": [],
+          "t28": [],
+          "t29": [],
+          "t30": [
+            "view"
+          ],
+          "t31": [
+            "view"
+          ],
+          "t32": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "export"
+          ],
+          "t33": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "export"
+          ],
+          "t34": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "export"
+          ],
+          "t35": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "export"
+          ],
+          "t36": [],
+          "t37": [],
+          "t38": [],
+          "t39": [],
+          "t40": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "export"
+          ],
+          "t41": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "export"
+          ],
+          "t42": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "export"
+          ],
+          "t43": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "export"
+          ]
+        },
+        "export": true,
+        "boardExport": true,
+        "system": [
+          "guide",
+          "dict",
+          "board",
+          "flow",
+          "notify",
+          "permissions",
+          "identity"
+        ],
+        "rowScope": "all",
+        "writable": [
+          "t32",
+          "t33",
+          "t34",
+          "t35",
+          "t40",
+          "t41",
+          "t42",
+          "t43"
+        ],
+        "readonly": [
+          "t06",
+          "t07",
+          "t30",
+          "t31"
+        ],
+        "approvable": [
+          "t32",
+          "t33",
+          "t34",
+          "t35",
+          "t40",
+          "t41",
+          "t42",
+          "t43"
+        ]
+      }
     },
     {
       "id": "finance",
@@ -376,7 +1483,138 @@ window.ERP_CONFIG = {
       "rowFilter": null,
       "scope": "授权模块：财务与 BI / 合同订单只读 / 收货只读",
       "wbTitle": "财务后台",
-      "wbSub": "应付 · 对账 · 发票 · 付款执行"
+      "wbSub": "应付 · 对账 · 发票 · 付款执行",
+      "policy": {
+        "ownDomains": [
+          "06"
+        ],
+        "ownModules": [],
+        "approveDomains": [
+          "06"
+        ],
+        "visible": [
+          "t26",
+          "t28",
+          "t31",
+          "t36",
+          "t37",
+          "t38",
+          "t39"
+        ],
+        "modules": {
+          "t00": [],
+          "t01": [],
+          "t02": [],
+          "t03": [],
+          "t04": [],
+          "t05": [],
+          "t06": [],
+          "t07": [],
+          "t08": [],
+          "t09": [],
+          "t10": [],
+          "t11": [],
+          "t12": [],
+          "t13": [],
+          "t14": [],
+          "t15": [],
+          "t16": [],
+          "t17": [],
+          "t18": [],
+          "t19": [],
+          "t20": [],
+          "t21": [],
+          "t22": [],
+          "t23": [],
+          "t24": [],
+          "t25": [],
+          "t26": [
+            "view"
+          ],
+          "t27": [],
+          "t28": [
+            "view"
+          ],
+          "t29": [],
+          "t30": [],
+          "t31": [
+            "view"
+          ],
+          "t32": [],
+          "t33": [],
+          "t34": [],
+          "t35": [],
+          "t36": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t37": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t38": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t39": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t40": [],
+          "t41": [],
+          "t42": [],
+          "t43": []
+        },
+        "export": true,
+        "boardExport": true,
+        "system": [
+          "guide",
+          "dict",
+          "board",
+          "flow",
+          "notify",
+          "permissions",
+          "identity"
+        ],
+        "rowScope": "all",
+        "writable": [
+          "t36",
+          "t37",
+          "t38",
+          "t39"
+        ],
+        "readonly": [
+          "t26",
+          "t28",
+          "t31"
+        ],
+        "approvable": [
+          "t36",
+          "t37",
+          "t38",
+          "t39"
+        ]
+      }
     },
     {
       "id": "quality",
@@ -407,7 +1645,178 @@ window.ERP_CONFIG = {
       "rowFilter": null,
       "scope": "授权模块：供应商与质量 / 收货只读 / 物料主数据",
       "wbTitle": "质量工作台",
-      "wbSub": "来料检验 · 不合格整改 · 供应商评审"
+      "wbSub": "来料检验 · 不合格整改 · 供应商评审",
+      "policy": {
+        "ownDomains": [
+          "02"
+        ],
+        "ownModules": [],
+        "approveDomains": [
+          "02"
+        ],
+        "visible": [
+          "t06",
+          "t09",
+          "t10",
+          "t11",
+          "t12",
+          "t13",
+          "t14",
+          "t15",
+          "t16",
+          "t31"
+        ],
+        "modules": {
+          "t00": [],
+          "t01": [],
+          "t02": [],
+          "t03": [],
+          "t04": [],
+          "t05": [],
+          "t06": [
+            "view"
+          ],
+          "t07": [],
+          "t08": [],
+          "t09": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t10": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t11": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t12": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t13": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t14": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t15": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t16": [
+            "view",
+            "create",
+            "edit",
+            "submit",
+            "approve",
+            "reject",
+            "export"
+          ],
+          "t17": [],
+          "t18": [],
+          "t19": [],
+          "t20": [],
+          "t21": [],
+          "t22": [],
+          "t23": [],
+          "t24": [],
+          "t25": [],
+          "t26": [],
+          "t27": [],
+          "t28": [],
+          "t29": [],
+          "t30": [],
+          "t31": [
+            "view"
+          ],
+          "t32": [],
+          "t33": [],
+          "t34": [],
+          "t35": [],
+          "t36": [],
+          "t37": [],
+          "t38": [],
+          "t39": [],
+          "t40": [],
+          "t41": [],
+          "t42": [],
+          "t43": []
+        },
+        "export": true,
+        "boardExport": true,
+        "system": [
+          "guide",
+          "dict",
+          "board",
+          "flow",
+          "notify",
+          "permissions",
+          "identity"
+        ],
+        "rowScope": "all",
+        "writable": [
+          "t09",
+          "t10",
+          "t11",
+          "t12",
+          "t13",
+          "t14",
+          "t15",
+          "t16"
+        ],
+        "readonly": [
+          "t06",
+          "t31"
+        ],
+        "approvable": [
+          "t09",
+          "t10",
+          "t11",
+          "t12",
+          "t13",
+          "t14",
+          "t15",
+          "t16"
+        ]
+      }
     },
     {
       "id": "supplier",
@@ -445,7 +1854,154 @@ window.ERP_CONFIG = {
       "rowFilter": "supplier",
       "scope": "门户隔离：仅可见本公司相关单据，无审批权限",
       "wbTitle": "供应商协同门户",
-      "wbSub": "准入 · 报价 · 订单 · 送货 · 对账"
+      "wbSub": "准入 · 报价 · 订单 · 送货 · 对账",
+      "policy": {
+        "ownDomains": [],
+        "ownModules": [
+          "t10",
+          "t11",
+          "t22",
+          "t24",
+          "t30",
+          "t37"
+        ],
+        "approveDomains": [],
+        "visible": [
+          "t09",
+          "t10",
+          "t11",
+          "t13",
+          "t21",
+          "t22",
+          "t24",
+          "t25",
+          "t26",
+          "t28",
+          "t30",
+          "t31",
+          "t37"
+        ],
+        "modules": {
+          "t00": [],
+          "t01": [],
+          "t02": [],
+          "t03": [],
+          "t04": [],
+          "t05": [],
+          "t06": [],
+          "t07": [],
+          "t08": [],
+          "t09": [
+            "view"
+          ],
+          "t10": [
+            "view",
+            "create",
+            "edit",
+            "submit"
+          ],
+          "t11": [
+            "view",
+            "create",
+            "edit",
+            "submit"
+          ],
+          "t12": [],
+          "t13": [
+            "view"
+          ],
+          "t14": [],
+          "t15": [],
+          "t16": [],
+          "t17": [],
+          "t18": [],
+          "t19": [],
+          "t20": [],
+          "t21": [
+            "view"
+          ],
+          "t22": [
+            "view",
+            "create",
+            "edit",
+            "submit"
+          ],
+          "t23": [],
+          "t24": [
+            "view",
+            "create",
+            "edit",
+            "submit"
+          ],
+          "t25": [
+            "view"
+          ],
+          "t26": [
+            "view"
+          ],
+          "t27": [],
+          "t28": [
+            "view"
+          ],
+          "t29": [],
+          "t30": [
+            "view",
+            "create",
+            "edit",
+            "submit"
+          ],
+          "t31": [
+            "view"
+          ],
+          "t32": [],
+          "t33": [],
+          "t34": [],
+          "t35": [],
+          "t36": [],
+          "t37": [
+            "view",
+            "create",
+            "edit",
+            "submit"
+          ],
+          "t38": [],
+          "t39": [],
+          "t40": [],
+          "t41": [],
+          "t42": [],
+          "t43": []
+        },
+        "export": false,
+        "boardExport": false,
+        "system": [
+          "guide",
+          "dict",
+          "board",
+          "flow",
+          "notify",
+          "permissions",
+          "identity"
+        ],
+        "rowScope": "supplier",
+        "writable": [
+          "t10",
+          "t11",
+          "t22",
+          "t24",
+          "t30",
+          "t37"
+        ],
+        "readonly": [
+          "t09",
+          "t13",
+          "t21",
+          "t25",
+          "t26",
+          "t28",
+          "t31"
+        ],
+        "approvable": []
+      }
     }
   ],
   "modules": [
@@ -7526,6 +9082,30 @@ window.ERP_CONFIG = {
       "guide": "本模块对应钉钉 AI 表格「43 重量核查与审核归档」，共 14 个字段、4 个视图。"
     }
   ],
+  "capLabels": {
+    "view": "查看",
+    "create": "新建",
+    "edit": "编辑",
+    "submit": "提交",
+    "approve": "审批",
+    "reject": "驳回",
+    "delete": "删除",
+    "export": "导出"
+  },
+  "systemLabels": {
+    "guide": "系统搭建指南",
+    "dict": "架构字典",
+    "board": "经营看板",
+    "flow": "全链路流程",
+    "notify": "通知中心",
+    "permissions": "我的权限",
+    "identity": "演示身份切换",
+    "settings": "系统设置",
+    "backup": "全量数据备份",
+    "reset": "重置演示数据",
+    "portal": "钉钉全量入口",
+    "audit": "全局审计与权限矩阵"
+  },
   "flow": [
     {
       "step": "01",
