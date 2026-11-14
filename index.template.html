@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="启能力 ERP 系统 · 全链路协同中枢 —— 可操作的采购寻源履约仓存财务一体化系统">
+<title>启能力 ERP · 全链路协同中枢</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- 登录层 -->
+<div id="loginView" class="login-view">
+  <div class="login-brand">
+    <div class="login-brand-inner">
+      <div class="login-logo"><span class="logo-mark">启</span><span>启能力 ERP</span></div>
+      <h1>启能力 ERP</h1>
+      <p class="login-slogan">采购 · 寻源 · 履约 · 仓存 · 财务一体化平台</p>
+      <ul class="login-points">
+        <li><b>全链路业务协同</b><span>44 个业务模块，八大业务域一站式打通</span></li>
+        <li><b>供应商门户</b><span>注册准入 · 报价协同 · 对账开票</span></li>
+        <li><b>角色权限隔离</b><span>6 套角色视图，模块与数据双层收敛</span></li>
+        <li><b>经营透明化</b><span>单据自动联动，端到端状态可追溯</span></li>
+      </ul>
+      <div class="login-brand-foot">基于钉钉 AI 多维表格架构 · 可操作演示系统 v2.0</div>
+    </div>
+  </div>
+  <div class="login-panel">
+    <div class="login-card">
+      <h2>欢迎登录</h2>
+      <p class="login-sub">请使用企业账号登入启能力平台</p>
+      <label class="login-label" for="loginAccount">请输入手机号或邮箱</label>
+      <input id="loginAccount" class="login-input" type="text" placeholder="13800138000" autocomplete="username">
+      <label class="login-label" for="loginPwd">请输入密码</label>
+      <input id="loginPwd" class="login-input" type="password" placeholder="已选 · 演示环境免密" autocomplete="current-password">
+      <div class="login-row">
+        <label class="login-check"><input type="checkbox" id="loginRemember" checked><span>记住登录状态</span></label>
+        <a class="login-link" href="javascript:void(0)" id="forgotPwd">忘记密码？</a>
+      </div>
+      <button class="btn btn-primary btn-login" id="loginBtn">登 录</button>
+      <div class="login-divider">演示角色快速进入</div>
+      <div class="login-roles" id="loginRoles"></div>
+      <p class="login-note">本机演示：无需真实账号，选择任一角色即可进入对应权限视图。所有数据保存在当前浏览器。</p>
+    </div>
+  </div>
+</div>
+
+<!-- 主应用 -->
+<div id="appView" class="app-view hidden">
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo"><span class="logo-mark">启</span></div>
+      <div class="sb-brand-text"><b id="sbBrand">启能力 ERP</b><span id="sbSlogan">企业采购协同平台</span></div>
+    </div>
+    <div class="sb-scroll" id="sbNav"></div>
+    <div class="sb-foot">
+      <div class="sb-mode"><i class="dot dot-green"></i><span>本地演示模式 · 数据存于浏览器</span></div>
+      <button class="sb-logout" id="logoutBtn">退出登录 / 切换角色</button>
+    </div>
+  </aside>
+
+  <div class="main-wrap">
+    <header class="topbar">
+      <button class="icon-btn sb-toggle" id="sbToggle" title="收起/展开导航" aria-label="切换导航"></button>
+      <div class="crumb" id="crumb"></div>
+      <div class="top-actions">
+        <div class="global-search">
+          <span class="gs-icon" aria-hidden="true"></span>
+          <input id="globalSearch" type="search" placeholder="搜索单据编号、模块、字段…" autocomplete="off">
+          <div class="gs-results hidden" id="gsResults"></div>
+        </div>
+        <a class="top-link" id="dingtalkBtn" href="https://alidocs.dingtalk.com/i/nodes/0eMKjyp81YYeX2ZAsZE9YXLg8xAZB1Gv" target="_blank" rel="noopener">钉钉 AI 表格</a>
+        <button class="icon-btn bell-btn" id="bellBtn" title="通知中心" aria-label="通知中心">
+          <span class="bell-svg" aria-hidden="true"></span><i class="badge hidden" id="bellBadge">0</i>
+        </button>
+        <button class="role-chip" id="roleChip" title="切换角色">
+          <span class="avatar" id="topAvatar">张</span>
+          <span class="role-chip-text"><b id="topRole">超级管理员</b><i id="topPerson">张账号</i></span>
+          <span class="caret"></span>
+        </button>
+        <div class="role-menu hidden" id="roleMenu"></div>
+      </div>
+    </header>
+
+    <main class="content" id="content"></main>
+  </div>
+</div>
+
+<!-- 抽屉：单据表单 / 详情 / 全局面板 -->
+<div class="drawer-overlay hidden" id="drawerOverlay"></div>
+<section class="drawer hidden" id="drawer" role="dialog" aria-modal="true">
+  <div class="drawer-head">
+    <div><h3 id="drawerTitle">标题</h3><p id="drawerSub">副标题</p></div>
+    <button class="icon-btn" id="drawerClose" aria-label="关闭"></button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</section>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="data.js"></script>
+<script src="config.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
