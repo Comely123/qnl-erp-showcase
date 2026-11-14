@@ -25,7 +25,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 SITE = HERE if (HERE / "styles.css").exists() else HERE / "site"
 TEMPLATE = SITE / "index.template.html"
 OUTPUT = SITE / "index.html"
-ASSET_ORDER = ["data.js", "config.js", "contract.js", "engine.js", "sync.js", "app.js"]
+ASSET_ORDER = ["data.js", "config.js", "contract.js", "qr.js", "engine.js", "sync.js", "app.js"]
 
 
 def ensure_template():
